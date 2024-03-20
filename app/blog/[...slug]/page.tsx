@@ -8,64 +8,35 @@ import { posts } from '#site/content'
 
 import { MDXContent } from './(components)/mdx-content'
 
-interface PostPageProps {
+interface Props {
   params: {
     slug: string[]
   }
 }
-async function getPostFromParams(params: PostPageProps['params']) {
+async function getPostFromParams(params: Props['params']) {
   const slug = params.slug?.join('/')
-  const post = posts.find((post) => post.slugAsParams === slug)
-
-  return post
+  return posts.find((post) => post.slugAsParams === slug)
 }
 
-export async function generateMetadata({
-  params,
-}: PostPageProps): Promise<Metadata> {
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const post = await getPostFromParams(params)
 
   if (!post) {
     return {}
   }
 
-  const ogSearchParams = new URLSearchParams()
-  ogSearchParams.set('title', post.title)
-
   return {
     title: post.title,
     description: post.description,
     authors: { name: siteConfig.author },
-    openGraph: {
-      title: post.title,
-      description: post.description,
-      type: 'article',
-      url: post.slug,
-      images: [
-        {
-          url: `/api/og?${ogSearchParams.toString()}`,
-          width: 1200,
-          height: 630,
-          alt: post.title,
-        },
-      ],
-    },
-    twitter: {
-      card: 'summary_large_image',
-      title: post.title,
-      description: post.description,
-      images: [`/api/og?${ogSearchParams.toString()}`],
-    },
   }
 }
 
-export async function generateStaticParams(): Promise<
-  PostPageProps['params'][]
-> {
+export async function generateStaticParams(): Promise<Props['params'][]> {
   return posts.map((post) => ({ slug: post.slugAsParams.split('/') }))
 }
 
-export default async function PostPage({ params }: PostPageProps) {
+export default async function Page({ params }: Props) {
   const post = await getPostFromParams(params)
 
   if (!post || !post.published) {
