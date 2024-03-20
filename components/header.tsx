@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { FC } from 'react'
+import { type FC } from 'react'
 
 import { siteConfig } from '@/config/site'
 import { cn } from '@/lib/utils'

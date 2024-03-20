@@ -3,7 +3,7 @@
 import { Menu } from 'lucide-react'
 import Link, { LinkProps } from 'next/link'
 import { useRouter } from 'next/navigation'
-import { FC, PropsWithChildren, useState } from 'react'
+import { type FC, type PropsWithChildren, useState } from 'react'
 
 import { siteConfig } from '@/config/site'
 

@@ -2,7 +2,7 @@
 
 import { Moon, Sun } from 'lucide-react'
 import { useTheme } from 'next-themes'
-import { FC } from 'react'
+import { type FC } from 'react'
 
 import { Button } from './ui/button'
 import {

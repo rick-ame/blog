@@ -1,6 +1,6 @@
 import { Calendar } from 'lucide-react'
 import Link from 'next/link'
-import { FC } from 'react'
+import { type FC } from 'react'
 
 import { buttonVariants } from '@/components/ui/button'
 import { cn, formatDate } from '@/lib/utils'

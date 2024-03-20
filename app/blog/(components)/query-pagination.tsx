@@ -1,7 +1,7 @@
 'use client'
 
 import { usePathname, useSearchParams } from 'next/navigation'
-import { FC } from 'react'
+import { type FC } from 'react'
 
 import {
   Pagination,

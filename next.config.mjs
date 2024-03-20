@@ -3,7 +3,9 @@ import { build } from 'velite'
 /** @type {import('next').NextConfig} */
 export default {
   images: {
-    domains: ['avatars.githubusercontent.com'],
+    remotePatterns: [
+      { protocol: 'https', hostname: 'avatars.githubusercontent.com' },
+    ],
   },
   webpack: (config) => {
     config.plugins.push(new VeliteWebpackPlugin())
