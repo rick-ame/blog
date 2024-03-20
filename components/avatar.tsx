@@ -16,10 +16,7 @@ export const MyAvatar: FC<Props> = ({ size = 'lg' }) => {
         'size-24': size === 'sm',
       })}
     >
-      <AvatarImage
-        src="https://avatars.githubusercontent.com/u/130942798?v=4"
-        alt={siteConfig.author}
-      />
+      <AvatarImage src={siteConfig.avatar} alt={siteConfig.author} />
       <AvatarFallback>Rick</AvatarFallback>
     </Avatar>
   )
