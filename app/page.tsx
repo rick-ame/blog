@@ -1,6 +1,6 @@
-import Image from 'next/image'
 import Link from 'next/link'
 
+import { MyAvatar } from '@/components/avatar'
 import { buttonVariants } from '@/components/ui/button'
 import { siteConfig } from '@/config/site'
 import { cn, sortPosts } from '@/lib/utils'
@@ -44,13 +44,7 @@ export default function Home() {
         </div>
       </section>
       <section className="mb-16 mt-8 flex justify-center">
-        <Image
-          src="https://avatars.githubusercontent.com/u/130942798?v=4"
-          className="rounded-full"
-          alt="avatar"
-          width={64}
-          height={64}
-        />
+        <MyAvatar size="sm" />
       </section>
       <section className="container flex max-w-4xl flex-col space-y-6 py-6 lg:py-10">
         <h2 className="text-center text-3xl font-black md:text-5xl">
