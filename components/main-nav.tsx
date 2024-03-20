@@ -1,5 +1,4 @@
 'use client'
-
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { FC } from 'react'
@@ -9,7 +8,7 @@ import { cn } from '@/lib/utils'
 
 import { Icons } from './icons'
 
-export const Nav: FC = () => {
+export const MainNav: FC = () => {
   const pathname = usePathname()
 
   return (
@@ -21,7 +20,7 @@ export const Nav: FC = () => {
       <Link
         href="/blog"
         className={cn(
-          'text-sm font-medium transition-colors hover:text-primary',
+          'hidden text-sm font-medium transition-colors hover:text-primary sm:inline-flex',
           pathname === '/blog' ? 'text-foreground' : 'text-foreground/60',
         )}
       >
@@ -30,7 +29,7 @@ export const Nav: FC = () => {
       <Link
         href="/about"
         className={cn(
-          'text-sm font-medium transition-colors hover:text-primary',
+          'hidden text-sm font-medium transition-colors hover:text-primary sm:inline-flex',
           pathname === '/about' ? 'text-foreground' : 'text-foreground/60',
         )}
       >
