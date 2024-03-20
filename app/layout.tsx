@@ -18,7 +18,7 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: PropsWithChildren) {
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang="en" suppressHydrationWarning className="scroll-pt-[3.5rem]">
       <body
         className={cn('min-h-screen bg-background antialiased', font.className)}
       >
