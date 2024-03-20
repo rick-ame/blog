@@ -19,7 +19,9 @@ export default function RootLayout({ children }: PropsWithChildren) {
       <body
         className={cn('min-h-screen bg-background antialiased', font.className)}
       >
-        {children}
+        <div className="relative flex min-h-dvh flex-col bg-background">
+          <main className="flex-1">{children}</main>
+        </div>
       </body>
     </html>
   )
