@@ -2,6 +2,7 @@ import { Calendar } from 'lucide-react'
 import Link from 'next/link'
 import { type FC } from 'react'
 
+import { Tag } from '@/components/tag'
 import { buttonVariants } from '@/components/ui/button'
 import { cn, formatDate } from '@/lib/utils'
 
@@ -10,14 +11,24 @@ interface Props {
   title: string
   description?: string
   date: string
+  tags?: string[]
 }
-export const PostItem: FC<Props> = ({ slug, title, description, date }) => {
+export const PostItem: FC<Props> = ({
+  slug,
+  title,
+  description,
+  date,
+  tags,
+}) => {
   return (
     <article className="flex flex-col gap-2 border-b border-border py-3">
       <div>
         <h2 className="text-2xl font-bold">
           <Link href={slug}>{title}</Link>
         </h2>
+      </div>
+      <div className="flex gap-2">
+        {tags?.map((tag) => <Tag tag={tag} key={tag} />)}
       </div>
       <div className="max-w-none text-muted-foreground">{description}</div>
       <div className="flex items-center justify-between">
