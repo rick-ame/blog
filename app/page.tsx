@@ -43,7 +43,7 @@ export default function Home() {
           </div>
         </div>
       </section>
-      <section className="mb-16 mt-8 flex justify-center">
+      <section className="mb-16 mt-8 flex justify-center md:mt-0">
         <MyAvatar size="sm" />
       </section>
       <section className="container flex max-w-4xl flex-col space-y-6 py-6 lg:py-10">
