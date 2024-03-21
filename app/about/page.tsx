@@ -1,4 +1,4 @@
-import { Metadata } from 'next'
+import { type Metadata } from 'next'
 
 import { MyAvatar } from '@/components/avatar'
 import { siteConfig } from '@/config/site'

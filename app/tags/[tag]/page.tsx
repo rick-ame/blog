@@ -1,35 +1,38 @@
+import { slug } from 'github-slugger'
 import { type Metadata } from 'next'
 
+import { PostItem } from '@/app/blog/(components)/post-item'
 import { Tag } from '@/components/tag'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { getAllTags, sortPosts, sortTagsByCount } from '@/lib/utils'
+import { getAllTags, getPostsByTagSlug, sortTagsByCount } from '@/lib/utils'
 import { posts } from '#site/content'
 
-import { PostItem } from './(components)/post-item'
-import { QueryPagination } from './(components)/query-pagination'
-
-export const metadata: Metadata = {
-  title: 'My blog',
-  description: 'My personal blog',
-}
-
-const POSTS_PER_PAGE = 5
-
 interface Props {
-  searchParams: {
-    page?: string
+  params: {
+    tag: string
   }
 }
-export default async function Page({ searchParams }: Props) {
-  const currentPage = Number(searchParams?.page) || 1
-  const sortedPosts = sortPosts(posts.filter((post) => post.published))
-  const totalPages = Math.ceil(sortedPosts.length / POSTS_PER_PAGE)
 
-  const displayPosts = sortedPosts.slice(
-    POSTS_PER_PAGE * (currentPage - 1),
-    POSTS_PER_PAGE * currentPage,
-  )
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const { tag } = params
 
+  return {
+    title: tag,
+    description: `Posts on the topic of ${tag}`,
+  }
+}
+
+export function generateStaticParams() {
+  const tags = getAllTags(posts)
+  const paths = Object.keys(tags).map((tag) => ({ tag: slug(tag) }))
+  return paths
+}
+
+export default function Page({ params }: Props) {
+  const { tag: currentTag } = params
+  const title = currentTag.replaceAll('-', ' ')
+
+  const displayPosts = getPostsByTagSlug(posts, currentTag)
   const tags = getAllTags(posts)
   const sortedTags = sortTagsByCount(tags)
 
@@ -37,10 +40,9 @@ export default async function Page({ searchParams }: Props) {
     <div className="container max-w-4xl py-6 lg:py-10">
       <div className="flex flex-col items-start gap-4 md:flex-row md:justify-between md:gap-8">
         <div className="flex-1 space-y-4">
-          <h1 className="inline-block text-4xl font-black lg:text-5xl">Blog</h1>
-          <p className="text-xl text-muted-foreground">
-            My ramblings on all things.
-          </p>
+          <h1 className="inline-block text-4xl font-black capitalize lg:text-5xl">
+            {title}
+          </h1>
         </div>
       </div>
       <div className="mt-8 grid grid-cols-12 gap-3">
@@ -66,10 +68,6 @@ export default async function Page({ searchParams }: Props) {
           ) : (
             <p>Nothing to see here yet</p>
           )}
-          <QueryPagination
-            totalPages={totalPages}
-            className="mt-4 justify-end"
-          />
         </div>
         <Card className="col-span-12 row-start-3 h-fit sm:col-span-4 sm:col-start-9 sm:row-start-1">
           <CardHeader>
@@ -77,7 +75,12 @@ export default async function Page({ searchParams }: Props) {
           </CardHeader>
           <CardContent className="flex flex-wrap gap-2">
             {sortedTags.map((tag) => (
-              <Tag tag={tag} key={tag} count={tags[tag]} />
+              <Tag
+                tag={tag}
+                key={tag}
+                count={tags[tag]}
+                current={slug(tag) === currentTag}
+              />
             ))}
           </CardContent>
         </Card>

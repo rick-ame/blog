@@ -1,6 +1,6 @@
 import './(components)/mdx.css'
 
-import { Metadata } from 'next'
+import { type Metadata } from 'next'
 import { notFound } from 'next/navigation'
 
 import { Tag } from '@/components/tag'
