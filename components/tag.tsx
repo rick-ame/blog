@@ -18,7 +18,7 @@ export const Tag: FC<Props> = ({ tag, current, count }) => {
         className: 'rounded-md no-underline',
       })}
     >
-      {tag}
+      {tag} {count ? `(${count})` : null}
     </Link>
   )
 }
