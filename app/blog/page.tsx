@@ -43,8 +43,8 @@ export default async function Page({ searchParams }: Props) {
           </p>
         </div>
       </div>
-      <div className="mt-8 grid grid-cols-12 gap-3">
-        <div className="col-span-12 col-start-1 sm:col-span-8">
+      <div className="mt-8 grid grid-cols-12 gap-2">
+        <div className="col-span-12 col-start-1 row-start-2 sm:col-span-8 sm:row-start-1">
           <hr className="mt-8" />
           {displayPosts?.length > 0 ? (
             <ul className="flex flex-col">
@@ -71,7 +71,7 @@ export default async function Page({ searchParams }: Props) {
             className="mt-4 justify-end"
           />
         </div>
-        <Card className="col-span-12 row-start-3 h-fit sm:col-span-4 sm:col-start-9 sm:row-start-1">
+        <Card className="col-span-12 h-fit sm:col-span-4 sm:col-start-9">
           <CardHeader>
             <CardTitle>Tags</CardTitle>
           </CardHeader>
