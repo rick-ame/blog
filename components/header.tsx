@@ -7,7 +7,7 @@ import { cn } from '@/lib/utils'
 import { Icons } from './icons'
 import { MainNav } from './main-nav'
 import { MobileNav } from './mobile-nav'
-import { ModeToggle } from './mode-toggle'
+import { ThemeToggle } from './theme-toggle'
 import { buttonVariants } from './ui/button'
 
 export const Header: FC = () => {
@@ -32,7 +32,7 @@ export const Header: FC = () => {
                 <span className="sr-only">GitHub</span>
               </div>
             </Link>
-            <ModeToggle />
+            <ThemeToggle />
             <MobileNav />
           </nav>
         </div>
