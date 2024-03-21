@@ -30,7 +30,7 @@ export default async function Page() {
           </p>
         </div>
         <ul className="py-4 text-lg text-muted-foreground">
-          <li>👋 Hi, I am Rick(@rick-ast)</li>
+          <li>👋 Hi, I am {siteConfig.author}</li>
           <li>👀 I&apos;m interested in web development</li>
         </ul>
       </div>
