@@ -1,5 +1,6 @@
 import { slug } from 'github-slugger'
 import { type Metadata } from 'next'
+import Link from 'next/link'
 
 import { PostItem } from '@/app/blog/(components)/post-item'
 import { Tag } from '@/components/tag'
@@ -71,7 +72,9 @@ export default function Page({ params }: Props) {
         </div>
         <Card className="col-span-12 row-start-3 h-fit sm:col-span-4 sm:col-start-9 sm:row-start-1">
           <CardHeader>
-            <CardTitle>Tags</CardTitle>
+            <CardTitle>
+              <Link href="/tags">Tags</Link>
+            </CardTitle>
           </CardHeader>
           <CardContent className="flex flex-wrap gap-2">
             {sortedTags.map((tag) => (
