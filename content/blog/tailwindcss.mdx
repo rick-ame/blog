@@ -1,0 +1,147 @@
+---
+title: Tailwind CSS
+description: Getting started with tailwind css
+date: 2024-03-23
+tags: ['css', 'tailwind']
+published: true
+---
+
+# Why to use Tailwind CSS
+
+There are two main types of CSS framework. One is based around components - a group that includes frameworks such as [Bootstrap](https://getbootstrap.com/). The other type of CSS framework is based around utilities — a group that includes the likes of [Tailwind CSS](https://tailwindcss.com/), and [UnoCSS](https://unocss.dev/).
+
+For many years, component-based frameworks were the de facto standard for building websites quickly and easily. But all this magic comes with a price. Without serious customization, sites built with such frameworks look similar to each other. And customization is a real pain in the neck for anyone who wants to build something more complex and/or creative. Component-based styles are easy to implement, but inflexible and confined to certain boundaries.
+
+“Utility-first” frameworks were created to solve this problem. A utility-first framework is built with low-level functionality in mind. Utility classes offer much more power and flexibility than component classes, they are completely customizable and extensible, it’s easier to build unique, custom website designs without fighting with unwanted styles. Utility classes have consistent styles, which gives us a ready-to-use [design system](https://uxdesign.cc/everything-you-need-to-know-about-design-systems-54b109851969). We can also create our own design system if we need to. With utility classes, we can still extract common, repetitive patterns into custom, reusable components. But in contrast to predefined components, custom components will be exactly what we need. In summary, we can say that a utility-first framework gives us balance between the concrete and the abstract.
+
+# Getting Started with Tailwind
+
+You can follow the [guide](https://tailwindcss.com/docs/installation) to implement Tailwind CSS to your project.
+
+# Building Complex Designs with Tailwind
+
+## Utility-First Fundamentals
+
+Using utility classes to build custom designs without writing CSS
+
+```html
+<div
+  class="mx-auto flex max-w-sm items-center space-x-4 rounded-xl bg-white p-6 shadow-lg"
+>
+  <div class="shrink-0">
+    <img class="h-12 w-12" src="/img/logo.svg" alt="ChitChat Logo" />
+  </div>
+  <div>
+    <div class="text-xl font-medium text-black">ChitChat</div>
+    <p class="text-slate-500">You have a new message!</p>
+  </div>
+</div>
+```
+
+### Why not just use inline styles?
+
+Utility classes has a few important advantages over inline styles:
+
+- Designing with constraints. Using inline styles, every value is a magic number. With utilities, you’re choosing styles from a predefined design system, which makes it much easier to build visually consistent UIs.
+- Responsive design. You can’t use media queries in inline styles, but you can use Tailwind’s responsive utilities to build fully responsive interfaces easily.
+- Hover, focus, and other states. Inline styles can’t target states like hover or focus, but Tailwind’s state variants make it easy to style those states with utility classes.
+
+## Handling Hover, Focus, and Other States
+
+Every utility class in Tailwind can be applied conditionally by adding a modifier to the beginning of the class name that describes the condition you want to target.
+
+For example, to apply the bg-sky-700 class on hover, use the hover:bg-sky-700 class:
+
+```html /hover:bg-sky-700/
+<button class="... bg-sky-500 hover:bg-sky-700">Save changes</button>
+```
+
+Tailwind includes modifiers for just about everything you’ll ever need, including:
+
+- Pseudo-classes, like `:hover`, `:focus`, `:first-child`, and `:required`
+- Pseudo-elements, like `::before`, `::after`, `::placeholder`, and `::selection`
+- Media and feature queries, like responsive breakpoints, dark mode, and prefers-reduced-motion
+- Attribute selectors, like `[dir="rtl"]` and `[open]`
+
+## Responsive Design
+
+There are five breakpoints by default, inspired by common device resolutions:
+
+| Breakpoint prefix | Minimum width | CSS                                  |
+| ----------------- | ------------- | ------------------------------------ |
+| `sm`              | 640px         | `@media (min-width: 640px) { ... }`  |
+| `md`              | 768px         | `@media (min-width: 768px) { ... }`  |
+| `lg`              | 1024px        | `@media (min-width: 1024px) { ... }` |
+| `xl`              | 1280px        | `@media (min-width: 1280px) { ... }` |
+| `2xl`             | 1536px        | `@media (min-width: 1536px) { ... }` |
+
+```html
+<!-- Width of 16 by default, 32 on medium screens, and 48 on large screens -->
+<img class="w-16 md:w-32 lg:w-48" src="..." />
+```
+
+### Working mobile-first
+
+Use unprefixed utilities to target mobile, and override them at larger breakpoints
+
+```html
+<!-- This will center text on mobile, and left align it on screens 640px and wider -->
+<div class="text-center sm:text-left"></div>
+```
+
+### Targeting a breakpoint range
+
+```html
+<div class="md:max-xl:flex">
+  <!-- ... -->
+</div>
+```
+
+## Dark Mode
+
+To make this as easy as possible, Tailwind includes a dark variant that lets you style your site differently when dark mode is enabled:
+
+```html /dark:bg-slate-800/ /dark:text-white/ /dark:text-slate-400/
+<div class="bg-white  dark:bg-slate-800">
+  <h3 class="mt-5 text-base font-medium text-slate-900 dark:text-white">...</h3>
+  <p class="mt-2 text-sm text-slate-500 dark:text-slate-400">
+    Lorem ipsum dolor sit amet consectetur.
+  </p>
+</div>
+```
+
+### Toggling dark mode manually
+
+If you want to support toggling dark mode manually instead of relying on the operating system preference, use the `selector`[^1] strategy instead of the media strategy:
+
+```js showLineNumbers {3} title="tailwind.config.mjs"
+/** @type {import('tailwindcss').Config} */
+module.exports = {
+  darkMode: 'selector',
+  // ...
+}
+```
+
+## Accessibility
+
+### Screen Readers
+
+Use sr-only to hide an element visually without hiding it from screen readers:
+
+```html /sr-only/
+<a href="#">
+  <svg><!-- ... --></svg>
+  <span class="sr-only">Settings</span>
+</a>
+```
+
+Use not-sr-only to undo sr-only, making an element visible to sighted users as well as screen readers. This can be useful when you want to visually hide something on small screens but show it on larger screens for example:
+
+```html /sm:not-sr-only/
+<a href="#">
+  <svg><!-- ... --></svg>
+  <span class="sr-only sm:not-sr-only">Settings</span>
+</a>
+```
+
+[^1]: The selector strategy replaced the class strategy in Tailwind CSS v3.4.1.
