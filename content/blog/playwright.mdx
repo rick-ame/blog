@@ -229,3 +229,9 @@ expect(await page.screenshot()).toMatchSnapshot(['landing', 'step3.png'])
 Learn more about [visual comparisons](https://playwright.dev/docs/test-snapshots).
 
 **Note that matching snapshots only work with Playwright test runner.**
+
+<Callout>
+  Since there can be significant differences among snapshots on different os or
+  headed/headless mode, it's better to run snapshot test cases on Linux headless
+  mode using docker image to keep the same environment with CI.
+</Callout>
