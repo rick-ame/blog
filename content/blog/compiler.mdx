@@ -60,7 +60,10 @@ Tokens might look something like this:
 ]
 ```
 
-```js showLineNumbers title="THE TOKENIZER!!!" caption="tokenizer"
+<details>
+  <summary>THE TOKENIZER!!!</summary>
+
+```js showLineNumbers
 function tokenizer(input) {
   // A `current` variable for tracking our position in the code like a cursor.
   let current = 0
@@ -168,6 +171,8 @@ function tokenizer(input) {
 }
 ```
 
+</details>
+
 And an Abstract Syntax Tree (AST) might look like this:
 
 ```js
@@ -194,7 +199,10 @@ And an Abstract Syntax Tree (AST) might look like this:
 }
 ```
 
-```js showLineNumbers title="THE PARSER!!!" caption="parser"
+<details>
+  <summary>THE PARSER!!!</summary>
+
+```js showLineNumbers
 function parser(tokens) {
   // Again we keep a `current` variable that we will use as a cursor.
   let current = 0
@@ -304,6 +312,8 @@ function parser(tokens) {
   return ast
 }
 ```
+
+</details>
 
 # Transformation
 
@@ -431,7 +441,10 @@ var visitor = {
 }
 ```
 
-```js showLineNumbers title="THE TRAVERSER!!!" caption="traverser"
+<details>
+  <summary>THE TRAVERSER!!!</summary>
+
+```js showLineNumbers
 /**
  * So now we have our AST, and we want to be able to visit different nodes with
  * a visitor. We need to be able to call the methods on the visitor whenever we
@@ -519,7 +532,12 @@ function traverser(ast, visitor) {
 }
 ```
 
-```js showLineNumbers title="THE TRANSFORMER!!!" caption="transformer"
+</details>
+
+<details>
+  <summary>THE TRANSFORMER!!!</summary>
+
+```js showLineNumbers
 /**
  * Next up, the transformer. Our transformer is going to take the AST that we
  * have built and pass it to our traverser function with a visitor and will
@@ -630,13 +648,18 @@ function transformer(ast) {
 }
 ```
 
+</details>
+
 # Code Generation
 
 The final phase of a compiler is code generation. Sometimes compilers will do things that overlap with transformation, but for the most part code generation just means take our AST and string-ify code back out.
 
 Effectively our code generator will know how to “print” all of the different node types of the AST, and it will recursively call itself to print nested nodes until everything is printed into one long string of code.
 
-```js showLineNumbers title=" THE CODE GENERATOR!!!" caption="codeGenerator"
+<details>
+  <summary>THE CODE GENERATOR!!!</summary>
+
+```js showLineNumbers
 function codeGenerator(node) {
   // We'll break things down by the `type` of the `node`.
   switch (node.type) {
@@ -676,6 +699,8 @@ function codeGenerator(node) {
   }
 }
 ```
+
+</details>
 
 # The Compiler
 
