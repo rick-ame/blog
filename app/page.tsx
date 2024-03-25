@@ -6,7 +6,7 @@ import { siteConfig } from '@/config/site'
 import { cn, sortPosts } from '@/lib/utils'
 import { posts } from '#site/content'
 
-import { PostItem } from './blog/(components)/post-item'
+import { PostItem } from './blog/_components/post-item'
 
 export default function Home() {
   const latestPosts = sortPosts(posts).slice(0, 5)

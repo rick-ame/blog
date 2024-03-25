@@ -2,7 +2,7 @@ import { slug } from 'github-slugger'
 import { type Metadata } from 'next'
 import Link from 'next/link'
 
-import { PostItem } from '@/app/blog/(components)/post-item'
+import { PostItem } from '@/app/blog/_components/post-item'
 import { Tag } from '@/components/tag'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { getAllTags, getPostsByTagSlug, sortTagsByCount } from '@/lib/utils'

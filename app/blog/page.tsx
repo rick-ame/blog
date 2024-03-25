@@ -6,8 +6,8 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { getAllTags, sortPosts, sortTagsByCount } from '@/lib/utils'
 import { posts } from '#site/content'
 
-import { PostItem } from './(components)/post-item'
-import { QueryPagination } from './(components)/query-pagination'
+import { PostItem } from './_components/post-item'
+import { QueryPagination } from './_components/query-pagination'
 
 export const metadata: Metadata = {
   title: 'My blog',

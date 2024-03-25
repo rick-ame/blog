@@ -1,4 +1,4 @@
-import './(components)/mdx.css'
+import './_components/mdx.css'
 
 import { type Metadata } from 'next'
 import { notFound } from 'next/navigation'
@@ -7,7 +7,7 @@ import { Tag } from '@/components/tag'
 import { siteConfig } from '@/config/site'
 import { posts } from '#site/content'
 
-import { MDXContent } from './(components)/mdx-content'
+import { MDXContent } from './_components/mdx-content'
 
 interface Props {
   params: {
