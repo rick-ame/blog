@@ -7,8 +7,8 @@ export const Providers: FC<PropsWithChildren> = ({ children }) => {
   return (
     <ThemeProvider
       attribute="class"
-      defaultTheme="system"
-      enableSystem
+      defaultTheme="light"
+      enableSystem={false}
       disableTransitionOnChange
     >
       {children}
