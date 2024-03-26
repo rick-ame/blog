@@ -235,3 +235,9 @@ Learn more about [visual comparisons](https://playwright.dev/docs/test-snapshots
   headed/headless mode, it's better to run snapshot test cases on Linux headless
   mode using docker image to keep the same environment with CI.
 </Callout>
+
+Script to run docker image:
+
+```sh
+docker run -it --rm --ipc=host -v $(pwd):/work/ -w /work/ mcr.microsoft.com/playwright:v1.42.1-jammy /bin/bash
+```
