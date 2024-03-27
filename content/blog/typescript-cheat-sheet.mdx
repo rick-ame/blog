@@ -1,0 +1,45 @@
+---
+title: Typescript Cheat Sheet
+description: A collection of useful typescript utilities
+date: 2024-02-08
+tags: ['ts']
+published: true
+---
+
+### DistributiveOmit
+
+```ts
+type DistributiveOmit<T, K extends keyof T> = T extends unknown
+  ? Omit<T, K>
+  : never
+```
+
+Why not just use `Omit`?
+
+```ts
+interface A {
+  id: string
+  label: string
+  a: string
+}
+interface B {
+  id: string
+  label: string
+  b: string
+}
+type C = A | B
+type D = Omit<C, 'id'> // can not get correct type, same as Omit<A, 'id'>
+```
+
+### ArrayElement
+
+```ts
+type ArrayElement<T> = T extends readonly (infer E)[] ? E : never
+```
+
+Or simplified version
+
+```ts
+const chars = ['a', 'b', 'c']
+const char: (typeof chars)[number] = 's'
+```
