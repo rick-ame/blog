@@ -9,7 +9,10 @@ import { posts } from '#site/content'
 import { PostItem } from './blog/_components/post-item'
 
 export default function Home() {
-  const latestPosts = sortPosts(posts).slice(0, 5)
+  const latestPosts = sortPosts(posts.filter((post) => post.published)).slice(
+    0,
+    5,
+  )
 
   return (
     <>

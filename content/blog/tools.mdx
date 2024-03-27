@@ -1,12 +1,57 @@
 ---
 title: Awesome Tools on MacOS
-description: Some tools you can use for entertainment or development on macos
+description: Some tools you can use for entertainment or development on MacOS
 date: 2023-10-12
 tags: ['mac']
 published: true
 ---
 
-# IINA
+## Terminal
+
+_This adds new theme to Terminal App of MacOS_
+
+1. Download the [file](/assets/rick.terminal)
+1. Import it to Terminal App
+
+## Homebrew
+
+The Missing Package Manager for macOS (or Linux)
+_[Download](https://brew.sh/)_
+
+## Oh My Zsh
+
+_This adds new theme to [Oh My Zsh](https://ohmyz.sh)_
+
+1. Download the [file](/assets/rick.zsh-theme)
+1. Place it under `$HOME/.oh-my-zsh/custom/themes` folder
+1. Change `ZSH_THEME` to "rick" in `$HOME/.zshrc`
+
+## FortiClient VPN
+
+The VPN-only version of FortiClient offers SSL VPN and IPSecVPN.
+_[Download](https://www.fortinet.com/support/product-downloads#vpn)_
+
+## Node.js
+
+_Node.js version manager, [fnm](https://github.com/Schniz/fnm) is recommended_
+
+1. Install using [Homebrew](https://brew.sh/)
+
+   ```sh
+   brew install fnm
+   ```
+
+1. To automatically run fnm use when a directory contains a .node-version or .nvmrc file, add the following to `$HOME/.zshrc` profile:
+
+   ```sh
+   eval "$(fnm env --use-on-cd)"
+   ```
+
+1. Usage
+
+   [Available commands for an extended usage documentation](https://github.com/Schniz/fnm/blob/master/docs/commands.md)
+
+## IINA
 
 IINA is the modern video player for macOS.
 _[Download](https://iina.io/)_
@@ -29,17 +74,7 @@ Features:
 - Command line tool and browser extensions provided
 - In active development
 
-# The Unarchiver
+## The Unarchiver
 
 The Unarchiver is the only app you need to open RAR on Mac. It’s times more powerful than the native macOS utility and supports infinitely more archive formats.
 _[Download](https://theunarchiver.com/)_
-
-# Homebrew
-
-The Missing Package Manager for macOS (or Linux)
-_[Download](https://brew.sh/)_
-
-# FortiClient VPN
-
-The VPN-only version of FortiClient offers SSL VPN and IPSecVPN.
-_[Download](https://www.fortinet.com/support/product-downloads#vpn)_
