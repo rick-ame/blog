@@ -1,0 +1,138 @@
+---
+title: What is Functional Programming
+description: Functional Programming is a paradigm of building computer programs using expressions and functions without mutating state and data.
+date: 2024-01-16
+tags: ['javascript']
+published: true
+---
+
+# Introduction
+
+Functional programming is a declarative programming paradigm style where one applies pure functions in sequence to solve complex problems. Functions take an input value and produce an output value without being affected by the program. Functional programming mainly focuses on what to solve and uses expressions instead of statements. Functional programming excels mostly at mathematical functions where the values don’t have any correlation and doesn’t make use of concepts like shared state and mutable data used in object-oriented programming.
+
+# Functional Programming Concepts
+
+## First-class functions
+
+First-class functions in functional programming are treated as data type variables and can be used like any other variables. These first-class variables can be passed to functions as parameters, or stored in data structures.
+
+## Recursion
+
+Unlike object-oriented programming, functional programming doesn’t make use of “while” or ”for” loops or “if-else” statements. Functional programs avoid constructions that create different outputs on every execution. Instead, recursive functions call themselves repeatedly until they reach the desired state or solution known as the base case.
+
+```js
+const range = (a, b) => (a > b ? [] : [a, ...range(a + 1, b)])
+```
+
+## Immutability
+
+In functional programming, we can’t modify a variable after being created. The reason for this is that we would want to maintain the program's state throughout the runtime of the program. It is best practice to program each function to produce the same result irrespective of the program's state. This means that when we create a variable and assign a value, we can run the program with ease fully knowing that the value of the variables will remain constant and can never change.
+
+## Pure vs. Impure Functions
+
+Pure functions form the foundation of functional programming and have two major properties:
+
+- They produce the same output if the given input is the same
+- They have no side effects
+
+```js
+const add = (a, b) => a + b
+```
+
+Here, add is a pure function. This is because, for a fixed value of a and b, the output will always be the same.
+
+#### Filter
+
+As the name suggests, this filters the array.
+
+```js
+array.filter(condition)
+```
+
+#### Reduce
+
+`reducer` is a function that takes the accumulated value and the next item in the array and returns the new value. It is called like this for all values in the array, one after another.
+
+```js
+const sum = (accumulatedSum, arrayItem) => accumulatedSum + arrayItem
+;[1, 2, 3].reduce(sum) // 6
+```
+
+#### Object.assign
+
+```js
+const obj = { a: 2 }
+const newObj = Object.assign({}, obj)
+newObj.a = 3
+obj.a // 2
+```
+
+With the advent of ES6, this can also be done using the spread operator.
+
+```js
+const newObj = { ...obj }
+```
+
+## High order functions
+
+A function that accepts other functions as parameters or returns functions as outputs is called a high order function. This process applies a function to its parameters at each iteration while returning a new function that accepts the next parameter.
+
+```js
+const withLog = (fn) => {
+  return (...args) => {
+    console.log(`calling ${fn.name}`)
+    return fn(...args)
+  }
+}
+```
+
+In the above example, we create a `withLog` higher-order function that takes a function and returns a function that logs a message before the wrapped function runs.
+
+```js
+const add = (a, b) => a + b
+const addWithLogging = withLog(add)
+addWithLogging(3, 4)
+// calling add
+// 7
+```
+
+## Currying
+
+Currying means breaking down a function that takes multiple arguments into one or multiple levels of higher-order functions.
+
+Let’s take the `add` function.
+
+```js
+const add = (a, b) => a + b
+```
+
+When we are to curry it, we rewrite it distributing arguments into multiple levels as follows.
+
+```js
+const add = (a) => {
+  return (b) => {
+    return a + b
+  }
+}
+add(3)(4) // 7
+```
+
+The benefit of currying is memoization. We can now memoize certain arguments in a function call so that they can be reused later without duplication and re-computation.
+
+## Composition
+
+In mathematics, composition is defined as passing the output of one function into input of another so as to create a combined output. The same is possible in functional programming since we are using pure functions.
+
+```js
+const range = (a, b) => (a > b ? [] : [a, ...range(a + 1, b)])
+const multiply = (arr) => arr.reduce((p, a) => p * a)
+const factorial = (n) => multiply(range(1, n))
+factorial(5) // 120
+factorial(6) // 720
+```
+
+The first function is `range`, which takes a starting number `a` and an ending number `b` and creates an array consisting of numbers from a to b. Then we have a function `multiply` that takes an array and multiplies all the numbers in it. The above function for calculating `factorial` is similar to f(x) = g(h(x)), thus demonstrating the composition property.
+
+# Conclusion
+
+Functional programming is a well-researched and robust paradigm of writing computer programs. With the introduction of `ESNext`, JavaScript allows for a much better functional programming experience than ever before.
