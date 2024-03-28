@@ -6,7 +6,68 @@ tags: ['typescript']
 published: true
 ---
 
-### DistributiveOmit
+## Function Overload
+
+In `Next.js` you can call server functions from client side directly, however, the type hints may mislead you and cause error.
+
+For example:
+
+```ts
+type FormData = {
+  name: string
+  age: string
+}
+export function serverAction(data: FormData) {
+  const { name, age } = data
+}
+```
+
+We cannot trust what client submits, the name or age prop may not exist in real world, we should validate the data first, so change that to:
+
+```ts
+function validate(data: unknown): FormData {
+  // validates data here
+  ...
+  return data as FormData
+}
+export function serverAction(data: FormData) {
+  const validData = validate(data)
+  const { name, age } = data // woops, should be validData here
+}
+```
+
+Declare data as `FormData` type maybe not a good idea, since there is no error hints when you accidentally uses `data.name` or `data.age`, so you should change its type to `unknown`
+
+```ts /unknown/
+export function serverAction(data: unknown) {
+  const validData = validate(data)
+  // const { name, age } = data, this will show ts error
+  const { name, age } = validData
+}
+```
+
+But in this case we lose type hints on client side, a better solution is to add another function declaration for client side using overload.
+
+The final version:
+
+```ts
+type FormData = {
+  name: string
+  age: string
+}
+export function serverAction(data: FormData): void
+export function serverAction(data: unknown) {
+  const validData = validate(data)
+  const { name, age } = validData
+}
+function validate(data: unknown): FormData {
+  // validates data here
+  ...
+  return data as FormData
+}
+```
+
+## DistributiveOmit
 
 ```ts
 type DistributiveOmit<T, K extends keyof T> = T extends unknown
@@ -31,7 +92,7 @@ type C = A | B
 type D = Omit<C, 'id'> // can not get correct type, same as Omit<A, 'id'>
 ```
 
-### ArrayElement
+## ArrayElement
 
 ```ts
 type ArrayElement<T> = T extends readonly (infer E)[] ? E : never
