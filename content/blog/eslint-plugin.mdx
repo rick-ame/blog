@@ -112,7 +112,7 @@ module.exports = {
           node.callee.type === 'Identifier' &&
           node.callee.name === 'useRequest'
         ) {
-          const arg1 = node.arguments[1]
+          const arg1 = node.arguments[1] // useRequest options
           let manual = false
           let refreshDeps
           let refreshDepsRange
