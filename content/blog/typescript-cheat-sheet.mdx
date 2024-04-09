@@ -8,7 +8,7 @@ published: true
 
 ## Function Overload
 
-In `Next.js` you can call server functions from client side directly, however, the type hints may mislead you and cause error.
+In `Next.js` you can call server functions from the client side directly, however, the type hints may mislead you and cause error.
 
 For example:
 
@@ -22,7 +22,7 @@ export function serverAction(data: FormData) {
 }
 ```
 
-We cannot trust what client submits, the name or age prop may not exist in real world, we should validate the data first, so change that to:
+We cannot trust what the client submits, the name or age prop may not exist in the real world, we should validate the data first, so change that to:
 
 ```ts
 function validate(data: unknown): FormData {
@@ -36,7 +36,7 @@ export function serverAction(data: FormData) {
 }
 ```
 
-Declare data as `FormData` type maybe not a good idea, since there is no error hints when you accidentally uses `data.name` or `data.age`, so you should change its type to `unknown`
+Declaring data as `FormData` type may not be a good idea, since there is no error hints when you accidentally use `data.name` or `data.age`, so you should change its type to `unknown`
 
 ```ts /unknown/
 export function serverAction(data: unknown) {
@@ -46,7 +46,7 @@ export function serverAction(data: unknown) {
 }
 ```
 
-But in this case we lose type hints on client side, a better solution is to add another function declaration for client side using overload.
+But in this case, we lose type hints on the client side, a better solution is to add another function declaration for the client side using overload.
 
 The final version:
 

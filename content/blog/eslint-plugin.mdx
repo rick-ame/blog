@@ -8,11 +8,11 @@ published: true
 
 # Background
 
-I'm using `useRequest` from [ahooks](https://ahooks.js.org/) to fetch data, however, its not easy to track the dependent parameters of `refreshDeps`. One way is to declare a request function using `useCallback`, then add this function as dependency, but this way is not very convenient. This plugin adds tips like [`eslint-plugin-react-hooks`](https://www.npmjs.com/package/eslint-plugin-react-hooks) for `useRequest`.
+I'm using `useRequest` from [ahooks](https://ahooks.js.org/) to fetch data, however, it's not easy to track the dependent parameters of `refreshDeps`. One way is to declare a request function using `useCallback`, and then add this function as a dependency, but this way is not very convenient. This plugin adds tips like [`eslint-plugin-react-hooks`](https://www.npmjs.com/package/eslint-plugin-react-hooks) for `useRequest`.
 
 # Adding a rule
 
-A basic rule starts with minimal codes as follow:
+A basic rule starts with minimal codes as follows:
 
 ```js
 module.exports = {
@@ -76,7 +76,7 @@ You can check out the [Custom Rules](https://eslint.org/docs/latest/extend/custo
 
 # Implementing the rule
 
-We would use `eslint-plugin-react-hooks` plugin to track the dependencies, below is the final rule.
+We would use the `eslint-plugin-react-hooks` plugin to track the dependencies, below is the final rule.
 
 ```js
 const reactHooksPlugin = require('eslint-plugin-react-hooks')
@@ -205,7 +205,7 @@ module.exports = {
 
 # How to use it
 
-In plugin, add the rule to recommend,
+In the plugin, add the rule to recommend,
 
 ```json title=".eslintrc"
 {

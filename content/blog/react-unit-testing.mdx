@@ -12,7 +12,7 @@ Unit testing is a crucial step in the software development process, where develo
 
 # What should you test
 
-As the name suggests we should be testing a unit, not more, not less. If its a function we should be testing only that function and not its dependencies. If its a react component it should only be that react component.
+As the name suggests we should be testing a unit, not more, not less. If it is a function we should be testing only that function and not its dependencies. If it's a react component it should only be that react component.
 
 ### What to test
 
@@ -27,7 +27,7 @@ In general, your tests should cover the following aspects of your code:
 Testing most of your code is important, but here are some things you do not need to test:
 
 - Actual Implementation: You do not need to test the actual implementation of a functionality. Just test if the component is behaving correctly.
-- Third Party libraries: If you are using any third party libraries like Material UI, no need to test those – they should already be tried and tested.
+- Third-Party libraries: If you are using any third-party libraries like Material UI, no need to test those – they should already be tried and tested.
 
 # Tools for React unit testing
 
@@ -37,15 +37,15 @@ The React [Testing Library](https://testing-library.com/) has a set of packages 
 
 ### Vitest
 
-[Vitest](https://vitest.dev/) is a next generation testing framework powered by [Vite](https://vitejs.dev/). You can check out the [Comparisons](https://vitest.dev/guide/comparisons.html) section on vitest website for more details on how Vitest differs from other similar tools.
+[Vitest](https://vitest.dev/) is a next-generation testing framework powered by [Vite](https://vitejs.dev/). You can check out the [Comparisons](https://vitest.dev/guide/comparisons.html) section on vitest website for more details on how Vitest differs from other similar tools.
 
 # How to write unit tests
 
-We are not going to deep dive about how to set up, configure and the file paths of tests. we’ll check the general idea and the strategy of writing unit tests. and try to talk through that.
+We are not going to deep dive into how to set up, configure and the file paths of tests. we’ll check the general idea and the strategy of writing unit tests. and try to talk through that.
 
 ## Test rendering components
 
-Let's write a component that renders "Hello World" and test that the component actually renders the popular greeting:
+Let's write a component that renders "Hello World" and test that the component renders the popular greeting:
 
 ```jsx title="HelloWorld.jsx"
 const HelloWorld = () => {
@@ -156,7 +156,7 @@ const Counter = ({ initialCount }) => {
 export default Counter
 ```
 
-We have a state `count`, its initial value is from `props` and it is displayed in the DOM in the `p` element. The Increment button when clicked increments the state of the count by 1 and this in turn makes the component re-render and display the updated value of the count state.
+We have a state `count`, its initial value is from `props` and it is displayed in the DOM in the `p` element. The Increment button when clicked increments the state of the count by 1 and this in turn makes the component re-render and displays the updated value of the count state.
 
 ```jsx title="Counter.test.jsx"
 import { render, fireEvent } from '@testing-library/react'
@@ -187,7 +187,7 @@ const Foobar = ({ done }) => {
 }
 ```
 
-We have a simple component here, it accepts a function in its props object via `done` property. This `done` props function is called when the Call DONE button is clicked.
+We have a simple component here, it accepts a function in its props object via the `done` property. This `done` props function is called when the Call DONE button is clicked.
 
 ```jsx title="Foobar.test.jsx" {6}
 import { render } from '@testing-library/react'
@@ -334,7 +334,7 @@ it('should Button component match snapshot', () => {
 })
 ```
 
-If you intentionally make changes to the component's output and want to update the snapshot, you can update the snapshot file using following command:
+If you intentionally make changes to the component's output and want to update the snapshot, you can update the snapshot file using the following command:
 
 ```sh
 vitest -u
@@ -342,8 +342,8 @@ vitest -u
 
 # Summary
 
-In summary I’d say the most important thing is writing testable code. That allows you to write better unit tests and write them fast. Key facts in writing testable code are:
+In summary, I’d say the most important thing is writing testable code. That allows you to write better unit tests and write them fast. Key facts in writing testable code are:
 
 - Separation of UI and logic
 - Passing dependencies to function (or dependency injection)
-- Make sure to test single unit of code
+- Make sure to test a single unit of code

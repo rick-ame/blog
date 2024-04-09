@@ -8,7 +8,7 @@ published: true
 
 # React Compiler
 
-React 19 will include a compiler much like Svelte or Vue. This will not only make React faster, but will automate certain tedious tasks and make less work for the developer.
+React 19 will include a compiler much like Svelte or Vue. This will not only make React faster but will automate certain tedious tasks and make less work for the developer.
 
 ### Automatic Memoization
 
@@ -18,11 +18,11 @@ With the compiler, these hooks will now be a thing of the past.
 
 # use() Hook
 
-The [`use`](https://react.dev/reference/react/use) hook lets you read and asynchronously load a resource such as a promise or a context. It can also be used in loops and conditionals unlike other hooks. It can be used to fetch data in some cases replacing `useEffect`.
+The [`use`](https://react.dev/reference/react/use) hook lets you read and asynchronously load a resource such as a promise or a context. It can also be used in loops and conditionals, unlike other hooks. It can be used to fetch data in some cases replacing `useEffect`.
 
 `use(context)` will replace the `useContext(context)` hook.
 
-Call use in your component to read the value of a resource like a Promise or context.
+Call `use` in your component to read the value of a resource like a Promise or context.
 
 ```jsx {4-5}
 import { use } from 'react';
@@ -72,15 +72,15 @@ By default, Actions are submitted within a [transition](https://react.dev/refere
 
 # useOptimistic
 
-As its name indicates, [`useOptimistic`](https://react.dev/reference/react/useOptimistic) manages optimistic state updates. With this hook, you can apply temporary updates that are automatically reverted once the final state commits. For Actions, this allows you to optimistically set the final state of the data on the client, assuming the submission is successful, and revert to the value for data received from the server. It works using regular `async/await`, so it works the same whether you’re using `fetch` on the client, or a Server Action from the server.
+As its name indicates, [`useOptimistic`](https://react.dev/reference/react/useOptimistic) manages optimistic state updates. With this hook, you can apply temporary updates that are automatically reverted once the final state is committed. For Actions, this allows you to optimistically set the final state of the data on the client, assuming the submission is successful, and revert to the value for data received from the server. It works using regular `async/await`, so it works the same whether you’re using `fetch` on the client or a Server Action from the server.
 
 # Document Metadata
 
-Built in support for metadata like `<title>`, `<meta>` and metadata `<link>` tags. These work the same way in all environments, including fully client-side code, SSR, and RSC.
+Built-in support for metadata like `<title>`, `<meta>` and metadata `<link>` tags. These work the same way in all environments, including fully client-side code, SSR, and RSC.
 
 # Asset Loading
 
-NOw `Suspense` is integrated with the loading lifecycle of resources such as stylesheets, fonts, and scripts so that React takes them into account to determine whether the content in elements like `<style>`, `<link>`, and `<script>` are ready to be displayed. There are also new [Resource Loading APIs](https://react.dev/reference/react-dom#resource-preloading-apis) added like `preload` and `preinit` to provide greater control for when a resource should load and initialize.
+NOw `Suspense` is integrated with the loading lifecycle of resources such as stylesheets, fonts, and scripts so that React takes them into account to determine whether the content in elements like `<style>`, `<link>`, and `<script>` is ready to be displayed. There are also new [Resource Loading APIs](https://react.dev/reference/react-dom#resource-preloading-apis) added like `preload` and `preinit` to provide greater control for when a resource should load and initialize.
 
 # Other Changes & Features
 

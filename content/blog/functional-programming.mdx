@@ -8,7 +8,7 @@ published: true
 
 # Introduction
 
-Functional programming is a declarative programming paradigm style where one applies pure functions in sequence to solve complex problems. Functions take an input value and produce an output value without being affected by the program. Functional programming mainly focuses on what to solve and uses expressions instead of statements. Functional programming excels mostly at mathematical functions where the values don’t have any correlation and doesn’t make use of concepts like shared state and mutable data used in object-oriented programming.
+Functional programming is a declarative programming paradigm style where one applies pure functions in sequence to solve complex problems. Functions take an input value and produce an output value without being affected by the program. Functional programming mainly focuses on what to solve and uses expressions instead of statements. Functional programming excels mostly at mathematical functions where the values don’t have any correlation and don’t make use of concepts like shared state and mutable data used in object-oriented programming.
 
 # Functional Programming Concepts
 
@@ -51,7 +51,7 @@ array.filter(condition)
 
 #### Reduce
 
-`reducer` is a function that takes the accumulated value and the next item in the array and returns the new value. It is called like this for all values in the array, one after another.
+`reducer` is a function that takes the accumulated value and the next item in the array and returns the new value. The function call applies to all values in the array, one after another.
 
 ```js
 const sum = (accumulatedSum, arrayItem) => accumulatedSum + arrayItem
@@ -75,7 +75,7 @@ const newObj = { ...obj }
 
 ## High order functions
 
-A function that accepts other functions as parameters or returns functions as outputs is called a high order function. This process applies a function to its parameters at each iteration while returning a new function that accepts the next parameter.
+A function that accepts other functions as parameters or returns functions as outputs is called a high-order function. This process applies a function to its parameters at each iteration while returning a new function that accepts the next parameter.
 
 ```js
 const withLog = (fn) => {
@@ -121,7 +121,7 @@ The benefit of currying is memoization. We can now memoize certain arguments in 
 
 ## Composition
 
-In mathematics, composition is defined as passing the output of one function into input of another so as to create a combined output. The same is possible in functional programming since we are using pure functions.
+In mathematics, composition is defined as passing the output of one function into the input of another to create a combined output. The same is possible in functional programming since we are using pure functions.
 
 ```js
 const range = (a, b) => (a > b ? [] : [a, ...range(a + 1, b)])
@@ -131,8 +131,8 @@ factorial(5) // 120
 factorial(6) // 720
 ```
 
-The first function is `range`, which takes a starting number `a` and an ending number `b` and creates an array consisting of numbers from a to b. Then we have a function `multiply` that takes an array and multiplies all the numbers in it. The above function for calculating `factorial` is similar to f(x) = g(h(x)), thus demonstrating the composition property.
+The first function is a `range`, which takes a starting number `a` and an ending number `b` and creates an array consisting of numbers from a to b. Then we have a function `multiply` that takes an array and multiplies all the numbers in it. The above function for calculating `factorial` is similar to f(x) = g(h(x)), thus demonstrating the composition property.
 
 # Conclusion
 
-Functional programming is a well-researched and robust paradigm of writing computer programs. With the introduction of `ESNext`, JavaScript allows for a much better functional programming experience than ever before.
+Functional programming is a well-researched and robust paradigm for writing computer programs. With the introduction of `ESNext`, JavaScript allows for a much better functional programming experience than ever before.

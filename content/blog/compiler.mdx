@@ -1,6 +1,6 @@
 ---
 title: The Super Tiny Compiler
-description: This is an ultra-simplified example of all the major pieces of a modern compiler written in easy to read JavaScript.
+description: This is an ultra-simplified example of all the major pieces of a modern compiler written in easy-to-read JavaScript.
 date: 2023-12-23
 tags: ['compiler']
 published: true
@@ -10,7 +10,7 @@ _ref: [the-super-tiny-compiler](https://github.com/jamiebuilds/the-super-tiny-co
 
 # Introduction
 
-Today we're going to write a compiler together. But not just any compiler... A super duper teeny tiny compiler! We're going to compile some lisp-like function calls into some C-like function calls. If you are not familiar with one or the other, below is a quick intro.
+Today we're going to write a compiler together. But not just any compiler... A super duper teeny tiny compiler! We're going to compile some Lisp-like function calls into some C-like function calls. If you are not familiar with one or the other, below is a quick intro.
 
 If we had two functions "add" and "subtract" they would be written like this:
 
@@ -23,14 +23,14 @@ If we had two functions "add" and "subtract" they would be written like this:
 Most compilers break down into three primary stages: `Parsing`, `Transformation`, and `Code Generation`
 
 1. `Parsing` is taking raw code and turning it into a more abstract representation of the code.
-1. `Transformation` takes this abstract representation and manipulates to do whatever the compiler wants it to.
+1. `Transformation` takes this abstract representation and manipulates it to do whatever the compiler wants it to.
 1. `Code Generation` takes the transformed representation of the code and turns it into new code.
 
 # Parsing
 
 Parsing typically gets broken down into two phases: `Lexical Analysis` and `Syntactic Analysis`.
 
-1. `Lexical Analysis` takes the raw code and splits it apart into these things called tokens by a thing called a tokenizer (or lexer).
+1. `Lexical Analysis` takes the raw code and splits it apart into things called tokens by a thing called a tokenizer (or lexer).
 
    _Tokens are an array of tiny little objects that describe an isolated piece of the syntax. They could be numbers, labels, punctuation, operators, whatever._
 
@@ -173,7 +173,7 @@ function tokenizer(input) {
 
 </details>
 
-And an Abstract Syntax Tree (AST) might look like this:
+An Abstract Syntax Tree (AST) might look like this:
 
 ```js
 {
@@ -319,7 +319,7 @@ function parser(tokens) {
 
 The next type of stage for a compiler is transformation. Again, this just takes the AST from the last step and makes changes to it. It can manipulate the AST in the same language or it can translate it into an entirely new language.
 
-You might notice that our AST has elements within it that look very similar. There are these objects with a type property. Each of these are known as an AST Node. These nodes have defined properties on them that describe one isolated part of the tree.
+You might notice that our AST has elements within it that look very similar. There are these objects with a type property. Each of these is known as an AST Node. These nodes have defined properties on them that describe one isolated part of the tree.
 
 We can have a node for a "NumberLiteral":
 
@@ -371,7 +371,7 @@ In order to navigate through all of these nodes, we need to be able to traverse 
 }
 ```
 
-So for the above AST we would go:
+So for the above AST, we would go:
 
 1. Program - Starting at the top level of the AST
 1. CallExpression (add) - Moving to the first element of the Program's body
@@ -402,7 +402,7 @@ var visitor = {
 }
 ```
 
-However, there also exists the possibility of calling things on "exit". Imagine our tree structure from before in list form:
+However, there also exists the possibility of calling things "exit". Imagine our tree structure from before in list form:
 
 ```
 - Program
@@ -652,7 +652,7 @@ function transformer(ast) {
 
 # Code Generation
 
-The final phase of a compiler is code generation. Sometimes compilers will do things that overlap with transformation, but for the most part code generation just means take our AST and string-ify code back out.
+The final phase of a compiler is code generation. Sometimes compilers will do things that overlap with transformation, but for the most part code generation just means taking our AST and string-ify code back out.
 
 Effectively our code generator will know how to “print” all of the different node types of the AST, and it will recursively call itself to print nested nodes until everything is printed into one long string of code.
 
