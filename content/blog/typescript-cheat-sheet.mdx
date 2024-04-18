@@ -104,3 +104,14 @@ Or simplified version
 const chars = ['a', 'b', 'c']
 const char: (typeof chars)[number] = 's'
 ```
+
+## Extend Third-party Module Interface
+
+```ts title="global.d.ts"
+import 'module-name'
+declare module 'module-name' {
+  export interface ToBeExtended {
+    prop: unknown
+  }
+}
+```
