@@ -1,0 +1,67 @@
+---
+title: Internationalization with CSS and HTML
+description: If you start thinking about a global audience sooner, you can avoid having to refactor later.
+date: 2024-04-18
+tags: ['css']
+published: true
+---
+
+# Introduction
+
+Internationalization, also called “i18n”, is the process of ensuring that your software or application can be easily used and understood by users around the world. Today we won't deal with the translation part but focus on page layout.
+
+Most languages are read from left to right (LTR), however, [languages such as Arabic or Persian use scripts that are read from right to left (RTL)](https://www.w3.org/International/questions/qa-scripts#directions). To handle i18n, we should first set the [dir](https://developer.mozilla.org/en-US/docs/Web/HTML/Global_attributes/dir) attribute and [lang](https://developer.mozilla.org/en-US/docs/Web/HTML/Global_attributes/lang) attribute for html correctly.
+
+# CSS logical properties and values
+
+Physical properties use `left`, `right`, `top`, and `bottom` to determine which side of an element is affected. For example, `margin-left: 1rem` places 1 rem of margin of the left side of an element, regardless of the element’s text direction. While [logical properties and values](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_logical_properties_and_values) use the abstract terms `block` and `inline` to describe the direction in which they flow. The physical meaning of these terms depends on the [writing mode](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_writing_modes).
+
+Some physical properties now have logical equivalents. Properties that accept physical values (top, bottom, left, right) now also accept flow-relative logical values (block-start, block-end, inline-start, inline-end).
+
+## Block dimension
+
+The dimension perpendicular to the flow of text within a line, i.e., the vertical dimension in horizontal writing modes, and the horizontal dimension in vertical writing modes. For standard English text, it is the vertical dimension.
+
+## Inline dimension
+
+The dimension parallel to the flow of text within a line, i.e., the horizontal dimension in horizontal writing modes, and the vertical dimension in vertical writing modes. For standard English text, it is the horizontal dimension.
+
+For example:
+`margin-top` ➡ `margin-block-start`
+`margin-right` ➡ `margin-inline-end`
+
+# CSS writing mode
+
+Unlike languages that use the Latin script which are primarily laid out horizontally, Asian languages such as Chinese and Japanese [can be laid out vertically](https://www.w3.org/TR/2019/REC-css-writing-modes-3-20191210/#vertical-modes). The [CSS writing modes](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_writing_modes) module defines various international writing modes, such as left-to-right (e.g., used by Latin and Indic scripts), right-to-left (e.g., used by Hebrew or Arabic scripts), bidirectional (used when mixing left-to-right and right-to-left scripts), and vertical (e.g., used by some Asian scripts).
+
+![Vert Horiz Comparison](../img/css-i18n/vert-horiz-comparison.png)
+
+<Callout>
+  For Chinese and Japanese lines are ordered either right to left or top to
+  bottom, while Mongolian and Manchu lines are ordered from left to right.
+</Callout>
+
+The [writing-mode](https://developer.mozilla.org/en-US/docs/Web/CSS/writing-mode) CSS property sets whether lines of text are laid out horizontally or vertically, as well as the direction in which blocks progress. When set for an entire document, it should be set on the root element (html element for HTML documents).
+
+## Syntax
+
+```css
+/* Keyword values */
+writing-mode: horizontal-tb;
+writing-mode: vertical-rl;
+writing-mode: vertical-lr;
+/* Global values */
+writing-mode: inherit;
+writing-mode: initial;
+writing-mode: revert;
+writing-mode: revert-layer;
+writing-mode: unset;
+```
+
+## Values
+
+It accepts `horizontal-tb`, `vertical-rl`, `vertical-lr`, `sideways-rl`, and `sideways-lr` where tb is top to bottom, rl is right to left, lr is left to right, and horizontal-tb is the browser default.
+
+# Summary
+
+By accounting for internationalization, you can ensure your product is inclusive to users around the world. Early in the development process of a new product, this may not seem necessary, particularly if your target market is not international. However, by keeping it in mind early and baking it into your CSS, you can avoid needing to refactor a large portion of your code base.
