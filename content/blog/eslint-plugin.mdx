@@ -10,7 +10,7 @@ published: true
 
 I'm using `useRequest` from [ahooks](https://ahooks.js.org/) to fetch data, however, it's not easy to track the dependent parameters of `refreshDeps`. One way is to declare a request function using `useCallback`, and then add this function as a dependency, but this way is not very convenient. This plugin adds tips like [`eslint-plugin-react-hooks`](https://www.npmjs.com/package/eslint-plugin-react-hooks) for `useRequest`.
 
-# Adding a rule
+# Adding a Rule
 
 A basic rule starts with minimal codes as follows:
 
@@ -74,7 +74,7 @@ module.exports = {
 
 You can check out the [Custom Rules](https://eslint.org/docs/latest/extend/custom-rules) for more information.
 
-# Implementing the rule
+# Implementing the Rule
 
 We would use the `eslint-plugin-react-hooks` plugin to track the dependencies, below is the final rule.
 
@@ -203,7 +203,7 @@ module.exports = {
 }
 ```
 
-# How to use it
+# How to Use It
 
 In the plugin, add the rule to recommend,
 

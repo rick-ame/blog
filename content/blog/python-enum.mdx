@@ -103,13 +103,13 @@ def act(light: TrafficLight):
 
 This tells all the developers looking ath this function that they should be passing in a `TrafficLight` enumeration, and not just any old string. It becomes much harder to introduce typos or incorrect values.
 
-# When not to use
+# When Not to Use
 
 Enumerations are great for communicating a static set of choices for users. You don't want to use them where your options are determined at runtime, as you lose a lot of their benefits around communicating intent and tooling. If you find yourself in this situation, a `dictionary` which offers a natural mapping between two values that can be changed at runtime would be a better choice. You will need to perform membership checks if you need to restrict what values a user an select, though.
 
-# Advanced usage
+# Advanced Usage
 
-## Automatic values
+## Automatic Values
 
 For some enumeration, you might want to explicitly specify that you don't care about the value that the enumeration is tied on. This tells users that they should not rely on these values. For this, you can use the `auto` function.
 
@@ -179,7 +179,7 @@ class TrafficLight(Enum):
     GREEN = "Green"
 ```
 
-## Integer conversion
+## Integer Conversion
 
 There are two more special case enumerations called `IntEnum` and `IntFlag`. These map to `Enum` and `Flag`, respectively, but allow degradation to raw integers for comparison. But I do **not** recommend using these features, because the situation to use them is when you want compare enumerations and integers directly, this may cause error if the value of an Enum changes in the future.
 

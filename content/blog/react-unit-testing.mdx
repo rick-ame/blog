@@ -6,15 +6,15 @@ tags: ['testing', 'react']
 published: true
 ---
 
-# Why you should write unit tests
+# Why You Should Write Unit Tests
 
 Unit testing is a crucial step in the software development process, where developers meticulously examine the smallest functional components, known as units, to ensure their proper functioning. This process involves thorough testing conducted by software developers, and occasionally by QA personnel, as an integral part of the development lifecycle. Unit testing helps us have faith and strong faith at that, that our software works well and in the most bizarre use cases. Sometimes, it's difficult to test and cover all use cases before the software is deployed, but unit testing helps us test different independent units of our software. Making sure that they are working correctly and will stand the test of time.
 
-# What should you test
+# What Should You Test
 
 As the name suggests we should be testing a unit, not more, not less. If it is a function we should be testing only that function and not its dependencies. If it's a react component it should only be that react component.
 
-### What to test
+### What to Test
 
 In general, your tests should cover the following aspects of your code:
 
@@ -22,16 +22,16 @@ In general, your tests should cover the following aspects of your code:
 - How a component renders with state changes
 - How a component reacts to user interactions
 
-### What not to test
+### What Not to Test
 
 Testing most of your code is important, but here are some things you do not need to test:
 
 - Actual Implementation: You do not need to test the actual implementation of a functionality. Just test if the component is behaving correctly.
 - Third-Party libraries: If you are using any third-party libraries like Material UI, no need to test those – they should already be tried and tested.
 
-# Tools for React unit testing
+# Tools for React Unit Testing
 
-### React testing library
+### React Testing Library
 
 The React [Testing Library](https://testing-library.com/) has a set of packages that help you test UI components in a user-centric way. This means it tests based on how the user interacts with the various elements displayed on the page.
 
@@ -39,11 +39,11 @@ The React [Testing Library](https://testing-library.com/) has a set of packages 
 
 [Vitest](https://vitest.dev/) is a next-generation testing framework powered by [Vite](https://vitejs.dev/). You can check out the [Comparisons](https://vitest.dev/guide/comparisons.html) section on vitest website for more details on how Vitest differs from other similar tools.
 
-# How to write unit tests
+# How to Write Unit Tests
 
 We are not going to deep dive into how to set up, configure and the file paths of tests. we’ll check the general idea and the strategy of writing unit tests. and try to talk through that.
 
-## Test rendering components
+## Test Rendering Components
 
 Let's write a component that renders "Hello World" and test that the component renders the popular greeting:
 
@@ -94,7 +94,7 @@ it('should render "Hello World" text', () => {
 })
 ```
 
-## Test firing events
+## Test Firing Events
 
 Let's say we have a Counter application that updates the DOM with the click of a button:
 
@@ -133,7 +133,7 @@ it('should increment count on button click', () => {
 
 See that we got the DOM instance of the button by calling this `getByText('Increment')`, then we called the `click` method on its instance, this will fire the click event on the button causing the increment state to be increased by one, then we will thereafter to see if the state was really updated. See in the last line, we got the text node of the div element and expect it to be `Increment: 1`.
 
-## State and props of the components
+## State and Props of the Components
 
 ```jsx title="Counter.jsx"
 import { useState } from 'react'
@@ -173,7 +173,7 @@ it('should render initial count and increment count on button click', () => {
 })
 ```
 
-## Mocking function calls
+## Mocking Function Calls
 
 During testing, we might not really want an actual function to be called based on some factors. For example, the function might have a number of calls set on it. The only way to go about this is to mock that function, ie, to create a dumb version function of that actual function.
 
@@ -205,7 +205,7 @@ it('test mock function props is called', () => {
 })
 ```
 
-## Testing React hooks
+## Testing React Hooks
 
 ```js title="useCounter.js"
 import { useState } from 'react'
@@ -244,7 +244,7 @@ it('should increment and decrement counter correctly', () => {
 })
 ```
 
-## Testing asynchronous operations
+## Testing Asynchronous Operations
 
 Let's see a component that on render makes an HTTP call to an endpoint and then renders the result of the fetch.
 
@@ -306,7 +306,7 @@ it('should render fetched data after async call', async () => {
 })
 ```
 
-## Snapshot testing
+## Snapshot Testing
 
 Snapshot testing is quite different from what we have seen above. This type of testing is classified as output comparison testing. In the case of React component snapshot testing, the UI of the component is taken first and saved, then on subsequent testing, a current snapshot of the component is taken and compared with the previous snapshot to check for changes that may cause breaks.
 

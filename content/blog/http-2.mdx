@@ -8,15 +8,15 @@ published: true
 
 # Introduction
 
-### What is a protocol?
+### What is a Protocol?
 
 A network protocol is a set of rules and conventions that define how data is formatted, transmitted, received, and processed within a computer network. It serves as a framework that allows different devices and systems within a network to communicate with each other, regardless of their underlying hardware, software, or architectures.
 
-### What is the HTTP/2 protocol?
+### What is the HTTP/2 Protocol?
 
 Hypertext Transfer Protocol version 2 (HTTP/2 or HTTP/2.0) is an application protocol and a set of standards responsible for a speedy and seamless data exchange between the client and the website. It was developed in 2015 after an HTTP revision by the Internet Engineering Task Force and derived from the SPDY protocol, providing advanced data communication.
 
-### The evolution of HTTP
+### The Evolution of HTTP
 
 ![HTTP timeline](../img/http/http-timeline.png)
 
@@ -34,9 +34,9 @@ While HTTP/2 was initially modeled after SPDY, it was soon modified to include u
 
 ![HTTP/1.1 vs HTTP/2](../img/http/http1vs2.webp)
 
-# Key features of HTTP/2
+# Key Features of HTTP/2
 
-## Binary protocols
+## Binary Protocols
 
 ![binary protocols](../img/http/binary-protocols.png)
 
@@ -50,13 +50,13 @@ In HTTP/2, the data is divided into smaller units called frames, which are binar
 
 HTTP/2 uses multiplexing to allow multiple concurrent requests and responses over a single TCP connection. With multiplexing, requests, and responses are divided into smaller units called frames. These frames are then interleaved and sent in a non-blocking manner. This means that if one request is delayed due to network congestion, other requests can continue to be processed, it eliminates the issue of head-of-line blocking, where one slow request can delay the delivery of subsequent HTTP requests. As a result, this feature helps reduce latency and promotes increased customer satisfaction.
 
-## Header compression
+## Header Compression
 
 ![header compression](../img/http/hpack-compression.png)
 
 HTTP/2 utilizes a header compression mechanism to reduce the overhead associated with HTTP headers. This compression technique reduces the size of the headers, resulting in lower bandwidth consumption and faster communication between the client and server. The mechanism uses the [HPACK](https://httpwg.org/specs/rfc7541.html) (HTTP/2 Static Table and Huffman Encoding) algorithm to compress headers. HPACK utilizes techniques such as Huffman encoding, indexing, and dynamic table management to minimize the size of headers without losing any critical information.
 
-## Server push
+## Server Push
 
 <div align="center">
   <img src="../img/http/server-push.png" alt="server push" />
@@ -73,7 +73,7 @@ HTTP/2 implementation presents significant performance for pushed resources, wit
 - The client can decline pushed resources to maintain an effective repository of cached resources or disable Server Push entirely.
 - The client can also limit the number of pushed streams multiplexed concurrently.
 
-## Stream prioritization
+## Stream Prioritization
 
 <div align="center">
   <img
@@ -106,7 +106,7 @@ Binary HTTP/2 format prevents response splitting attacks common with HTTP/1.1. H
 | Security              | Run with TLS                                                     | Optional (can be run with or without TLS)                          |
 | Resource loading      | More efficient and faster due to multiplexing and prioritization | Inefficient under certain conditions due to connection limitations |
 
-# The main benefits of HTTP/2
+# The Main Benefits of HTTP/2
 
 The main benefits of using HTTP/2 are efficiency solutions to improve web performance, optimize resource use, and reduce browsing latency. One of the most beneficial HTTP/2 features is multiplexing, which handles multiple streams simultaneously over a single connection, reducing network latency. It also improves performance by compressing HTTP headers sent over the network and prioritizing network resource allocation. Moreover, the HTTP/2 binary protocol format and default TLS encryption can help enhance browsing security.
 
@@ -116,6 +116,6 @@ The main benefits of using HTTP/2 are efficiency solutions to improve web perfor
 
 Google Chrome and Firefox have supported the technology for years and Apple added HTTP/2 browser support to the Safari web browser back in 2014. Internet Explorer requires users to run Windows 8 to support the latest application protocol. Major mobile web browsers including Android’s aptly named Browser, Chrome for Android and iOS, as well as Safari in iOS 8 and above support HTTP/2 for mobile web access.
 
-# Why is HTTP/2 not widely used?
+# Why is HTTP/2 Not Widely Used?
 
 The adoption of HTTP/2 is not as widespread as network engineers might have expected. This could be due to several reasons. First, employing HTTP/2 might be costly and complex for organizations with widespread infrastructure. Correctly establishing HTTP/2 may require extra technical knowledge. Moreover, some older browsers may not be compatible with the HTTP/2 protocol. So organizations that serve a diverse user base may hesitate to adopt it. Furthermore, the performance gain from HTTP/2 may not be sufficient enough to invest funds and human and server resources into adopting the protocol for smaller websites. Another reason system admins opt out of HTTP/2 is that the content delivery network that enhances web performance cannot fully support HTTP/2, reducing the expected needs.

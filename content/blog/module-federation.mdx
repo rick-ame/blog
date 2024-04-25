@@ -59,23 +59,23 @@ A federated module is any valid JavaScript module that is exposed by a remote ap
 
 # Pros of Module Federation
 
-### Reduced code duplication
+### Reduced Code Duplication
 
 One of the primary benefits of Module Federation is that it can significantly reduce code duplication between applications. Instead of duplicating code across multiple applications, developers can share modules between them, reducing the size and complexity of each application.
 
-### Greater flexibility
+### Greater Flexibility
 
 Module Federation also provides greater flexibility and modularity in application design. By breaking applications down into smaller, more manageable modules, developers can more easily swap out and replace modules as needed, without having to rewrite entire applications.
 
-### Improved scalability
+### Improved Scalability
 
 Module Federation can also improve scalability by allowing developers to distribute functionality across multiple applications. This approach can help to reduce the size and complexity of individual applications, making them easier to maintain and scale.
 
-# Common pitfalls
+# Common Pitfalls
 
 Module Federation is not without its complexity, especially if you choose to use it to enable independent deployments where independent remotes are deployed on different release cadences.
 
-### Increased bundle size
+### Increased Bundle Size
 
 Module Federation allows you to share third-party packages across remotes and hosts, which can be essential in cases such as react and react-dom packages. This means that when you load a federated module from a remote, Webpack does not need to re-download a copy of these packages. Instead, the federated module uses the already loaded packages.
 

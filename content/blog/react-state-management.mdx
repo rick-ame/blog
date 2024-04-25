@@ -12,15 +12,15 @@ published: true
 
 State can be defined as an object that houses data that changes over time in an application. In other words, state is a dynamic data storage that provides a mechanism for components to manage, keep track of changing data, and trigger re-rendering when it is updated.
 
-### When to use State
+### When to Use State
 
 When building an application, data plays an integral role in what is been displayed or stored. The same applies to building web applications in React, where components display or operate on data — which can be user input, data fetched from APIs, or any other dynamic content. When there is a need to get data that has to be updated inside of a component, we use state.
 
-### Why is State management important?
+### Why is State Management Important?
 
 State represents the data that changes over time in your application, and properly managing it ensures your app functions correctly. It helps you avoid common pitfalls like data inconsistency, prop drilling, and unnecessary re-renders.
 
-# Different approaches to managing State in React
+# Different Approaches to Managing State in React
 
 ## Component State
 
@@ -58,7 +58,7 @@ These are states that are accessible to every component in the application. It i
 
 As React team member [Sebastian Markbage mentioned](https://github.com/facebook/react/issues/14110#issuecomment-448074060), the Context API was not built and optimized for high-frequency updates but rather for low-frequency updates like theme updates and authentication management.
 
-## React State management libraries
+## React State Management Libraries
 
 React state management libraries can be divided into three groups:
 
@@ -66,7 +66,7 @@ React state management libraries can be divided into three groups:
 - `Atom-based`: splits states into tiny pieces of data called atoms, which can be written to and read from using React hooks. In this group, we have [Recoil](#recoil) and [Jotai](#jotai).
 - `Mutable-based`: leverages proxy to create mutable data sources which can be directly written to or reactively read from. Candidates in this group are [MobX](#mobx) and [Valtio](#valtio).
 
-#### Reducer-based libraries
+#### Reducer-based Libraries
 
 ![Redux Flow](../img/react/redux-flow.gif)
 
@@ -223,7 +223,7 @@ const [isAvailable, setIsAvailable] = useAtom(isAvailableState) // state's value
 const [status] = useAtom(statusState) // ignoring state setter
 ```
 
-#### Mutable-based libraries
+#### Mutable-based Libraries
 
 ![Mobx Flow](../img/react/mobx-flow.png)
 
@@ -309,7 +309,7 @@ function Counter() {
 }
 ```
 
-# Conclusion: choosing the right State management approach
+# Conclusion: Choosing the Right State Management Approach
 
 Choosing the right state management approach for your React app depends on the complexity of your application and your team's preferences. For simple applications, useState and useReducer may be enough. React Context or state management libraries like Zustand or MobX can be more appropriate for global state or more complex scenarios. It's essential to evaluate the needs of your application, the scale of state changes, and the potential for future growth when deciding on a state management strategy.
 
