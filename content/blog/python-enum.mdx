@@ -1,0 +1,188 @@
+---
+title: Enumerations In Python
+description: Enumerations provide a developer with a restricted set of values.
+date: 2024-04-25
+tags: ['python']
+published: true
+---
+
+# Introduction
+
+In some scenarios, you want a developer to pick one value from a list. Colors of a traffic light, HTTP methods and HTTP response status codes are all great examples of this type of relationship. To express that relationship in Python, you should use enumerations. Enumerations are a construct that let you define the list of values, and developers pick the specific value they want. Python first supported enumerations in Python 3.4.
+
+Let's suppose I represent the traffic lights as a Python tuple:
+
+```py
+# Node: use UPPER_CASE variable names to denote constant/immutable values
+TRAFFIC_LIGHTS = ("Red", "Yellow", "Green")
+```
+
+What does this tuple communicate to other developers?
+
+- This collection is immutable.
+- They can iterate over this collection to get all the lights.
+- They can retrieve a specific light through static indexing.
+
+The immutability and retrieval properties are important for my application. I don't want to add or subtract any lights at runtime. Retrieval lets me choose just one light, but it is a bit clunky.
+
+```py
+TRAFFIC_LIGHTS[1]
+```
+
+This unfortunately does not communicate intent. Every time a developer sees this, they must remember that `1` means `Yellow`. Constantly correlating numbers to lights wastes time. This is fragile and will invariably cause mistakes. To combat this, I'll make aliases for each of these:
+
+```py
+RED = "Red"
+YELLOW = "Yellow"
+GREEN = "Green"
+TRAFFIC_LIGHTS = (RED, YELLOW, GREEN)
+```
+
+That's a bit more code, and still doesn't make it any easier to index into that tuple. Futhermore, there is still a lingering issue in calling code. Consider a function that performs an action based on the light:
+
+```py
+def act(light: str):
+    ...
+```
+
+Future developers would come across code like this:
+
+```py
+act(TRAFFIC_LIGHTS[0])
+act(RED)
+```
+
+Or:
+
+```py
+act("Red")
+# Definitely wrong
+act("Red Yellow Green")
+```
+
+And here lies the crux of the problem. On the happy path, a developer can use the predefined variables. But if somebody accidentally were to use the wrong light, you soon get unwanted behavior. You want to find a way to communicate that you want a very specific, restricted set of values in specific locations.
+
+# Enum
+
+Here's an example of Python's enumeration, `Enum`, in action:
+
+```py
+from enum import Enum
+# Class syntax
+class TrafficLight(Enum):
+    RED = "Red"
+    YELLOW = "Yellow"
+    GREEN = "Green"
+# Functional syntax
+TrafficLight = Enum('TrafficLight', ['RED', 'YELLOW', 'GREEN'])
+```
+
+To access specific instances, you can just do:
+
+```py
+TrafficLight.RED
+TrafficLight.GREEN
+```
+
+If you wanted to print out all the values of the enumeration, you can simply iterate over the enumeration:
+
+```py
+for option_number, light in enumerate(TrafficLight, start=1):
+    print(f"Option {option_number}: {light.value}")
+# Option 1: Red
+# Option 2: Yellow
+# Option 3: Green
+```
+
+Finally, you can communicate your intent in functions that use this `Enum`:
+
+```py
+def act(light: TrafficLight):
+    ...
+```
+
+This tells all the developers looking ath this function that they should be passing in a `TrafficLight` enumeration, and not just any old string. It becomes much harder to introduce typos or incorrect values.
+
+# When not to use
+
+Enumerations are great for communicating a static set of choices for users. You don't want to use them where your options are determined at runtime, as you lose a lot of their benefits around communicating intent and tooling. If you find yourself in this situation, a `dictionary` which offers a natural mapping between two values that can be changed at runtime would be a better choice. You will need to perform membership checks if you need to restrict what values a user an select, though.
+
+# Advanced usage
+
+## Automatic values
+
+For some enumeration, you might want to explicitly specify that you don't care about the value that the enumeration is tied on. This tells users that they should not rely on these values. For this, you can use the `auto` function.
+
+```py
+from enum import auto, Enum
+class TrafficLight(Enum):
+    RED = auto()
+    YELLOW = auto()
+    GREEN = auto()
+print(list(TrafficLight))
+# [<TrafficLight.RED: 1>, <TrafficLight.YELLOW: 2>, <TrafficLight.GREEN: 3>]
+```
+
+By default, `auto` will select monotonically increasing values(1, 2, 3...). If you would like to control what values are set, you should implement a `_generate_next_value_` function:
+
+```py
+from enum import auto, Enum
+class TrafficLight(Enum):
+    def _generate_next_value_(name, start, count, last_values):
+        return name.capitalize()
+    RED = auto()
+    YELLOW = auto()
+    GREEN = auto()
+print(list(TrafficLight))
+# [<TrafficLight.RED: 'Red'>, <TrafficLight.YELLOW: 'Yellow'>, <TrafficLight.GREEN: 'Green'>]
+```
+
+## Flags
+
+Now that you have the traffic lights represented in an `Enum`, we can declare a variable `stop_signs` for when the light is `Red` or `Yellow`, you may track a list of lights as such:
+
+```py
+from typing import Set
+stop_signs: Set[TrafficLight] = {TrafficLight.RED, TrafficLight.YELLOW}
+```
+
+This tells readers that a collection of traffic lights will be unique, and that there might be zero, one, or many lights. This satisfies your needs. But I don't want to rely on every developer remembering to use a set(just one use of a list or dictionary can invite wrong behavior). I want some way to represent a grouping of unique enumeration values and more intuitive. The `enum` module gives you a handy base class to use - `Flag`:
+
+```py
+from enum import auto, Flag
+class TrafficLight(Flag):
+    RED = auto()
+    YELLOW = auto()
+    GREEN = auto()
+```
+
+This lets you perform bitwise operations to combine traffic lights or check if certain lights are present.
+
+```py
+stop_signs = TrafficLight.RED | TrafficLight.YELLOW
+if stop_signs & TrafficLight.RED:
+    print("You should wait!")
+if stop_signs ^ TrafficLight.GREEN:
+    print("You can go!")
+```
+
+## Unique
+
+One great feature of enumerations is the ability to alias values. However, there are cases where you want to force uniqueness on the values. Perhaps you are relying on the enumeration to always contain a set number of values, or perhaps it messes with some of the string representations that are shown to customers. No matter the case, if you want to preserve uniqueness in your `Enum`, simply add a `@unique` decorator.
+
+```py
+from enum import Enum, unique
+@unique
+class TrafficLight(Enum):
+    RED = "Red"
+    YELLOW = "Yellow"
+    GREEN = "Green"
+```
+
+## Integer conversion
+
+There are two more special case enumerations called `IntEnum` and `IntFlag`. These map to `Enum` and `Flag`, respectively, but allow degradation to raw integers for comparison. But I do **not** recommend using these features, because the situation to use them is when you want compare enumerations and integers directly, this may cause error if the value of an Enum changes in the future.
+
+# Summary
+
+Enumerations are simple, and often overlooked as a powerful communication method. Any time that you want to represent a single value from a static collection of values, an enumeration should be your go-to user-defined type. It's easy to define and use them. They offer a wealth of operations, including iteration, bitwise operations and control over uniqueness.
