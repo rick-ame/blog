@@ -1,6 +1,6 @@
 export const siteConfig = {
-  name: 'Writer',
-  description: 'My Personal blog about writing',
+  name: 'Blog',
+  description: 'My Personal Blog',
   author: 'Rick',
   email: 'rick-ast@outlook.com',
   avatar: 'https://avatars.githubusercontent.com/u/130942798?v=4',
