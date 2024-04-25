@@ -2,35 +2,32 @@
 title: Awesome Tools on MacOS
 description: Some tools you can use for entertainment or development on MacOS
 date: 2023-10-12
+tags: ['tool']
 published: true
 ---
 
-## Terminal
+# Terminal
 
 _This adds a new theme to the Terminal App of MacOS_
 
-1. Download the [file](/assets/rick.terminal)
+1. [Download the file](/assets/rick.terminal)
 1. Import it to the Terminal App
 
-## Homebrew
+# Homebrew
 
-The Missing Package Manager for macOS (or Linux)
-_[Download](https://brew.sh/)_
+> The Missing Package Manager for macOS (or Linux)
 
-## Oh My Zsh
+[Download](https://brew.sh/)
+
+# Oh My Zsh
 
 _This adds a new theme to [Oh My Zsh](https://ohmyz.sh)_
 
-1. Download the [file](/assets/rick.zsh-theme)
+1. [Download the file](/assets/rick.zsh-theme)
 1. Place it under `$HOME/.oh-my-zsh/custom/themes` folder
 1. Change `ZSH_THEME` to "rick" in `$HOME/.zshrc`
 
-## FortiClient VPN
-
-The VPN-only version of FortiClient offers SSL VPN and IPSecVPN.
-_[Download](https://www.fortinet.com/support/product-downloads#vpn)_
-
-## Node.js
+# Node.js
 
 _Node.js version manager, [fnm](https://github.com/Schniz/fnm) is recommended_
 
@@ -50,11 +47,54 @@ _Node.js version manager, [fnm](https://github.com/Schniz/fnm) is recommended_
 
    [Available commands for extended usage documentation](https://github.com/Schniz/fnm/blob/master/docs/commands.md)
 
-## IINA
+# Python
 
-IINA is the modern video player for macOS.
-_[Download](https://iina.io/)_
-_[GitHub](https://github.com/iina/iina)_
+## Virtual Environment
+
+1. To use python venv module
+
+   ```sh
+   python3 -m venv .venv     # This creates virtual environment under current working directory in `.venv` folder
+   source .venv/bin/activate # To activate venv
+   deactivate                # To deactivate venv
+   ```
+
+1. Poetry
+
+   [Poetry](https://python-poetry.org/) is a tool for **dependency management** and **packaging** in Python. It allows you to declare the libraries your project depends on and it will manage (install/update) them for you. Poetry offers a lockfile to ensure repeatable installs, and can build your project for distribution.
+
+## Jupyter Notebook
+
+**Preferred online jupyter notebook**
+https://colab.research.google.com/
+
+## To execute shell command in notebook
+
+1. With leading `!`
+
+   ```ipynb /!/
+   !python -V
+   ```
+
+1. `%%bash`
+
+   ```ipynb {1}
+   %%bash
+   python -V
+   ```
+
+# FortiClient VPN
+
+> The VPN-only version of FortiClient offers SSL VPN and IPSecVPN.
+
+[Download](https://www.fortinet.com/support/product-downloads#vpn)
+
+# IINA
+
+> IINA is the modern video player for macOS.
+
+[Download](https://iina.io/)
+[GitHub](https://github.com/iina/iina)
 
 Features:
 
@@ -73,7 +113,8 @@ Features:
 - Command line tool and browser extensions provided
 - In active development
 
-## The Unarchiver
+# The Unarchiver
 
-The Unarchiver is the only app you need to open RAR on Mac. It’s times more powerful than the native macOS utility and supports infinitely more archive formats.
-_[Download](https://theunarchiver.com/)_
+> The Unarchiver is the only app you need to open RAR on Mac. It’s times more powerful than the native macOS utility and supports infinitely more archive formats.
+
+[Download](https://theunarchiver.com/)
