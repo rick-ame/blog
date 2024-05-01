@@ -139,11 +139,12 @@ WORKDIR /app
 COPY package.json package-lock.json .
 RUN npm install
 COPY . .
+ENV PORT 8080
 EXPOSE 8080
 ENTRYPOINT ["node", "./index.js"]
 ```
 
-The Dockerfile `FROM` instruction specifies the base image for the new image you’re building. It is also used to distinguish a new build stage in multi-stage builds. The `RUN` instruction lets you to run commands inside the image during a build. Each `RUN` instruction adds a new layer to the overall image. The `COPY` instruction adds files into the image as a new layer. It’s common to use it to copy your application code into an image. The `EXPOSE` instruction documents the network port an application uses. The `ENTRYPOINT` instruction sets the default application to run when the image is started as a container.
+The Dockerfile `FROM` instruction specifies the base image for the new image you’re building. It is also used to distinguish a new build stage in multi-stage builds. The `RUN` instruction lets you to run commands inside the image during a build. Each `RUN` instruction adds a new layer to the overall image. The `COPY` instruction adds files into the image as a new layer. It’s common to use it to copy your application code into an image. The `ENV` instruction sets the environment variables. The `EXPOSE` instruction documents the network port an application uses. The `ENTRYPOINT` instruction sets the default application to run when the image is started as a container.
 
 ## Build the Image
 
@@ -159,6 +160,7 @@ docker build -t myapp:latest .
 
 ```sh
 docker run -d --name c1 \
+  -e PORT=8080 \
   -p 80:8080 \
   myapp:latest
 ```
