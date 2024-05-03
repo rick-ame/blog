@@ -39,7 +39,7 @@ The [`Expires`](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Expire
 
 Freshness is calculated using a combination of header values. The `Cache-Control: max-age=N` header is the primary directive, and this value specifies the freshness period in seconds. If `max-age` is not specified, the `Expires` header is checked next. If this header exists, then it is used to calculate the freshness period. The `Expires` header specifies an explicit date and time after which the resource should be considered stale. For example:
 
-```
+```http
 Expires: Wed, 21 Oct 2015 07:28:00 GMT
 ```
 

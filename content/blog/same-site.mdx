@@ -46,7 +46,7 @@ All major browsers currently support the following SameSite restriction levels:
 
 Developers can manually configure a restriction level for each cookie they set, giving them more control over when these cookies are used. To do this, they just have to include the `SameSite` attribute in the `Set-Cookie` response header, along with their preferred value:
 
-```
+```http
 Set-Cookie: session=sessionId; SameSite=Strict
 ```
 
