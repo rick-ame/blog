@@ -1,5 +1,5 @@
 export const siteConfig = {
-  name: 'Blog',
+  name: 'AST',
   description: 'My Personal Blog',
   author: 'Rick',
   email: 'rick-ast@outlook.com',
