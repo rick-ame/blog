@@ -16,3 +16,19 @@ https://blog-x3pc.onrender.com/
 pnpm install
 pnpm dev
 ```
+
+## Blog Template
+
+```mdx
+---
+title: Title
+description: Description
+date: 2024-00-00
+tags: ['tag']
+published: false
+---
+
+# Content
+
+Emoji: https://emojidb.org/format-emojis
+```
