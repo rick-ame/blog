@@ -1,31 +1,69 @@
 ---
-title: 🛠️ Awesome Tools on MacOS
-description: Some tools you can use for entertainment or development on MacOS
+title: 🛠️ Awesome Tools
+description: Some tools you can use for entertainment or development on MacOS and Windows
 date: 2023-10-12
 tags: ['tool']
 published: true
 ---
 
-# Terminal
+# MacOS
+
+## Terminal
 
 _This adds a new theme to the Terminal App of MacOS_
 
 1. [Download the file](/assets/rick.terminal)
 1. Import it to the Terminal App
 
-# Homebrew
+## Homebrew
 
 > The Missing Package Manager for macOS (or Linux)
 
 [Download](https://brew.sh/)
 
-# Oh My Zsh
+## Oh My Zsh
 
 _This adds a new theme to [Oh My Zsh](https://ohmyz.sh)_
 
 1. [Download the file](/assets/rick.zsh-theme)
 1. Place it under `$HOME/.oh-my-zsh/custom/themes` folder
 1. Change `ZSH_THEME` to "rick" in `$HOME/.zshrc`
+
+## FortiClient VPN
+
+> The VPN-only version of FortiClient offers SSL VPN and IPSecVPN.
+
+[Download](https://www.fortinet.com/support/product-downloads#vpn)
+
+## IINA
+
+> IINA is the modern video player for macOS.
+
+[Download](https://iina.io/)
+[GitHub](https://github.com/iina/iina)
+
+Features:
+
+- Based on mpv, which provides the best decoding capacity on macOS
+- Designed with modern versions of macOS (10.11+) in mind
+- All the features you need for video and music: subtitles, playlists, chapters…and much, much more!
+- Force Touch, picture-in-picture and advanced Touch Bar support
+- Customizable user interface including multiple color schemes and on-screen controller (OSC) layout positioning
+- Standalone Music Mode designed for audio files
+- Video thumbnails
+- Online subtitle searching and intelligent local subtitle matching
+- Unlimited playback history
+- Convenient and interactive settings for video/audio filters
+- Fully customizable keyboard, mouse, trackpad, and gesture controls
+- mpv configuration files and script system for advanced users
+- Command line tool and browser extensions provided
+- In active development
+
+## The Unarchiver
+
+> The Unarchiver is the only app you need to open RAR on Mac. It’s times more powerful than the native macOS utility and supports infinitely more archive formats.
+
+[Download](https://theunarchiver.com/)
 
 # Node.js
 
@@ -83,38 +121,18 @@ https://colab.research.google.com/
    python -V
    ```
 
-# FortiClient VPN
+# Windows
 
-> The VPN-only version of FortiClient offers SSL VPN and IPSecVPN.
+1. First, turn on settings under `System > Developer > PowerShell > Scripts Policy`, this grants permission for local scripts to run.
+1. Install `oh-my-posh` from Microsoft Store.
+1. Install [posh-git](https://github.com/dahlbyk/posh-git)
+1. Run `code $PROFILE` (use VS Code to edit profile of PowerShell), add following scripts:
 
-[Download](https://www.fortinet.com/support/product-downloads#vpn)
+   ```ps1
+   oh-my-posh init pwsh --config "$env:POSH_THEMES_PATH\huvix.omp.json" | Invoke-Expression
+   Import-Module posh-git
 
-# IINA
+   clear # clear terminal output
+   ```
 
-> IINA is the modern video player for macOS.
-
-[Download](https://iina.io/)
-[GitHub](https://github.com/iina/iina)
-
-Features:
-
-- Based on mpv, which provides the best decoding capacity on macOS
-- Designed with modern versions of macOS (10.11+) in mind
-- All the features you need for video and music: subtitles, playlists, chapters…and much, much more!
-- Force Touch, picture-in-picture and advanced Touch Bar support
-- Customizable user interface including multiple color schemes and on-screen controller (OSC) layout positioning
-- Standalone Music Mode designed for audio files
-- Video thumbnails
-- Online subtitle searching and intelligent local subtitle matching
-- Unlimited playback history
-- Convenient and interactive settings for video/audio filters
-- Fully customizable keyboard, mouse, trackpad, and gesture controls
-- mpv configuration files and script system for advanced users
-- Command line tool and browser extensions provided
-- In active development
-
-# The Unarchiver
-
-> The Unarchiver is the only app you need to open RAR on Mac. It’s times more powerful than the native macOS utility and supports infinitely more archive formats.
-
-[Download](https://theunarchiver.com/)
+   Check out more `oh-my-posh` [Themes](https://ohmyposh.dev/docs/themes)
