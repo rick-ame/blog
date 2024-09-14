@@ -6,10 +6,6 @@
 
 https://blog-ast.vercel.app/
 
-Or
-
-https://blog-x3pc.onrender.com/
-
 ## Getting Started
 
 ```sh
