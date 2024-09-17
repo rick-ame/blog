@@ -1,0 +1,38 @@
+---
+title: 🐧 How to install Linux on Windows with WSL
+description: The Windows Subsystem for Linux (WSL) lets developers install a Linux distribution (such as Ubuntu, OpenSUSE, Kali, Debian, Arch Linux, etc) and use Linux applications, utilities, and Bash command-line tools directly on Windows, unmodified, without the overhead of a traditional virtual machine or dualboot setup.
+date: 2024-09-17
+tags: ['tool']
+published: true
+---
+
+# Install WSL command
+
+Open PowerShell or Windows Command, run `wsl --install`. You can also use this command to install additional Linux distributions by running `wsl --install <Distribution Name>`. For a valid list of distribution names, run `wsl --list --online`.
+
+# Add a User for WSL
+
+```sh
+adduser <username>
+usermod -aG sudo <username> # add user to sudoers
+```
+
+# Use Windows Proxy
+
+**Ubuntu version at least to be 22.04**
+
+In your `%UserProfile%` directory(use `cd ~` to access your home directory, which is typically your user profile, `C:\Users\<UserName>`), create `.wslconfig` file, paste the following configurations into it:
+
+```
+[wsl2]
+networkingMode=mirrored
+autoProxy=true
+```
+
+**After configured this, you need to run `wsl --shutdown` to stop WSL first, and then relaunch terminal**
+
+# Replace bash with zsh
+
+1. `sudo apt update && sudo apt upgrade`
+1. `sudo apt install zsh`
+1. Install [oh-my-zsh](https://ohmyz.sh/)
