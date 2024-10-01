@@ -8,14 +8,25 @@ published: true
 
 # Install WSL Command
 
-Open PowerShell or Windows Command, run `wsl --install`. You can also use this command to install additional Linux distributions by running `wsl --install <Distribution Name>`. For a valid list of distribution names, run `wsl --list --online`.
+Open PowerShell or Windows Command
 
-# Add a User for WSL
+```sh
+wsl --install
+# or
+wsl --list --online # For a valid list of distribution names
+wsl --install -d <Distribution Name>
+```
+
+# Add a User for WSL (Optional)
 
 ```sh
 adduser <username>
-usermod -aG sudo <username> # add user to sudoers
+usermod -aG sudo <username> # Add user to sudoers
 ```
+
+# Install Visual Studio Code
+
+[Download](https://code.visualstudio.com/)
 
 # Use Windows Proxy
 
@@ -31,19 +42,24 @@ autoProxy=true
 
 **After configured this, you need to run `wsl --shutdown` to stop WSL first, and then relaunch terminal**
 
+# Install zsh
+
+```sh
+sudo apt install zsh
+chsh -s $(which zsh) # Make zsh the default shell. Without sudo, if you use sudo it will change the shell not for your working user but for root
+```
+
+1. Install [oh-my-zsh](https://ohmyz.sh/)
+1. [Change theme](/blog/tools#oh-my-zsh)
+
 # Install Homebrew
 
 [Homebrew on Linux](https://docs.brew.sh/Homebrew-on-Linux#install)
 
-# Replace bash with zsh
-
-1. `brew install zsh`
-1. Install [oh-my-zsh](https://ohmyz.sh/)
-
 # Useful Commands
 
 ```sh
-explorer.exe . # open current folder in windows
+explorer.exe . # Open current folder in windows
 ```
 
 # Additional Information
