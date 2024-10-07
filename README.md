@@ -2,10 +2,6 @@
 
 > Powered by [Next.js](https://nextjs.org/), [Velite](https://velite.js.org/), [Shadcn](https://ui.shadcn.com/) and [TailwindCSS](https://tailwindcss.com/)
 
-## Online
-
-https://blog-ast.vercel.app/
-
 ## Getting Started
 
 ```sh
