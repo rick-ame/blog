@@ -26,9 +26,21 @@ The dimension perpendicular to the flow of text within a line, i.e., the vertica
 
 The dimension parallel to the flow of text within a line, i.e., the horizontal dimension in horizontal writing modes, and the vertical dimension in vertical writing modes. For standard English text, it is the horizontal dimension.
 
-For example:
-`margin-top` ➡ `margin-block-start`
-`margin-right` ➡ `margin-inline-end`
+## For example:
+
+#### Margin and Padding
+
+`margin-top` ➡ `margin-block-start` \
+`margin-right` ➡ `margin-inline-end` \
+`padding-left` ➡ `padding-inline-start`
+
+#### Float
+
+`float: left` ➡ `float: inline-start`
+
+#### Position
+
+`left: 0` ➡ `inset-inline-start: 0`[^1]
 
 # CSS Writing Mode
 
@@ -65,3 +77,5 @@ It accepts `horizontal-tb`, `vertical-rl`, `vertical-lr`, `sideways-rl`, and `si
 # Summary
 
 By accounting for internationalization, you can ensure your product is inclusive to users around the world. Early in the development process of a new product, this may not seem necessary, particularly if your target market is not international. However, by keeping it in mind early and baking it into your CSS, you can avoid needing to refactor a large portion of your code base.
+
+[^1]: [inset](https://developer.mozilla.org/en-US/docs/Web/CSS/inset)
