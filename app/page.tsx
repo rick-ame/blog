@@ -23,7 +23,7 @@ export default function Home() {
           </h1>
           <p className="text-muted-foreground mx-auto max-w-[42rem] text-balance sm:text-xl">
             Welcome to my blog. Built using tailwind, shadcn, velite and Nextjs
-            14.
+            15.
           </p>
           <div className="flex flex-col justify-center gap-4 sm:flex-row">
             <Link
