@@ -9,13 +9,13 @@ import { getAllTags, getPostsByTagSlug, sortTagsByCount } from '@/lib/utils'
 import { posts } from '#site/content'
 
 interface Props {
-  params: {
+  params: Promise<{
     tag: string
-  }
+  }>
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const { tag } = params
+  const { tag } = await params
 
   return {
     title: tag,
@@ -29,8 +29,8 @@ export function generateStaticParams() {
   return paths
 }
 
-export default function Page({ params }: Props) {
-  const { tag: currentTag } = params
+export default async function Page({ params }: Props) {
+  const { tag: currentTag } = await params
   const title = currentTag.replaceAll('-', ' ')
 
   const displayPosts = getPostsByTagSlug(posts, currentTag)

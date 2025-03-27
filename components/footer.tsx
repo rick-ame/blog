@@ -7,7 +7,7 @@ import { Icons } from './icons'
 export function Footer() {
   return (
     <footer>
-      <div className="mb-6 mt-14 flex flex-col items-center">
+      <div className="mt-14 mb-6 flex flex-col items-center">
         <div className="flex space-x-4">
           <a
             target="_blank"

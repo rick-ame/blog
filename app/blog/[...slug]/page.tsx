@@ -10,12 +10,12 @@ import { posts } from '#site/content'
 import { MDXContent } from './_components/mdx-content'
 
 interface Props {
-  params: {
+  params: Promise<{
     slug: string[]
-  }
+  }>
 }
 async function getPostFromParams(params: Props['params']) {
-  const slug = params.slug?.join('/')
+  const slug = (await params).slug?.join('/')
   return posts.find((post) => post.slugAsParams === slug)
 }
 
@@ -33,7 +33,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   }
 }
 
-export async function generateStaticParams(): Promise<Props['params'][]> {
+export async function generateStaticParams() {
   return posts.map((post) => ({ slug: post.slugAsParams.split('/') }))
 }
 
@@ -45,13 +45,13 @@ export default async function Page({ params }: Props) {
   }
 
   return (
-    <article className="container prose mx-auto max-w-3xl py-6 dark:prose-invert">
+    <article className="prose dark:prose-invert container mx-auto max-w-3xl py-6">
       <h1 className="mb-2">{post.title}</h1>
       <div className="mb-2 flex gap-2">
         {post.tags?.map((tag) => <Tag tag={tag} key={tag} />)}
       </div>
       {post.description ? (
-        <p className="mt-0 text-xl text-muted-foreground">{post.description}</p>
+        <p className="text-muted-foreground mt-0 text-xl">{post.description}</p>
       ) : null}
       <hr className="my-4" />
       <MDXContent code={post.body} />

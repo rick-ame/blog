@@ -20,7 +20,7 @@ export const MainNav: FC = () => {
       <Link
         href="/blog"
         className={cn(
-          'hidden text-sm font-medium transition-colors hover:text-primary sm:inline-flex',
+          'hover:text-primary hidden text-sm font-medium transition-colors sm:inline-flex',
           pathname === '/blog' ? 'text-foreground' : 'text-foreground/60',
         )}
       >
@@ -29,7 +29,7 @@ export const MainNav: FC = () => {
       <Link
         href="/about"
         className={cn(
-          'hidden text-sm font-medium transition-colors hover:text-primary sm:inline-flex',
+          'hover:text-primary hidden text-sm font-medium transition-colors sm:inline-flex',
           pathname === '/about' ? 'text-foreground' : 'text-foreground/60',
         )}
       >

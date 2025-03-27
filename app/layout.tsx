@@ -1,16 +1,22 @@
 import './globals.css'
 
 import type { Metadata, Viewport } from 'next'
-import { Inter } from 'next/font/google'
-import { type PropsWithChildren } from 'react'
+import { Geist, Geist_Mono } from 'next/font/google'
 
 import { Footer } from '@/components/footer'
 import { Header } from '@/components/header'
 import { Providers } from '@/components/providers'
 import { siteConfig } from '@/config/site'
-import { cn } from '@/lib/utils'
 
-const font = Inter({ subsets: ['latin'] })
+const geistSans = Geist({
+  variable: '--font-geist-sans',
+  subsets: ['latin'],
+})
+
+const geistMono = Geist_Mono({
+  variable: '--font-geist-mono',
+  subsets: ['latin'],
+})
 
 export const metadata: Metadata = {
   title: siteConfig.name,
@@ -24,14 +30,18 @@ export const viewport: Viewport = {
   ],
 }
 
-export default function RootLayout({ children }: PropsWithChildren) {
+export default function RootLayout({
+  children,
+}: Readonly<{
+  children: React.ReactNode
+}>) {
   return (
     <html lang="en" suppressHydrationWarning className="scroll-pt-[3.5rem]">
       <body
-        className={cn('min-h-screen bg-background antialiased', font.className)}
+        className={`${geistSans.variable} ${geistMono.variable} bg-background min-h-screen antialiased`}
       >
         <Providers>
-          <div className="relative flex min-h-dvh flex-col bg-background">
+          <div className="bg-background relative flex min-h-dvh flex-col">
             <Header />
             <main className="flex-1">{children}</main>
             <Footer />

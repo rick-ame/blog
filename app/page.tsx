@@ -16,12 +16,12 @@ export default function Home() {
 
   return (
     <>
-      <section className="space-y-6 pb-8 pt-6 md:mt-10 md:pb-12 lg:py-32">
+      <section className="space-y-6 pt-6 pb-8 md:mt-10 md:pb-12 lg:py-32">
         <div className="container flex flex-col gap-4 text-center">
-          <h1 className="text-balance bg-gradient-to-br from-black to-blue-500 bg-clip-text text-3xl font-black text-transparent sm:text-5xl md:text-6xl lg:text-7xl dark:bg-blue-500 dark:bg-none">
+          <h1 className="bg-gradient-to-br from-black to-blue-500 bg-clip-text text-3xl font-black text-balance text-transparent sm:text-5xl md:text-6xl lg:text-7xl dark:bg-blue-500 dark:bg-none">
             Hello, I&apos;m {siteConfig.author}
           </h1>
-          <p className="mx-auto max-w-[42rem] text-balance text-muted-foreground sm:text-xl">
+          <p className="text-muted-foreground mx-auto max-w-[42rem] text-balance sm:text-xl">
             Welcome to my blog. Built using tailwind, shadcn, velite and Nextjs
             14.
           </p>
@@ -46,7 +46,7 @@ export default function Home() {
           </div>
         </div>
       </section>
-      <section className="mb-16 mt-8 flex justify-center md:mt-0">
+      <section className="mt-8 mb-16 flex justify-center md:mt-0">
         <MyAvatar size="sm" />
       </section>
       <section className="container flex max-w-4xl flex-col space-y-6 py-6 lg:py-10">
@@ -55,7 +55,7 @@ export default function Home() {
         </h2>
         <ul className="flex flex-col">
           {latestPosts.map((post) => (
-            <li key={post.slug} className="first:border-t first:border-border">
+            <li key={post.slug} className="first:border-border first:border-t">
               <PostItem
                 slug={post.slug}
                 title={post.title}
