@@ -17,12 +17,12 @@ export const metadata: Metadata = {
 const POSTS_PER_PAGE = 5
 
 interface Props {
-  searchParams: {
+  searchParams: Promise<{
     page?: string
-  }
+  }>
 }
 export default async function Page({ searchParams }: Props) {
-  const currentPage = Number(searchParams?.page) || 1
+  const currentPage = Number((await searchParams)?.page) || 1
   const sortedPosts = sortPosts(posts.filter((post) => post.published))
   const totalPages = Math.ceil(sortedPosts.length / POSTS_PER_PAGE)
 
@@ -39,7 +39,7 @@ export default async function Page({ searchParams }: Props) {
       <div className="flex flex-col items-start gap-4 md:flex-row md:justify-between md:gap-8">
         <div className="flex-1 space-y-4">
           <h1 className="inline-block text-4xl font-black lg:text-5xl">Blog</h1>
-          <p className="text-xl text-muted-foreground">
+          <p className="text-muted-foreground text-xl">
             My ramblings on all things.
           </p>
         </div>
