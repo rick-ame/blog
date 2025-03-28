@@ -51,7 +51,7 @@
     "*": [
       "prettier --write --cache --ignore-unknown"
     ],
-    "*.{ts,tsx,js}": [
+    "*.{ts,tsx,js,mjs}": [
       "eslint --fix"
     ]
   }
