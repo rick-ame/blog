@@ -8,13 +8,17 @@ published: true
 
 # Install WSL Command
 
-Open PowerShell or Windows Command
+Open PowerShell or Windows Command, run
 
 ```sh
 wsl --install
-# or
+```
+
+_or_
+
+```sh
 wsl --list --online # For a valid list of distribution names
-wsl --install -d <Distribution Name>
+wsl --install -d <Distribution Name> # <Distribution Name> from the list got by upper command
 ```
 
 # Add a User for WSL (Optional)
@@ -32,20 +36,22 @@ usermod -aG sudo <username> # Add user to sudoers
 
 **Ubuntu version at least to be 22.04**
 
-In your `%UserProfile%` directory(use `cd ~` to access your home directory, which is typically your user profile, `C:\Users\<UserName>`), create `.wslconfig` file, paste the following configurations into it:
+In your `%UserProfile%` directory (use `cd ~` to access your home directory, which is typically your user profile, `C:\Users\<UserName>`), create `.wslconfig` file, paste the following configurations into it:
 
 ```
 [wsl2]
 networkingMode=mirrored
 ```
 
-**After configured this, you need to run `wsl --shutdown` to stop WSL first, and then relaunch terminal**
+**After configuring this, you need to run `wsl --shutdown` to stop WSL first, and then relaunch terminal**
 
 # Install zsh
 
 ```sh
 sudo apt install zsh
-chsh -s $(which zsh) # Make zsh the default shell. Without sudo, if you use sudo it will change the shell not for your working user but for root
+# Make zsh the default shell.
+# Run below command WITHOUT sudo! If you use `sudo` it will change the shell not for your working user but for root
+chsh -s $(which zsh)
 ```
 
 1. Install [oh-my-zsh](https://ohmyz.sh/)
@@ -62,6 +68,8 @@ explorer.exe . # Open current folder in windows
 ```
 
 # Additional Information
+
+## Terminal Configurations
 
 1. Size: 72 x 20
 1. Theme: Campbell
