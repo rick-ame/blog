@@ -18,12 +18,12 @@ export default function Home() {
     <>
       <section className="space-y-6 pt-6 pb-8 md:mt-10 md:pb-12 lg:py-32">
         <div className="container flex flex-col gap-4 text-center">
-          <h1 className="bg-gradient-to-br from-black to-blue-500 bg-clip-text text-3xl font-black text-balance text-transparent sm:text-5xl md:text-6xl lg:text-7xl dark:bg-blue-500 dark:bg-none">
+          <h1 className="bg-gradient-to-br from-black to-blue-500 bg-clip-text text-3xl font-black text-balance text-transparent sm:text-5xl md:text-6xl lg:text-7xl dark:from-gray-900">
             Hello, I&apos;m {siteConfig.author}
           </h1>
           <p className="text-muted-foreground mx-auto max-w-[42rem] text-balance sm:text-xl">
-            Welcome to my blog. Built using tailwind, shadcn, velite and Nextjs
-            15.
+            Welcome to my blog. Built using Tailwind CSS, shadcn/ui, Velite and
+            Next.js 15.
           </p>
           <div className="flex flex-col justify-center gap-4 sm:flex-row">
             <Link
