@@ -1,0 +1,81 @@
+---
+title: 🔁 The Complete Guide to bfcache - How Browsers Make Navigation Blazing Fast
+description: As web developers, we often focus on optimizing initial page loads, but what happens when users click the back button? Modern browsers employ an ingenious optimization called bfcache (Back/Forward Cache) that makes navigation between previously visited pages nearly instantaneous. Let's dive deep into this performance powerhouse.
+date: 2025-04-15
+tags: ['web']
+published: true
+---
+
+# Understanding bfcache: The Browser's Time Machine
+
+[bfcache](https://developer.mozilla.org/en-US/docs/Glossary/bfcache) acts like a time machine for web pages. When users navigate away from your site, instead of discarding the page, browsers preserve the complete page state - including the JavaScript heap and DOM - in memory. This enables three key benefits:
+
+1. **Instantaneous navigation**: Pages restore in under 100ms
+1. **Perfect state preservation**: Scroll positions, form inputs, and even paused videos resume exactly as left
+1. **Resource efficiency**: Saves bandwidth and reduces server load by avoiding repeat requests
+
+# How bfcache Works: A Technical Breakdown
+
+The caching process involves several sophisticated steps:
+
+1. **Snapshot Creation**: When navigating away, the browser serializes the page's complete state
+1. **Memory Storage**: The snapshot gets stored in a dedicated memory cache
+1. **Execution Pause**: All JavaScript execution halts, including timers and promises
+1. **Selective Restoration**: When returning, the browser rehydrates only changed elements
+
+```js
+// Detect bfcache restoration
+window.addEventListener('pageshow', (event) => {
+  if (event.persisted) {
+    // Page was restored from bfcache
+    console.log('BFcache restore time:', performance.now())
+  }
+})
+```
+
+# Optimizing Your Pages for bfcache
+
+To maximize bfcache eligibility:
+
+1. **Avoid `unload` handlers**: These prevent caching in most browsers
+1. **Close connections**: Properly close IndexedDB, WebSockets, and BroadcastChannels
+1. **Handle restoration**: Use `pageshow` to detect cache restores
+1. **Mind your headers**: `Cache-Control: no-store` disables bfcache
+
+```js
+// Proper connection cleanup
+window.addEventListener('pagehide', () => {
+  if (myWebSocket) myWebSocket.close()
+  if (myBroadcastChannel) myBroadcastChannel.close()
+})
+```
+
+# Common Pitfalls and Solutions
+
+1. **Dynamic content updates**:[^1]
+
+   ```js
+   window.addEventListener('pageshow', (event) => {
+     if (event.persisted) {
+       fetchLatestContent() // Refresh stale data
+     }
+   })
+   ```
+
+1. **Authentication state changes**: \
+   Implement session timeouts that check server state on restore
+1. **Analytics tracking**: \
+   Modify your tracking to avoid double-counting pageviews
+1. **For single-page applications (SPAs)**:
+
+   ```js
+   router.beforeResolve((to, from, next) => {
+     if (window.performance?.navigation?.type === 2) {
+       // Back/forward navigation
+       handleBfcacheRestore()
+     }
+     next()
+   })
+   ```
+
+[^1]: [JavaScript - bfcache/pageshow event - event.persisted always set to false?](https://stackoverflow.com/questions/17432899/javascript-bfcache-pageshow-event-event-persisted-always-set-to-false)
