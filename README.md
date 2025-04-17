@@ -5,8 +5,8 @@
 ## Getting Started
 
 ```sh
-pnpm install
-pnpm dev
+npm install
+npm run dev
 ```
 
 ## Blog Template
