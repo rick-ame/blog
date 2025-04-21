@@ -1,0 +1,32 @@
+---
+title: 📱 Collection of Enhancements for Mobile Web
+description: Enhancements for mobile web
+date: 2025-04-21
+tags: ['web']
+published: true
+---
+
+## Viewport Fit and Safe Area Inset Variables
+
+To tell the browser to use the whole available space on the screen, and so enabling us to use the [env()](https://developer.mozilla.org/en-US/docs/Web/CSS/env) variables, we need to add a new viewport meta value:
+
+```html
+<meta name="viewport" content="viewport-fit=cover" />
+```
+
+You can then use `env()` in your CSS:
+
+```css
+body {
+  padding: env(safe-area-inset-top, 20px) env(safe-area-inset-right, 20px)
+    env(safe-area-inset-bottom, 20px) env(safe-area-inset-left, 20px);
+}
+```
+
+## `enterkeyhint` and `inputmode`
+
+The [inputmode](https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Global_attributes/inputmode) provides a hint about the type of data that might be entered by the user while editing the element or its contents. This allows the browser to display an appropriate virtual keyboard.
+
+The [enterkeyhint](https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Global_attributes/enterkeyhint) is an enumerated attribute defining what action label (or icon) to present for the enter key on virtual keyboards.
+
+_Note: If you define them both at the same time it may not work, so use `type="xx"` for `input` together with enterkeyhint._
