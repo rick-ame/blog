@@ -2,11 +2,11 @@
 title: 🐳 Docker Up and Running
 description: Docker helps developers build, share, run, and verify applications anywhere — without tedious environment configuration or management.
 date: 2024-04-27
-tags: ['docker']
+tags: ['tool']
 published: true
 ---
 
-# Introduction
+## Introduction
 
 When you install Docker, you get two major components:
 
@@ -25,13 +25,13 @@ docker version
 
 If you get a response back from the Client and Server, you’re good to go.
 
-# Images
+## Images
 
 Image, Docker image, container image, and [OCI (Open Container Initiative )](https://opencontainers.org/) image all mean the same thing. A container image is read-only package that contains everything you need to run an application. It includes application code, application dependencies, a minimal set of OS constructs, and metadata. A single image can be used to start one or more containers.
 
 You get container images by pulling them from a registry. The most common registry is [Docker Hub](https://hub.docker.com/) but others exist. The pull operation downloads an image to your local Docker host where Docker can use it to start one or more containers.
 
-## Pulling Images
+### Pulling Images
 
 ```sh
 docker images                                   # list all the local images, you can add the `--digests` flag to see the SHA256 digests.
@@ -41,7 +41,7 @@ docker pull mcr.microsoft.com/powershell:latest # Pull the image from an unoffic
 
 Note: `tag` is optional when you pull images, it default to `latest`, if the repository doesn't have an image tagged as `latest`, the command will fail. You should note the `latest` tag does not guarantee it is the most recent image in the repository.
 
-## Filtering the Output of Docker Images
+### Filtering the Output of Docker Images
 
 ```sh
 docker images --filter dangling=true
@@ -68,7 +68,7 @@ You can also use the --format flag to format output using Go templates.
 docker images --format "{{.Repository}}: {{.Tag}}: {{.Size}}"
 ```
 
-## Deleting Images
+### Deleting Images
 
 When you no longer need an image on your Docker host, you can delete it with the `docker rmi` command.
 
@@ -78,7 +78,7 @@ docker rmi alpine:latest
 
 Deleting an image will remove the image and all of its layers from your Docker host. This means it will no longer show up in docker images commands and all directories on the Docker host containing the layer data will be deleted. However, if an image layer is shared by another image, it won’t be deleted until all images that reference it have been deleted.
 
-## Images and Layers
+### Images and Layers
 
 A Docker image is a collection of loosely-connected read-only layers where each layer comprises one or more files. Docker takes care of stacking the layers and representing them as a single unified object. All Docker images start with a base layer, and as changes are made and new content is added, new layers are added on top.
 
@@ -90,7 +90,7 @@ The `docker inspect` command is a great way to see the details of an image. The 
 docker inspect ubuntu:latest
 ```
 
-# Containers
+## Containers
 
 A container is the runtime instance of an image. The simplest way to start a container is with the `docker run` command. The command can take a lot of arguments, but in its most basic form you tell it an image to use and an app to run: `docker run <image> <app>`. The following command will start a new container based on the Ubuntu Linux image and start a Bash shell.
 
@@ -100,7 +100,7 @@ docker run -it ubuntu:latest /bin/bash
 
 The `-it` flags connect your current terminal window to the container’s shell.
 
-## The Commands
+### The Commands
 
 - `docker ps`: list all containers in the running state. If you add the `-a` flag you will also see containers in the stopped (`Exited`) state.
 - `docker exec`: run a new process inside of a running container. It’s useful for attaching the shell of your Docker host to a terminal inside a running container. This command will start a new Bash shell inside a running container and connect to it: `docker exec -it <container-name or container-id> bash`. For this to work, the image used to create the container must include the Bash shell.
@@ -109,7 +109,7 @@ The `-it` flags connect your current terminal window to the container’s shell.
 - `docker rm`: delete a stopped container. You can specify containers by name or ID. It is recommended that you stop a container with the `docker stop` command before deleting it with `docker rm`.
 - `docker inspect`: show you detailed configuration and runtime information about a container. It accepts container names and container IDs as its main argument.
 
-# Containerizing an App
+## Containerizing an App
 
 Containers are all about making apps simple to build, ship, and run. The end-to-end process looks like this:
 
@@ -119,7 +119,7 @@ Containers are all about making apps simple to build, ship, and run. The end-to-
 1. Push the new image to a registry (optional)
 1. Run a container from the image
 
-## Inspecting the Dockerfile
+### Inspecting the Dockerfile
 
 ```text title=".dockerignore"
 node_modules
@@ -146,7 +146,7 @@ ENTRYPOINT ["node", "./index.js"]
 
 The Dockerfile `FROM` instruction specifies the base image for the new image you’re building. It is also used to distinguish a new build stage in multi-stage builds. The `RUN` instruction lets you to run commands inside the image during a build. Each `RUN` instruction adds a new layer to the overall image. The `COPY` instruction adds files into the image as a new layer. It’s common to use it to copy your application code into an image. The `ENV` instruction sets the environment variables. The `EXPOSE` instruction documents the network port an application uses. The `ENTRYPOINT` instruction sets the default application to run when the image is started as a container.
 
-## Build the Image
+### Build the Image
 
 Be sure to include the trailing period `.` and be sure to run the command from the same directory where `Dockerfile` exists.
 
@@ -156,7 +156,7 @@ docker build -t myapp:latest .
 
 `docker build` is the command that reads a Dockerfile and containerizes an application. The `-t` flag tags the image, and the `-f` flag lets you specify the name and location of the Dockerfile. With the `-f` flag, you can use a Dockerfile with an arbitrary name and in an arbitrary location.
 
-## Run the App
+### Run the App
 
 ```sh
 docker run -d --name c1 \
@@ -167,7 +167,7 @@ docker run -d --name c1 \
 
 The `-d` flag runs the container in the background, and the `-p 80:8080` flag maps port 80 on the host to port 8080 inside the running container.
 
-## Moving to Production with Multi-stage Builds
+### Moving to Production with Multi-stage Builds
 
 ```dockerfile title="Dockerfile"
 FROM node:20-slim AS base
@@ -199,7 +199,7 @@ Perform the build. You should see the `prod-deps` and `build` stages execute in 
 docker build -t multi:stage .
 ```
 
-# Volumes and Persistent Data
+## Volumes and Persistent Data
 
 Containers are designed to be immutable, which means it's read-only, you should not change the configuration of a container after it’s deployed. If something breaks or you need to change something, you create a brand-new container with the fixes or updates and replace the old container with this new one. You should never log into a running container and make configuration changes. However, many applications require a read-write filesystem in order to run – they won’t even run on a read-only filesystem. To help with this, containers created by Docker have a thin read-write layer on top of the read-only images they’re based on.
 
@@ -211,7 +211,7 @@ Volumes are the recommended way to persist data in containers. There are three m
 
 At a high-level, you create a volume, then you create a container and mount the volume into it. The volume is mounted into a directory in the container’s filesystem, and anything written to that directory is stored in the volume. If you delete the container, the volume and its data will still exist.
 
-## Creating and Mounting Docker Volumes
+### Creating and Mounting Docker Volumes
 
 ```sh
 docker volume create myvol # create a new volume called myvol
@@ -228,14 +228,14 @@ The command uses the `--mount` flag to mount a volume called "bizvol" into the c
 - If you specify an existing volume, Docker will use the existing volume
 - If you specify a volume that doesn’t exist, Docker will create it for you
 
-## The Commands
+### The Commands
 
 - `docker volume ls`: list all volumes on the local Docker host.
 - `docker volume inspect`: show detailed volume information. Use this command to see many interesting volume properties, including where a volume exists in the Docker host’s filesystem.
 - `docker volume prune`: delete all volumes that are not in use by a container or service replica. **Use with caution!**
 - `docker volume rm`: delete specific volumes that are not in use.
 
-# Deploying Apps with Compose
+## Deploying Apps with Compose
 
 ```sh
 docker compose version
@@ -283,7 +283,7 @@ docker compose up &
 
 Normally you’ll use the `--detach` flag to bring the app up in the background. However, we brought it up in the foreground and used the `&` to give us the terminal window back. This forces Compose to output all messages to the terminal window.
 
-## The commands
+### The commands
 
 - `docker compose stop`: stop all containers in a Compose app without deleting them from the system.
 - `docker compose rm`: delete a stopped Compose app. It will delete containers and networks, but it won’t delete volumes and images by default.
@@ -291,6 +291,6 @@ Normally you’ll use the `--detach` flag to bring the app up in the background.
 - `docker compose ps`: list each container in the Compose app. It shows current state, the command running inside each container, and network ports.
 - `docker compose down`: stop and delete a running Compose app. It deletes containers and networks, but not volumes and images.
 
-# Summary
+## Summary
 
 We used to live in a world where every time the business needed a new application we had to buy a brand-new server. VMware came along and allowed us to drive more value out of new and existing IT assets. As good as VMware and the VM model is, it’s not perfect. Following the success of VMware and hypervisors came a newer more efficient and portable virtualization technology called containers. But containers were initially hard to implement and were only found in the data centers of web giants that had Linux kernel engineers on staff. Docker came along and made containers easy and accessible to the masses. Containers have taken over the world!

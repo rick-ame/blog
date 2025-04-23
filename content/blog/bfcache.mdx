@@ -6,7 +6,7 @@ tags: ['web']
 published: true
 ---
 
-# Understanding bfcache: The Browser's Time Machine
+## Understanding bfcache: The Browser's Time Machine
 
 [bfcache](https://developer.mozilla.org/en-US/docs/Glossary/bfcache) acts like a time machine for web pages. When users navigate away from your site, instead of discarding the page, browsers preserve the complete page state - including the JavaScript heap and DOM - in memory. This enables three key benefits:
 
@@ -14,7 +14,7 @@ published: true
 1. **Perfect state preservation**: Scroll positions, form inputs, and even paused videos resume exactly as left
 1. **Resource efficiency**: Saves bandwidth and reduces server load by avoiding repeat requests
 
-# How bfcache Works: A Technical Breakdown
+## How bfcache Works: A Technical Breakdown
 
 The caching process involves several sophisticated steps:
 
@@ -33,7 +33,7 @@ window.addEventListener('pageshow', (event) => {
 })
 ```
 
-# Optimizing Your Pages for bfcache
+## Optimizing Your Pages for bfcache
 
 To maximize bfcache eligibility:
 
@@ -50,7 +50,7 @@ window.addEventListener('pagehide', () => {
 })
 ```
 
-# Common Pitfalls and Solutions
+## Common Pitfalls and Solutions
 
 1. **Dynamic content updates**:[^1]
 

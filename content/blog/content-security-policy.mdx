@@ -6,7 +6,7 @@ tags: ['web']
 published: true
 ---
 
-# Introduction
+## Introduction
 
 Content Security Policy ([CSP](https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP)) is a browser security mechanism that aims to mitigate Cross-Site Scripting ([XSS](https://developer.mozilla.org/en-US/docs/Glossary/Cross-site_scripting)) and some other attacks. It works by restricting the resources (such as scripts and images) that a page can load and restricting whether a page can be framed by other pages.
 
@@ -14,9 +14,9 @@ Content Security Policy ([CSP](https://developer.mozilla.org/en-US/docs/Web/HTTP
 
 To enable CSP, a response needs to include an HTTP response header called `Content-Security-Policy` with a value containing the policy. The policy itself consists of one or more directives, separated by semicolons.
 
-# Threats
+## Threats
 
-## Mitigating cross-site scripting
+### Mitigating cross-site scripting
 
 By preventing the page from executing inline scripts, attacks like injecting
 
@@ -36,15 +36,15 @@ By preventing the page from loading scripts from arbitrary servers, attacks like
 
 will not work.
 
-## Mitigating packet sniffing attacks
+### Mitigating packet sniffing attacks
 
 In addition to restricting the domains from which content can be loaded, the server can specify which protocols are allowed to be used; for example (and ideally, from a security standpoint), a server can specify that all content must be loaded using HTTPS. A complete data transmission security strategy includes not only enforcing HTTPS for data transfer, but also marking all cookies with the `secure` attribute and providing automatic redirects from HTTP pages to their HTTPS counterparts. Sites may also use the `Strict-Transport-Security` HTTP header to ensure that browsers connect to them only over an encrypted channel.
 
-# CSP Directive Reference
+## CSP Directive Reference
 
 This documentation is provided based on the [Content Security Policy Level 2](https://www.w3.org/TR/CSP2/) W3C Recommendation, and the [Content Security Policy Level 3](https://www.w3.org/TR/CSP3/) W3C Working Draft
 
-## Fetch Directives
+### Fetch Directives
 
 Fetch directives tell the browser the locations to trust and load resources from. Most fetch directives have a certain [fallback list specified in w3](https://www.w3.org/TR/CSP3/#directive-fallback-list). This list allows for granular control of the source of scripts, images, files, etc.
 
@@ -64,7 +64,7 @@ Fetch directives tell the browser the locations to trust and load resources from
 - `prefetch-sr`c specifies the URLs from which resources can be prefetched from. <Tag>CSP Level 3</Tag>
 - `manifest-src` specifies the URLs that application manifests may be loaded from. <Tag>CSP Level 3</Tag>
 
-## Document Directives
+### Document Directives
 
 Document directives instruct the browser about the properties of the document to which the policies will apply to.
 
@@ -80,7 +80,7 @@ Document directives instruct the browser about the properties of the document to
   plugin-types application/pdf;
   ```
 
-## Navigation Directives
+### Navigation Directives
 
 Navigation directives instruct the browser about the locations that the document can navigate to.
 
@@ -91,14 +91,14 @@ Navigation directives instruct the browser about the locations that the document
   - `X-Frame-Options` is rendered obsolete by this directive and is ignored by the user agents.
 - `navigate-to` restricts the URLs that the document may navigate to by any means. For example when a link is clicked, a form is submitted, or window.location is invoked. If `form-action` is present then this directive is ignored for form submissions. Removed from the CSP 3 Spec.
 
-## Reporting Directives
+### Reporting Directives
 
 Reporting directives deliver violations of prevented behaviors to specified locations. These directives serve no purpose on their own and are dependent on other directives.
 
 - `report-to` defines a reporting group name defined by a `Report-To` HTTP response header. <Tag>CSP Level 3</Tag> See the [Reporting API](https://w3c.github.io/reporting/) for more info.
 - `report-uri` directive is deprecated in CSP Level 3 in favor of the `report-to` directive, which is a URI that the reports are sent to.
 
-# Source List Reference
+## Source List Reference
 
 | Source Value         | Example                       | Description                                                                                                                                                                |
 | -------------------- | ----------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -115,7 +115,7 @@ Reporting directives deliver violations of prevented behaviors to specified loca
 | `'sha256-'`          | `script-src 'sha256-xyz...'`  | Allows an inline script or CSS to execute if its hash matches the specified hash in the header.                                                                            |
 | `'strict-dynamic'`   | `script-src 'strict-dynamic'` | Enables an allowed script to load additional scripts via non-"parser-inserted" script elements (for example `document.createElement('script');` is allowed).               |
 
-# Implementing Content Security Policy
+## Implementing Content Security Policy
 
 You can deploy a CSP as a HTTP response header or an HTML meta tag.
 

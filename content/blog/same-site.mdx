@@ -6,11 +6,11 @@ tags: ['web']
 published: true
 ---
 
-# Introduction
+## Introduction
 
 [SameSite](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Set-Cookie#samesitesamesite-value) is a browser security mechanism that determines when a website's cookies are included in requests originating from other websites. SameSite cookie restrictions provide partial protection against a variety of cross-site attacks, including [CSRF](https://developer.mozilla.org/en-US/docs/Glossary/CSRF), [cross-site leaks](https://en.wikipedia.org/wiki/Cross-site_leaks), and some [CORS](https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS) exploits.
 
-# What is a Site in the Context of SameSite Cookies?
+## What is a Site in the Context of SameSite Cookies?
 
 ![Site Definition](../img/same-site/site-definition.png)
 In the context of SameSite cookie restrictions, a site is defined as the top-level domain ([TLD](https://developer.mozilla.org/en-US/docs/Glossary/TLD)), usually something like `.com` or `.net`, plus one additional level of the domain name. This is often referred to as the TLD+1.
@@ -21,7 +21,7 @@ In the context of SameSite cookie restrictions, a site is defined as the top-lev
   top-level domains in practice, such as `.co.uk`.
 </Callout>
 
-# What's the Difference Between a Site and an Origin?
+## What's the Difference Between a Site and an Origin?
 
 ![Site vs Origin](../img/same-site/site-vs-origin.png)
 The difference between a site and an origin is their scope; a site encompasses multiple domain names, whereas an origin only includes one. Two URLs are considered to have the same origin if they share the exact same scheme, domain name, and port. Although note that the port is often inferred from the scheme. The term "site" is much less specific as it only accounts for the scheme and last part of the domain name. Crucially, this means that a cross-origin request can still be same-site, but not the other way around.
@@ -34,7 +34,7 @@ The difference between a site and an origin is their scope; a site encompasses m
 | `https://example.com`     | `https://example.co.uk`    | No: mismatched eTLD   | No: mismatched domain name |
 | `https://example.com`     | `http://example.com`       | No: mismatched scheme | No: mismatched scheme      |
 
-# How does SameSite Work?
+## How does SameSite Work?
 
 Before the SameSite mechanism was introduced, browsers sent cookies in every request to the domain that issued them, even if the request was triggered by an unrelated third-party website. SameSite works by enabling browsers and website owners to limit which cross-site requests, if any, should include specific cookies.
 
@@ -57,18 +57,18 @@ Set-Cookie: session=sessionId; SameSite=Strict
   even though the developers never configured this behavior.
 </Callout>
 
-## Strict
+### Strict
 
 If a cookie is set with the `SameSite=Strict` attribute, browsers will not send it in any cross-site requests. In simple terms, this means that if the target site for the request does not match the site currently shown in the browser's address bar, it will not include the cookie. Although this is the most secure option, it can negatively impact the user experience in cases where cross-site functionality is desirable.
 
-## Lax
+### Lax
 
 If a cookie is set with the `SameSite=Lax` attribute, this means that browsers will send the cookie in cross-site requests, but only if both of the following conditions are met:
 
 - The request uses the `GET` method.
 - The request resulted from a top-level navigation by the user.[^1]
 
-## None
+### None
 
 If a cookie is set with the `SameSite=None` attribute, this effectively disables SameSite restrictions altogether, regardless of the browser. As a result, browsers will send this cookie in all requests to the site that issued it, even those that were triggered by completely unrelated third-party sites.
 

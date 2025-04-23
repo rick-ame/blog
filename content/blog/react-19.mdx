@@ -6,7 +6,7 @@ tags: ['react']
 published: true
 ---
 
-# React Compiler
+## React Compiler
 
 React 19 will include a compiler much like Svelte or Vue. This will not only make React faster but will automate certain tedious tasks and make less work for the developer.
 
@@ -16,7 +16,7 @@ In current APIs, we use useMemo, useCallback, and memo APIs to manually tune how
 
 With the compiler, these hooks will now be a thing of the past.
 
-# use() Hook
+## use() Hook
 
 The [`use`](https://react.dev/reference/react/use) hook lets you read and asynchronously load a resource such as a promise or a context. It can also be used in loops and conditionals, unlike other hooks. It can be used to fetch data in some cases replacing `useEffect`.
 
@@ -51,11 +51,11 @@ function HorizontalRule({ show }) {
   context providers in the component from which you’re calling use(context).
 </Callout>
 
-# use client & use server Directives
+## use client & use server Directives
 
 Components can be rendered on the server, which makes for better SEO, faster page load times and easy data fetching. Obviously, you will need a Node.js(or maybe deno, bun) server to run the [`use server`](https://react.dev/reference/react/use-server)[^1] component.
 
-# Actions
+## Actions
 
 Actions allow you to pass a function to DOM elements such as `<form/>`:
 
@@ -70,26 +70,26 @@ The action function can operate synchronously or asynchronously. You can define 
 
 By default, Actions are submitted within a [transition](https://react.dev/reference/react/useTransition), keeping the current page interactive while the action is processing. Since Actions support async functions, you can use `async/await` in transitions. This allows you to show pending UI with the `isPending` state of a transition when an async request like fetch starts, and show the pending UI all the way through the update being applied.
 
-# useOptimistic
+## useOptimistic
 
 As its name indicates, [`useOptimistic`](https://react.dev/reference/react/useOptimistic) manages optimistic state updates. With this hook, you can apply temporary updates that are automatically reverted once the final state is committed. For Actions, this allows you to optimistically set the final state of the data on the client, assuming the submission is successful, and revert to the value for data received from the server. It works using regular `async/await`, so it works the same whether you’re using `fetch` on the client or a Server Action from the server.
 
-# Document Metadata
+## Document Metadata
 
 Built-in support for metadata like `<title>`, `<meta>` and metadata `<link>` tags. These work the same way in all environments, including fully client-side code, SSR, and RSC.
 
-# Asset Loading
+## Asset Loading
 
 NOw `Suspense` is integrated with the loading lifecycle of resources such as stylesheets, fonts, and scripts so that React takes them into account to determine whether the content in elements like `<style>`, `<link>`, and `<script>` is ready to be displayed. There are also new [Resource Loading APIs](https://react.dev/reference/react-dom#resource-preloading-apis) added like `preload` and `preinit` to provide greater control for when a resource should load and initialize.
 
-# Other Changes & Features
+## Other Changes & Features
 
 - `ref` passed as a regular prop (No more forwardRef)
 - Web Components
 - No More `React.lazy`
 - `<Context.Provider>` replaced with `<Context>`
 
-# Amazing Articles
+## Amazing Articles
 
 - [React v19](https://react.dev/blog/2024/12/05/react-19)
 - [What’s new in React 19](https://vercel.com/blog/whats-new-in-react-19)

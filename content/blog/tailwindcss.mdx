@@ -6,7 +6,7 @@ tags: ['css', 'tailwind']
 published: true
 ---
 
-# Why to use Tailwind CSS
+## Why to use Tailwind CSS
 
 There are two main types of CSS frameworks. One is based around components - a group that includes frameworks such as [Bootstrap](https://getbootstrap.com/). The other type of CSS framework is based around utilities — a group that includes the likes of [Tailwind CSS](https://tailwindcss.com/), and [UnoCSS](https://unocss.dev/).
 
@@ -14,13 +14,13 @@ For many years, component-based frameworks were the de facto standard for buildi
 
 “Utility-first” frameworks were created to solve this problem. A utility-first framework is built with low-level functionality in mind. Utility classes offer much more power and flexibility than component classes, they are completely customizable and extensible, and it’s easier to build unique, custom website designs without fighting with unwanted styles. Utility classes have consistent styles, which gives us a ready-to-use [design system](https://uxdesign.cc/everything-you-need-to-know-about-design-systems-54b109851969). We can also create our own design system if we need to. With utility classes, we can still extract common, repetitive patterns into custom, reusable components. But in contrast to predefined components, custom components will be exactly what we need. In summary, we can say that a utility-first framework gives us a balance between the concrete and the abstract.
 
-# Getting Started with Tailwind
+## Getting Started with Tailwind
 
 You can follow the [guide](https://tailwindcss.com/docs/installation) to implement Tailwind CSS in your project.
 
-# Building Complex Designs with Tailwind
+## Building Complex Designs with Tailwind
 
-## Utility-First Fundamentals
+### Utility-First Fundamentals
 
 Using utility classes to build custom designs without writing CSS
 
@@ -38,7 +38,7 @@ Using utility classes to build custom designs without writing CSS
 </div>
 ```
 
-### Why not just use inline styles?
+#### Why not just use inline styles?
 
 Utility classes have a few important advantages over inline styles:
 
@@ -46,14 +46,14 @@ Utility classes have a few important advantages over inline styles:
 - Responsive design. You can’t use media queries in inline styles, but you can use Tailwind’s responsive utilities to build fully responsive interfaces easily.
 - Hover, focus, and other states. Inline styles can’t target states like hover or focus, but Tailwind’s state variants make it easy to style those states with utility classes.
 
-## Handling Hover, Focus, and Other States
+### Handling Hover, Focus, and Other States
 
 Every utility class in Tailwind can be applied conditionally by adding a modifier to the beginning of the class name that describes the condition you want to target.
 
 For example, to apply the bg-sky-700 class on hover, use the hover:bg-sky-700 class:
 
 ```html /hover:bg-sky-700/
-<button class="... bg-sky-500 hover:bg-sky-700">Save changes</button>
+<button class="bg-sky-500 hover:bg-sky-700 ...">Save changes</button>
 ```
 
 Tailwind includes modifiers for just about everything you’ll ever need, including:
@@ -63,7 +63,7 @@ Tailwind includes modifiers for just about everything you’ll ever need, includ
 - Media and feature queries, like responsive breakpoints, dark mode, and prefers-reduced-motion
 - Attribute selectors, like `[dir="rtl"]` and `[open]`
 
-## Responsive Design
+### Responsive Design
 
 There are five breakpoints by default, inspired by common device resolutions:
 
@@ -80,7 +80,7 @@ There are five breakpoints by default, inspired by common device resolutions:
 <img class="w-16 md:w-32 lg:w-48" src="..." />
 ```
 
-### Working mobile-first
+#### Working mobile-first
 
 Use unprefixed utilities to target mobile, and override them at larger breakpoints
 
@@ -89,7 +89,7 @@ Use unprefixed utilities to target mobile, and override them at larger breakpoin
 <div class="text-center sm:text-left"></div>
 ```
 
-### Targeting a breakpoint range
+#### Targeting a breakpoint range
 
 ```html
 <div class="md:max-xl:flex">
@@ -97,12 +97,12 @@ Use unprefixed utilities to target mobile, and override them at larger breakpoin
 </div>
 ```
 
-## Dark Mode
+### Dark Mode
 
 To make this as easy as possible, Tailwind includes a dark variant that lets you style your site differently when dark mode is enabled:
 
 ```html /dark:bg-slate-800/ /dark:text-white/ /dark:text-slate-400/
-<div class="bg-white  dark:bg-slate-800">
+<div class="bg-white dark:bg-slate-800">
   <h3 class="mt-5 text-base font-medium text-slate-900 dark:text-white">...</h3>
   <p class="mt-2 text-sm text-slate-500 dark:text-slate-400">
     Lorem ipsum dolor sit amet consectetur.
@@ -110,7 +110,7 @@ To make this as easy as possible, Tailwind includes a dark variant that lets you
 </div>
 ```
 
-### Toggling dark mode manually
+#### Toggling dark mode manually
 
 If you want to support toggling dark mode manually instead of relying on the operating system preference, use the `selector`[^1] strategy instead of the media strategy:
 
@@ -122,9 +122,9 @@ module.exports = {
 }
 ```
 
-## Accessibility
+### Accessibility
 
-### Screen Readers
+#### Screen Readers
 
 Use sr-only to hide an element visually without hiding it from screen readers:
 

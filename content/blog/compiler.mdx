@@ -8,7 +8,7 @@ published: true
 
 _ref: [the-super-tiny-compiler](https://github.com/jamiebuilds/the-super-tiny-compiler)_
 
-# Introduction
+## Introduction
 
 Today we're going to write a compiler together. But not just any compiler... A super duper teeny tiny compiler! We're going to compile some Lisp-like function calls into some C-like function calls. If you are not familiar with one or the other, below is a quick intro.
 
@@ -26,7 +26,7 @@ Most compilers break down into three primary stages: `Parsing`, `Transformation`
 1. `Transformation` takes this abstract representation and manipulates it to do whatever the compiler wants it to.
 1. `Code Generation` takes the transformed representation of the code and turns it into new code.
 
-# Parsing
+## Parsing
 
 Parsing typically gets broken down into two phases: `Lexical Analysis` and `Syntactic Analysis`.
 
@@ -315,7 +315,7 @@ function parser(tokens) {
 
 </details>
 
-# Transformation
+## Transformation
 
 The next type of stage for a compiler is transformation. Again, this just takes the AST from the last step and makes changes to it. It can manipulate the AST in the same language or it can translate it into an entirely new language.
 
@@ -343,7 +343,7 @@ Or maybe a node for a "CallExpression":
 When transforming the AST we can manipulate nodes by adding/removing/replacing properties, we can add new nodes, remove nodes, or we could leave the existing AST alone and create an entirely new one based
 on it. Since we’re targeting a new language, we’re going to focus on creating an entirely new AST that is specific to the target language.
 
-## Traversal
+### Traversal
 
 In order to navigate through all of these nodes, we need to be able to traverse through them. This traversal process goes to each node in the AST depth-first.
 
@@ -382,7 +382,7 @@ So for the above AST, we would go:
 
 If we were manipulating this AST directly, instead of creating a separate AST, we would likely introduce all sorts of abstractions here. But just visiting each node in the tree is enough for what we're trying to do.
 
-## Visitors
+### Visitors
 
 The basic idea here is that we are going to create a `visitor` object that has methods that will accept different node types.
 
@@ -650,7 +650,7 @@ function transformer(ast) {
 
 </details>
 
-# Code Generation
+## Code Generation
 
 The final phase of a compiler is code generation. Sometimes compilers will do things that overlap with transformation, but for the most part code generation just means taking our AST and string-ify code back out.
 
@@ -702,7 +702,7 @@ function codeGenerator(node) {
 
 </details>
 
-# The Compiler
+## The Compiler
 
 ```js
 /**

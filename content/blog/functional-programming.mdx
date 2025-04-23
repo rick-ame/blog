@@ -6,17 +6,17 @@ tags: ['javascript']
 published: true
 ---
 
-# Introduction
+## Introduction
 
 Functional programming is a declarative programming paradigm style where one applies pure functions in sequence to solve complex problems. Functions take an input value and produce an output value without being affected by the program. Functional programming mainly focuses on what to solve and uses expressions instead of statements. Functional programming excels mostly at mathematical functions where the values don’t have any correlation and don’t make use of concepts like shared state and mutable data used in object-oriented programming.
 
-# Functional Programming Concepts
+## Functional Programming Concepts
 
-## First-class Functions
+### First-class Functions
 
 First-class functions in functional programming are treated as data type variables and can be used like any other variables. These first-class variables can be passed to functions as parameters, or stored in data structures.
 
-## Recursion
+### Recursion
 
 Unlike object-oriented programming, functional programming doesn’t make use of “while” or ”for” loops or “if-else” statements. Functional programs avoid constructions that create different outputs on every execution. Instead, recursive functions call themselves repeatedly until they reach the desired state or solution known as the base case.
 
@@ -24,11 +24,11 @@ Unlike object-oriented programming, functional programming doesn’t make use of
 const range = (a, b) => (a > b ? [] : [a, ...range(a + 1, b)])
 ```
 
-## Immutability
+### Immutability
 
 In functional programming, we can’t modify a variable after being created. The reason for this is that we would want to maintain the program's state throughout the runtime of the program. It is best practice to program each function to produce the same result irrespective of the program's state. This means that when we create a variable and assign a value, we can run the program with ease fully knowing that the value of the variables will remain constant and can never change.
 
-## Pure vs. Impure Functions
+### Pure vs. Impure Functions
 
 Pure functions form the foundation of functional programming and have two major properties:
 
@@ -73,7 +73,7 @@ With the advent of ES6, this can also be done using the spread operator.
 const newObj = { ...obj }
 ```
 
-## High Order Functions
+### High Order Functions
 
 A function that accepts other functions as parameters or returns functions as outputs is called a high-order function. This process applies a function to its parameters at each iteration while returning a new function that accepts the next parameter.
 
@@ -96,7 +96,7 @@ addWithLogging(3, 4)
 // 7
 ```
 
-## Currying
+### Currying
 
 Currying means breaking down a function that takes multiple arguments into one or multiple levels of higher-order functions.
 
@@ -119,7 +119,7 @@ add(3)(4) // 7
 
 The benefit of currying is memoization. We can now memoize certain arguments in a function call so that they can be reused later without duplication and re-computation.
 
-## Composition
+### Composition
 
 In mathematics, composition is defined as passing the output of one function into the input of another to create a combined output. The same is possible in functional programming since we are using pure functions.
 
@@ -133,6 +133,6 @@ factorial(6) // 720
 
 The first function is a `range`, which takes a starting number `a` and an ending number `b` and creates an array consisting of numbers from a to b. Then we have a function `multiply` that takes an array and multiplies all the numbers in it. The above function for calculating `factorial` is similar to f(x) = g(h(x)), thus demonstrating the composition property.
 
-# Conclusion
+## Conclusion
 
 Functional programming is a well-researched and robust paradigm for writing computer programs. With the introduction of `ESNext`, JavaScript allows for a much better functional programming experience than ever before.

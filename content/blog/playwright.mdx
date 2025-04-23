@@ -6,13 +6,13 @@ tags: ['testing', 'playwright']
 published: true
 ---
 
-# Introduction
+## Introduction
 
 [Playwright](https://playwright.dev/) enables reliable end-to-end testing for modern web apps. Playwright Test was created specifically to accommodate the needs of end-to-end testing. Playwright supports all modern rendering engines including Chromium, WebKit, and Firefox. Test on Windows, Linux, and macOS, locally or on CI, headless or headed with native mobile emulation of Google Chrome for Android and Mobile Safari.
 
 _[Best Practices](https://playwright.dev/docs/best-practices)_
 
-# Out-of-the-box Test Assertions
+## Out-of-the-box Test Assertions
 
 `Playwright` includes test assertions in the form of `expect` function. To make an assertion, call `expect(value)` and choose a matcher that reflects the expectation. There are many [generic matchers](https://playwright.dev/docs/api/class-genericassertions) like `toEqual`, `toContain`, and `toBeTruthy` that can be used to assert any conditions.
 
@@ -43,7 +43,7 @@ expect(test.info().errors).toHaveLength(0)
 
 **Note that soft assertions only work with Playwright test runner.**
 
-# Support Multiple Browsers
+## Support Multiple Browsers
 
 Playwright can run tests on Chromium, WebKit and Firefox browsers as well as branded browsers such as Google Chrome and Microsoft Edge. It can also run on emulated tablets and mobile devices.
 
@@ -144,7 +144,7 @@ The [HTML Reporter](https://playwright.dev/docs/test-reporters#html-reporter) sh
 npx playwright show-report
 ```
 
-# Trace Viewer
+## Trace Viewer
 
 Playwright Trace Viewer is a GUI tool that lets you explore recorded Playwright traces of your tests meaning you can go back and forward through each action of your test and visually see what was happening during each action.
 
@@ -157,11 +157,11 @@ View traces of your test by clicking through each action or hovering using the t
 ![Playwright Trace Viewer](../img/playwright/trace-viewer.png)
 To learn more about traces check out the detailed guide on [Trace Viewer](https://playwright.dev/docs/trace-viewer).
 
-# Support Multiple Languages
+## Support Multiple Languages
 
 Playwright is available in multiple languages that share the same underlying implementation. All core features for automating the browser are supported in all languages while testing ecosystem integration is different. You can pick the language based on your experience, familiarity with its testing ecosystem and your project constraints. For more information, check out [supported languages](https://playwright.dev/docs/languages).
 
-# Mock APIs
+## Mock APIs
 
 Web APIs are usually implemented as HTTP endpoints. Playwright provides APIs to mock and modify network traffic, both HTTP and HTTPS. Any requests that a page does, including XHRs and fetch requests, can be tracked, modified and mocked. With Playwright you can also mock using HAR files that contain multiple network requests made by the page.
 
@@ -197,7 +197,7 @@ export default defineConfig({
 
 For more information, check out [webServer](https://playwright.dev/docs/api/class-testconfig#test-config-web-server).
 
-# Out-of-the-box Snapshot
+## Out-of-the-box Snapshot
 
 Playwright provides methods for comparing page and element screenshots with expected values stored in files.
 

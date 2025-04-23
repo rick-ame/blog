@@ -6,7 +6,7 @@ tags: ['react']
 published: true
 ---
 
-# Introduction
+## Introduction
 
 ### What is State?
 
@@ -20,9 +20,9 @@ When building an application, data plays an integral role in what is been displa
 
 State represents the data that changes over time in your application, and properly managing it ensures your app functions correctly. It helps you avoid common pitfalls like data inconsistency, prop drilling, and unnecessary re-renders.
 
-# Different Approaches to Managing State in React
+## Different Approaches to Managing State in React
 
-## Component State
+### Component State
 
 Each React component has its internal state, which can be used to store and manage data that is specific to that component. This state is managed using the setState method, which updates the component’s state and triggers a re-render.
 
@@ -48,11 +48,11 @@ function Counter() {
 
 Using local state, components can independently change and handle their data which leads to partitioning within the application. However, problems may arise when the state should be shared among many components. Engineers have to find tools and libraries that suit their needs, yet at the same time meet the high standards needed for enterprise-grade apps.
 
-## Global State
+### Global State
 
 These are states that are accessible to every component in the application. It is always declared and located in the root component of your app before the JSX is returned. A state can be considered as a global state if it is a piece of data that is accessible among multiple components thereby, aiding communication between components in the application.
 
-### Consider Using React Context API
+#### Consider Using React Context API
 
 [React’s Context API](https://react.dev/learn/passing-data-deeply-with-context) is a built-in solution for sharing state across components without resorting to a global state management library. It allows you to pass data through the component tree without passing props explicitly at every level. Context is ideal for smaller applications or when you need to share state between a few closely related components. However, be cautious with using Context, as it can lead to performance issues if overused. The only advantage of Context is that it doesn’t depend on a third-party library, but that can’t outweigh the effort to maintain this approach.
 
@@ -66,11 +66,11 @@ React state management libraries can be divided into three groups:
 - `Atom-based`: splits states into tiny pieces of data called atoms, which can be written to and read from using React hooks. In this group, we have [Recoil](#recoil) and [Jotai](#jotai).
 - `Mutable-based`: leverages proxy to create mutable data sources which can be directly written to or reactively read from. Candidates in this group are [MobX](#mobx) and [Valtio](#valtio).
 
-#### Reducer-based Libraries
+### Reducer-based Libraries
 
 ![Redux Flow](../img/react/redux-flow.gif)
 
-### Redux
+#### Redux
 
 [Redux](https://redux.js.org/) is a state container created in 2015, no React state management library list would be complete without Redux. In Redux, you can change the state only by dispatching an action - an object describing what should happen. This, in turn, runs a function called a reducer, which, given an action object and previous state, returns a new state.
 
@@ -146,7 +146,7 @@ dispatch({ type: 'count/incrementAsync', payload: 1 })
 dispatch.count.incrementAsync(1) // Async action shortcut
 ```
 
-### Zustand
+#### Zustand
 
 [Zustand](https://docs.pmnd.rs/zustand/getting-started/introduction) is a small, fast and scalable barebones state-management solution using simplified flux principles. Although concepts like actions or selectors exist in Zustand, the leading role is played by hooks. For example, the create function used to create a Zustand store returns a hook for use in React components.
 
@@ -166,11 +166,11 @@ const status = useStore((state) => state.status) // Access selected property
 
 You can also combine [Immer](https://immerjs.github.io/immer/) with Zustand to handle nested objects and complicated data.
 
-#### Atom-based libraries
+### Atom-based libraries
 
 ![Recoil Flow](../img/react/recoil-flow.avif)
 
-### Recoil
+#### Recoil
 
 [Recoil](https://recoiljs.org/) is a relative newcomer, the latest brainchild of the React team. The basic idea behind it is a simple implementation of missing React features like shared state and derived data.
 
@@ -204,7 +204,7 @@ const [isAvailable, setIsAvailable] = useRecoilState(isAvailableState)
 const status = useRecoilValue(statusState)
 ```
 
-### Jotai
+#### Jotai
 
 Staying in the realm of atomic state management, [Jotai](https://jotai.org/) is another library worth considering. The most significant difference between Recoil and Jotai is probably the performance, specifically the garbage collection. If you noticed from the previous snippets, Recoil tracks its state by string keys - that’s why they're required and must be unique. It’s uncomfortable, ineffective, and can lead to memory leaks.
 
@@ -223,11 +223,11 @@ const [isAvailable, setIsAvailable] = useAtom(isAvailableState) // state's value
 const [status] = useAtom(statusState) // ignoring state setter
 ```
 
-#### Mutable-based Libraries
+### Mutable-based Libraries
 
 ![Mobx Flow](../img/react/mobx-flow.png)
 
-### Mobx
+#### Mobx
 
 [MobX](https://mobx.js.org/README.html) is another relatively old library. What sets it apart from Redux is that it follows the OOP paradigm and uses observables.
 
@@ -282,7 +282,7 @@ const store = new TodoList([
 render(<TodoListView todoList={store} />, document.getElementById('root'))
 ```
 
-### Valtio
+#### Valtio
 
 The [Valtio](https://valtio.pmnd.rs/) API is minimal, flexible, unopinionated and a touch magical. Valtio's proxy turns the object you pass it into a self-aware proxy, allowing fine-grained subscription and reactivity when making state updates. In React, Valtio shines at render optimization. It is compatible with Suspense and React 18. Valtio is also a viable option in vanilla JavaScript applications.
 
@@ -309,7 +309,7 @@ function Counter() {
 }
 ```
 
-# Conclusion: Choosing the Right State Management Approach
+## Conclusion: Choosing the Right State Management Approach
 
 Choosing the right state management approach for your React app depends on the complexity of your application and your team's preferences. For simple applications, useState and useReducer may be enough. React Context or state management libraries like Zustand or MobX can be more appropriate for global state or more complex scenarios. It's essential to evaluate the needs of your application, the scale of state changes, and the potential for future growth when deciding on a state management strategy.
 

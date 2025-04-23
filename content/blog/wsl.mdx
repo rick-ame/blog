@@ -6,7 +6,7 @@ tags: ['tool']
 published: true
 ---
 
-# Install WSL Command
+## Install WSL Command
 
 Open PowerShell or Windows Command, run
 
@@ -21,18 +21,18 @@ wsl --list --online # For a valid list of distribution names
 wsl --install -d <Distribution Name> # <Distribution Name> from the list got by upper command
 ```
 
-# Add a User for WSL (Optional)
+## Add a User for WSL (Optional)
 
 ```sh
 adduser <username>
 usermod -aG sudo <username> # Add user to sudoers
 ```
 
-# Install Visual Studio Code
+## Install Visual Studio Code
 
 [Download](https://code.visualstudio.com/)
 
-# Use Windows Proxy
+## Use Windows Proxy
 
 **Ubuntu version at least to be 22.04**
 
@@ -47,7 +47,7 @@ networkingMode=mirrored
 
 _If you are using [Clash Verge](https://github.com/clash-verge-rev/clash-verge-rev) for proxy, [TUN](https://wiki.metacubex.one/en/config/inbound/tun/) mode is recommended. FYI, the network hotspot sharing only works in `GVisor` mode._
 
-# Install zsh
+## Install zsh
 
 ```sh
 sudo apt install zsh
@@ -59,19 +59,19 @@ chsh -s $(which zsh)
 1. Install [oh-my-zsh](https://ohmyz.sh/)
 1. [Change theme](/blog/tools#oh-my-zsh)
 
-# Install Homebrew
+## Install Homebrew
 
 [Homebrew on Linux](https://docs.brew.sh/Homebrew-on-Linux#install)
 
-# Useful Commands
+## Useful Commands
 
 ```sh
 explorer.exe . # Open current folder in windows
 ```
 
-# Additional Information
+## Additional Information
 
-## Terminal Configurations
+### Terminal Configurations
 
 1. Size: 72 x 20
 1. Theme: Campbell
