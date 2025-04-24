@@ -26,8 +26,8 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="en" suppressHydrationWarning>
-      <body className="scroll-pt-14 antialiased">
+    <html lang="en" suppressHydrationWarning className="scroll-pt-14">
+      <body className="antialiased">
         <Providers>
           <div className="flex min-h-dvh flex-col">
             <Header />
