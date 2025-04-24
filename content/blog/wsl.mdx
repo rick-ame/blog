@@ -69,6 +69,41 @@ chsh -s $(which zsh)
 explorer.exe . # Open current folder in windows
 ```
 
+## Configure Port Forwarding to Access WSL2 from the Local Network
+
+To allow devices on your local network to access services running in WSL2, follow these steps:
+
+_Run the following commands in PowerShell (Admin)_
+
+1. Enable Port Forwarding from Windows to WSL2
+
+   ```ps1
+   netsh interface portproxy add v4tov4 listenaddress=0.0.0.0 listenport=<PORT> connectaddress=<WSL2_IP> connectport=<PORT>
+   # for example port 3000
+   netsh interface portproxy add v4tov4 listenaddress=0.0.0.0 listenport=3000 connectaddress=localhost connectport=3000
+   ```
+
+1. Allow the Port in Windows Firewall
+
+   ```ps1
+   New-NetFirewallRule -DisplayName "Allow_TCP_<PORT>" -Direction Inbound -LocalPort <PORT> -Protocol TCP -Action Allow
+   # for example port 3000
+   New-NetFirewallRule -DisplayName "Allow_TCP_3000" -Direction Inbound -LocalPort 3000 -Protocol TCP -Action Allow
+   ```
+
+1. Verify Forwarding
+
+   ```ps1
+   # Check active port proxies:
+   netsh interface portproxy show all
+   ```
+
+1. Delete an unwanted forwarding rule
+
+   ```ps1
+   netsh interface portproxy delete v4tov4 listenaddress=0.0.0.0 listenport=<PORT>
+   ```
+
 ## Additional Information
 
 ### Terminal Configurations

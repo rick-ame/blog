@@ -22,7 +22,11 @@ export const MobileNav: FC = () => {
           <span className="sr-only">Toggle Nav</span>
         </Button>
       </SheetTrigger>
-      <SheetContent side="right" onOpenAutoFocus={(e) => e.preventDefault()}>
+      <SheetContent
+        side="right"
+        onOpenAutoFocus={(e) => e.preventDefault()}
+        className="p-4"
+      >
         <MobileLink
           onOpenChange={setOpen}
           href="/"
