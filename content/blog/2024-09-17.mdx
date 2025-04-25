@@ -43,7 +43,10 @@ In your `%UserProfile%` directory (use `cd ~` to access your home directory, whi
 networkingMode=mirrored
 ```
 
-**After configuring this, you need to run `wsl --shutdown` to stop WSL first, and then relaunch terminal**
+<Callout type="warning">
+  After configuring this, you need to run `wsl --shutdown` to stop WSL first,
+  and then relaunch terminal.
+</Callout>
 
 _If you are using [Clash Verge](https://github.com/clash-verge-rev/clash-verge-rev) for proxy, [TUN](https://wiki.metacubex.one/en/config/inbound/tun/) mode is recommended. FYI, the network hotspot sharing only works in `GVisor` mode._
 
@@ -52,7 +55,8 @@ _If you are using [Clash Verge](https://github.com/clash-verge-rev/clash-verge-r
 ```sh
 sudo apt install zsh
 # Make zsh the default shell.
-# Run below command WITHOUT sudo! If you use `sudo` it will change the shell not for your working user but for root
+# NOTE: Run below command WITHOUT sudo!
+# If you use `sudo` it will change the shell not for your working user but for root
 chsh -s $(which zsh)
 ```
 
@@ -66,7 +70,8 @@ chsh -s $(which zsh)
 ## Useful Commands
 
 ```sh
-explorer.exe . # Open current folder in windows
+explorer.exe .       # Open current folder in windows
+wsl.exe hostname -I  # get the ip address
 ```
 
 ## Configure Port Forwarding to Access WSL2 from the Local Network
@@ -74,7 +79,7 @@ explorer.exe . # Open current folder in windows
 To allow devices on your local network to access services running in WSL2, follow these steps:
 
 <Callout type="warning">
-  Run the following commands in PowerShell (Admin)
+  Run the following commands in PowerShell (Admin).
 </Callout>
 
 1. Enable port forwarding from windows to WSL2
