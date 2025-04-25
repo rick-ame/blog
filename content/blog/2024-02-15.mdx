@@ -18,7 +18,7 @@ Hypertext Transfer Protocol version 2 (HTTP/2 or HTTP/2.0) is an application pro
 
 ### The Evolution of HTTP
 
-![HTTP timeline](../img/http/http-timeline.png)
+![HTTP timeline](../img/2024-02-15/http-timeline.png)
 
 Hypertext Transfer Protocol (HTTP) is a network protocol for communication on the web introduced in 1991. The initial version of HTTP was a simple protocol for retrieving HTML documents. It didn’t include response headers or support for status codes.
 
@@ -32,34 +32,38 @@ While HTTP/2 was initially modeled after SPDY, it was soon modified to include u
 
 ### The Need for HTTP/2
 
-![HTTP/1.1 vs HTTP/2](../img/http/http1vs2.webp)
+![HTTP/1.1 vs HTTP/2](../img/2024-02-15/http1vs2.webp)
 
 ## Key Features of HTTP/2
 
 ### Binary Protocols
 
-![binary protocols](../img/http/binary-protocols.png)
+![binary protocols](../img/2024-02-15/binary-protocols.png)
 
 In HTTP/2, the data is divided into smaller units called frames, which are binary packets that carry specific types of information. Each frame has a specific format, including a frame header that indicates its type and length. These frames are then sent over a single client-server connection, allowing for concurrent and interleaved communication. The binary format reduces the amount of data that needs to be transmitted, improving performance.
 
 ### Multiplexing
 
 <div align="center">
-  <img src="../img/http/multiplexing.png" alt="multiplexing" width="250" />
+  <img
+    src="../img/2024-02-15/multiplexing.png"
+    alt="multiplexing"
+    width="250"
+  />
 </div>
 
 HTTP/2 uses multiplexing to allow multiple concurrent requests and responses over a single TCP connection. With multiplexing, requests, and responses are divided into smaller units called frames. These frames are then interleaved and sent in a non-blocking manner. This means that if one request is delayed due to network congestion, other requests can continue to be processed, it eliminates the issue of head-of-line blocking, where one slow request can delay the delivery of subsequent HTTP requests. As a result, this feature helps reduce latency and promotes increased customer satisfaction.
 
 ### Header Compression
 
-![header compression](../img/http/hpack-compression.png)
+![header compression](../img/2024-02-15/hpack-compression.png)
 
 HTTP/2 utilizes a header compression mechanism to reduce the overhead associated with HTTP headers. This compression technique reduces the size of the headers, resulting in lower bandwidth consumption and faster communication between the client and server. The mechanism uses the [HPACK](https://httpwg.org/specs/rfc7541.html) (HTTP/2 Static Table and Huffman Encoding) algorithm to compress headers. HPACK utilizes techniques such as Huffman encoding, indexing, and dynamic table management to minimize the size of headers without losing any critical information.
 
 ### Server Push
 
 <div align="center">
-  <img src="../img/http/server-push.png" alt="server push" />
+  <img src="../img/2024-02-15/server-push.png" alt="server push" />
 </div>
 
 One of the notable features of HTTP/2 is server push. With it, the server can proactively send resources to satisfy the client’s future requests. This feature reduces the number of round trips required between both – the client and server, resulting in faster page load speed. As the infographic above shows, upon a single client request, the server pushes 3 assets – the HTML along with CSS and images. Thanks to that preemptive push of website assets, HTTP/2 facilitates and speeds up page rendering.
@@ -77,7 +81,7 @@ HTTP/2 implementation presents significant performance for pushed resources, wit
 
 <div align="center">
   <img
-    src="../img/http/stream-prioritization.png"
+    src="../img/2024-02-15/stream-prioritization.png"
     alt="stream prioritization"
   />
 </div>
@@ -89,7 +93,7 @@ In the real world, however, the server rarely has control over resources such as
 ### Security
 
 <div align="center">
-  <img src="../img/http/https.png" alt="https" />
+  <img src="../img/2024-02-15/https.png" alt="https" />
 </div>
 
 Binary HTTP/2 format prevents response splitting attacks common with HTTP/1.1. Hackers carry out response splitting by altering the textual response and inserting whitespaces. This is not a threat to an HTTP/2 binary protocol. Moreover, HTTP/2 comes with TLS encryption, ensuring security and privacy.
@@ -112,7 +116,7 @@ The main benefits of using HTTP/2 are efficiency solutions to improve web perfor
 
 ## Client Support
 
-![browser support](../img/http/http2-browser-support.png)
+![browser support](../img/2024-02-15/http2-browser-support.png)
 
 Google Chrome and Firefox have supported the technology for years and Apple added HTTP/2 browser support to the Safari web browser back in 2014. Internet Explorer requires users to run Windows 8 to support the latest application protocol. Major mobile web browsers including Android’s aptly named Browser, Chrome for Android and iOS, as well as Safari in iOS 8 and above support HTTP/2 for mobile web access.
 

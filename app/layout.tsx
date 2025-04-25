@@ -1,11 +1,17 @@
 import './globals.css'
 
 import type { Metadata, Viewport } from 'next'
+import { Geist } from 'next/font/google'
 
 import { Footer } from '@/components/footer'
 import { Header } from '@/components/header'
 import { Providers } from '@/components/providers'
 import { siteConfig } from '@/config/site'
+
+const geistSans = Geist({
+  variable: '--font-geist-sans',
+  subsets: ['latin'],
+})
 
 export const metadata: Metadata = {
   title: siteConfig.name,
@@ -27,7 +33,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning className="scroll-pt-14">
-      <body className="antialiased">
+      <body className={`${geistSans.variable} antialiased`}>
         <Providers>
           <div className="flex min-h-dvh flex-col">
             <Header />
