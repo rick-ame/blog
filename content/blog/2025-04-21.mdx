@@ -39,3 +39,11 @@ _Note: If you define them both at the same time it may not work, so use `type="x
 ## `dvh`
 
 [Understanding dvh: The CSS Dynamic Viewport Height](https://mayank1513.medium.com/understanding-dvh-the-css-dynamic-viewport-height-9ddf70a77c6c)
+
+## `playsinline`
+
+```html
+<video src="..." controls playsinline></video>
+```
+
+[`playsinline`](https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/video#playsinline) is a Boolean attribute indicating that the video is to be played "inline", that is, within the element's playback area. Note that the absence of this attribute does not imply that the video will always be played in fullscreen. Mobile browsers, will play the video right where it is instead of the default, which is to open it up fullscreen while it plays.
