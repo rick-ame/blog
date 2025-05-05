@@ -1,0 +1,42 @@
+---
+title: 🚨 Authorization Bypass in Next.js Middleware
+description: A massive security vulnerability was uncovered in Next.js and it breaks the authentication of many major applications. In short, It is possible to bypass authorization checks within a Next.js application, if the authorization check occurs in middleware.
+date: 2025-05-05
+tags: ['nextjs']
+published: true
+---
+
+> https://github.com/vercel/next.js/security/advisories/GHSA-f82v-jwr5-mffw
+
+## Background
+
+- **Purpose of Next.js Middleware**: Next.js middleware allows developers to execute code before a request reaches a page, commonly used for authentication, redirection, and request/response modification.
+- **Vulnerability Scenario**: Under certain conditions, middleware can become "corrupt", causing it to malfunction or even be bypassed or tampered with.
+
+## Vulnerability Details
+
+- **Root Cause**: Middleware corruption typically occurs due to misconfiguration or logical errors, such as:
+
+  - Improper handling of edge cases (e.g., malformed headers or paths).
+  - Conflicts with other Next.js features (e.g., API routes or static file serving).
+
+- **Manifestations**:
+
+  - Middleware may fail to intercept or modify requests correctly.
+  - Attackers can craft malicious requests to bypass security checks.
+
+In this scenario, Next.js uses this header `x-middleware-subrequest` to prevent middleware from max recursion depth error, it will bypass middleware's execution after it has been called over 5 times.
+
+## Mitigation & Recommendations
+
+- **Strict Input Validation**: Validate all incoming request paths, headers, and methods.
+- **Robust Error Handling**: Catch and handle exceptions to prevent middleware failure.
+- **Edge Case Testing**: Test against unusual paths, special characters, and non-standard HTTP methods.
+- **Limit Middleware Scope**: Use precise matcher paths to avoid overuse.
+- **Minimize Dependencies**: Reduce reliance on external libraries or complex logic.
+
+## Conclusion
+
+This security issue has been fixed by Next.js. However, if patching to a safe version is infeasible, you may need to prevent external user requests which contain the `x-middleware-subrequest` header from reaching your Next.js application. For technical details or code examples, refer to the original article: [Next.js and the Corrupt Middleware](https://zhero-web-sec.github.io/research-and-things/nextjs-and-the-corrupt-middleware).
+
+To sum up, never trust the client and you should always validate the inputs.
