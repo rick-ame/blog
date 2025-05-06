@@ -1,0 +1,62 @@
+---
+title: 🗄️ Deploy an Express Application to Vercel
+description: Vercel is a developer cloud to build and deploy web applications. It's very easy to deploy static files or projects using Next.js framework, but for Express applications, its documents are very simple and not easy to follow.
+date: 2025-05-06
+tags: ['web']
+published: true
+---
+
+## Setup your Express.js app
+
+For simple apps, you can follow theses instructions in the [doc](https://vercel.com/guides/using-express-with-vercel), first you need to create a directory named `/api` (do NOT change to other names) in the project root, under this folder create a file named `index.ts` or `index.js`, this would be your main server file, you can see it as you app's entry file.
+
+Since backend files deployed to Vercel actually are serverless functions, each file is an entry point, and free plans they are limited to most 14, you can put your actual routes and all other files under different folders, in `index.js` file just import them.
+
+## Configure your project for Vercel
+
+```json title="vercel.json"
+{
+  "version": 2,
+  "routes": [
+    {
+      // api call send to express server
+      "src": "/api/(.*)",
+      "dest": "api/index.js"
+    },
+    {
+      // frontend static files let vercel to handle,
+      // and we place them under `assets` folder to
+      // distinguish from api calls
+      "src": "/assets/(.*)",
+      "dest": "/assets/$1"
+    },
+    {
+      // because of the last rule, any static files out of `assets` folder,
+      // will return the `index.html` file, we don't want that to happen,
+      // config individual rules for them, eg. favicon.
+      "src": "/favicon.ico",
+      "dest": "/favicon.ico"
+    },
+    {
+      // for SPA apps, any not found files redirect to `index.html`
+      "src": "/(.+)",
+      "dest": "/"
+    }
+  ]
+}
+```
+
+Create a file named `vercel.json` under your project root, copy the configurations and paste them to that file.
+
+API calls send to Express, static files still handled by Vercel.
+
+## Custom Domain
+
+If you have a custom domain, say from [dynadot](https://www.dynadot.com/). You can first config it on dynadot,
+
+|                   | Record Type | IP Address/Destination    | Subdomain |
+| ----------------- | ----------- | ------------------------- | --------- |
+| Domain Record     | A           | 76.223.126.88             | N/A       |
+| Subdomain Records | CNAME       | name-china.vercel-dns.com | www       |
+
+And then add two domains to Vercel, first is the domain name you owned, and also add `www.<your domain>`, config the redirect rule for it, which is used to redirect requests starting with `www` to you domain.
