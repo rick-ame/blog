@@ -1,5 +1,6 @@
 import './globals.css'
 
+import { SpeedInsights } from '@vercel/speed-insights/next'
 import type { Metadata, Viewport } from 'next'
 import { Geist } from 'next/font/google'
 
@@ -41,6 +42,7 @@ export default function RootLayout({
             <Footer />
           </div>
         </Providers>
+        <SpeedInsights />
       </body>
     </html>
   )
