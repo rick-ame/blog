@@ -8,22 +8,23 @@ published: true
 
 ## What is Module Federation?
 
-Module Federation is a method in which code can be split into smaller deployable modules that can be shared and consumed at runtime between applications. This method allows for the development of Micro Frontend which can reduce coordination between teams and allow for a faster development cycle with each team adhering to its release cadence.
+Module Federation is a technique that enables code to be split into smaller, deployable modules that can be shared and consumed at runtime between applications. This approach supports the development of micro frontends, reducing the need for tight coordination between teams and allowing each team to release on its own schedule.
 
 <Callout type="warning">
-  Although teams can adhere to their release cadence, some changes should still
-  be coordinated with teams, such as package upgrades, as this can lead to an
-  incompatibility and unexpected behavior between the applications within the
-  Module Federation Architecture. For example, upgrading Angular or React to the
-  latest version should be coordinated to prevent any issues where different
-  versions are loaded at runtime, causing unexpected behavior.
+  While teams can release independently, some changes—such as package
+  upgrades—should still be coordinated. Uncoordinated upgrades can lead to
+  incompatibility and unexpected behavior between applications in a Module
+  Federation architecture. For example, upgrading Angular or React should be
+  coordinated to avoid issues caused by loading different versions at runtime.
 </Callout>
 
-To achieve this, Module Federation introduces three terms for the applications that make up the Module Federation architecture: host, remote and federated modules.
+Module Federation introduces three key terms for the applications involved: **host**, **remote**, and **federated modules**.
+
+---
 
 ### What is a Host?
 
-A host is an application that consumes federated modules from remote applications at runtime. When you write your host application, you import the module from your remote as though it was part of the build, but at build time, Webpack is aware that this module will only exist at runtime, and only after it has made a network request to the corresponding remote application to fetch the JS bundle. The federated module will then be executed as though it was always part of the host application.
+A **host** is an application that consumes federated modules from remote applications at runtime. When developing a host, you import modules from remotes as if they were part of your build. At build time, Webpack knows these modules will only be available at runtime, after fetching the JS bundle from the remote application.
 
 ```js title="webpack.config.js"
 plugins: [
@@ -35,9 +36,13 @@ plugins: [
 ]
 ```
 
+The host is responsible for defining which remotes it will consume and how those modules are loaded. Hosts can dynamically load remote modules, enabling features like lazy loading and on-demand updates.
+
+---
+
 ### What is a Remote?
 
-A remote is an application that exposes a federated module that can be fetched over the network at runtime. The federated module can be any valid JavaScript module and therefore grows to include things such as a React Component, an Angular Routing File, a plain old JavaScript object (POJO) and more.
+A **remote** is an application that exposes federated modules, making them available to hosts over the network at runtime. These modules can be anything from React components to Angular routing files, plain JavaScript objects, and more.
 
 ```js title="webpack.config.js"
 plugins: [
@@ -45,70 +50,128 @@ plugins: [
     filename: 'remoteEntry.js',
     name: 'app',
     exposes: {
-      ...
-    }
+      './Button': './src/components/Button', // Example: expose a Button component
+    },
+    shared: {
+      react: { singleton: true, eager: true, requiredVersion: '^18.0.0' },
+      'react-dom': { singleton: true, eager: true, requiredVersion: '^18.0.0' },
+    },
   }),
 ]
 ```
 
+- `filename`: The entry file that will be loaded by hosts.
+- `name`: The global variable name for the remote.
+- `exposes`: The modules/components to expose.
+- `shared`: Shared dependencies to avoid duplication and version conflicts.
+
+---
+
 ### What is a Federated Module?
 
-A federated module is any valid JavaScript module that is exposed by a remote application with the aim that it will be consumed by a host application. This means that React Components, Angular Components, Services, Application State, Functions, UI Components and more can be shared between applications and updated without the need to redeploy everything.
+A **federated module** is any JavaScript module exposed by a remote application, intended to be consumed by a host. This can include UI components, services, application state, functions, and more—enabling code sharing and updates without redeploying everything.
 
-**You can check out the Module Federation examples [here](https://github.com/module-federation/module-federation-examples).**
+**Explore Module Federation examples [here](https://github.com/module-federation/module-federation-examples).**
+
+---
+
+## How Module Federation Works
+
+- At build time, Webpack generates a manifest (`remoteEntry.js`) for each remote, describing what modules are available.
+- At runtime, the host loads the remote's manifest and fetches the required modules over HTTP.
+- Shared dependencies (like React) are managed to avoid duplication and version conflicts.
+- Modules can be loaded eagerly or lazily, supporting advanced use cases like A/B testing, plugin systems, and dynamic feature delivery.
+
+---
 
 ## Pros of Module Federation
 
 ### Reduced Code Duplication
 
-One of the primary benefits of Module Federation is that it can significantly reduce code duplication between applications. Instead of duplicating code across multiple applications, developers can share modules between them, reducing the size and complexity of each application.
+Module Federation allows you to share modules between applications, significantly reducing code duplication and the size of each application.
 
 ### Greater Flexibility
 
-Module Federation also provides greater flexibility and modularity in application design. By breaking applications down into smaller, more manageable modules, developers can more easily swap out and replace modules as needed, without having to rewrite entire applications.
+By breaking applications into smaller, manageable modules, you can swap or update modules independently, increasing flexibility and modularity.
 
 ### Improved Scalability
 
-Module Federation can also improve scalability by allowing developers to distribute functionality across multiple applications. This approach can help to reduce the size and complexity of individual applications, making them easier to maintain and scale.
+Distributing functionality across multiple applications makes each one easier to maintain and scale.
+
+### Independent Deployment
+
+Teams can deploy and update their modules independently, enabling faster release cycles and reducing bottlenecks.
+
+### Dynamic Loading
+
+Modules can be loaded on demand, reducing initial bundle size and improving performance.
+
+---
 
 ## Common Pitfalls
 
-Module Federation is not without its complexity, especially if you choose to use it to enable independent deployments where independent remotes are deployed on different release cadences.
+Module Federation introduces complexity, especially with independent deployments and different release cadences.
 
 ### Increased Bundle Size
 
-Module Federation allows you to share third-party packages across remotes and hosts, which can be essential in cases such as react and react-dom packages. This means that when you load a federated module from a remote, Webpack does not need to re-download a copy of these packages. Instead, the federated module uses the already loaded packages.
-
-However, when third-party packages are shared between remotes and hosts, Webpack is unable to perform efficient tree-shaking on those packages as it is unaware of exactly what code will be used by any of the remotes. This can lead to an increased bundle size for some third-party packages. A solution to help mitigate the impact of this is to only share exactly what is necessary between remotes and hosts.
+Sharing third-party packages (like `react` or `react-dom`) across remotes and hosts can prevent redundant downloads, but limits Webpack's ability to tree-shake unused code, potentially increasing bundle size. To mitigate this, only share what is necessary.
 
 ### Managing Versions
 
-Module Federation also supports the ability to manage the versions of third-party packages that are compatible across remotes and hosts. This support ensures that each federated module works with a version of the package it was intended to use, but it can also add some overhead to ensuring that the package versions remain up to date.
-
-Versioned packages and libraries can cause further issues if they store internal state or use a Singleton to manage a single instance across your application. If a remote is deployed with a new version of the package or library, there is the possibility that your federated module will download a new copy of that package if your host does not have the same version it is expecting. Having multiple versions of a package would then break the package's Singleton nature as there will now be multiple instances of it running.
+Managing compatible versions of shared packages is crucial. If a remote uses a different version than the host, multiple versions may be loaded, breaking singleton patterns and causing unexpected behavior. Use the `singleton` and `requiredVersion` options in the `shared` config to enforce version consistency.
 
 ### Security Risks
 
-Module Federation also introduces potential security risks. Sharing code between applications can create vulnerabilities, particularly if proper security measures are not in place.
+Sharing code between applications can introduce vulnerabilities if proper security measures are not in place. Always validate and sanitize data exchanged between hosts and remotes, and avoid exposing sensitive logic.
 
 ### Increased Coupling
 
-Module Federation can also increase coupling between applications, making it more difficult to make changes to individual applications without affecting others. This can lead to a loss of flexibility and modularity in application design.
+Module Federation can increase coupling between applications, making changes more challenging and potentially reducing flexibility. Design clear contracts and interfaces for shared modules.
+
+### Local Development Complexity
+
+Running multiple apps locally (host and remotes) can be challenging. Use tools like [Webpack Dev Server](https://webpack.js.org/configuration/dev-server/) and consider using [dynamic remote URLs](https://webpack.js.org/concepts/module-federation/#dynamic-remote-containers) for easier development.
+
+---
 
 ## Use Cases for Module Federation
 
-### Use Case 1: Micro-frontend Architecture
+### Micro-frontend Architecture
 
-One of the most common use cases for Module Federation is in micro-frontend architecture. This approach involves breaking down large monolithic applications into smaller, more manageable front-end modules that can be developed and deployed independently. With Module Federation, these modules can be shared between different applications, allowing for greater flexibility and modularity in application design.
+Break large monolithic apps into smaller, independently developed and deployed front-end modules. Module Federation enables seamless sharing and integration of these modules.
 
-### Use Case 2: Multi-Application Integration
+### Multi-Application Integration
 
-Another common use case for Module Federation is in integrating multiple applications that share common functionality. With Module Federation, developers can share modules between different applications, allowing them to work together seamlessly and share data more efficiently.
+Integrate multiple applications that share common functionality by sharing modules, enabling seamless collaboration and data sharing.
 
-### Use Case 3: Shared Libraries
+### Shared Libraries
 
-Finally, Module Federation can also be used for sharing libraries and other common codes between different applications. With Module Federation, developers can easily share code libraries and other common functionality, reducing duplication and improving collaboration between development teams.
+Share libraries and common code between applications to reduce duplication and improve collaboration.
+
+### Plugin Systems
+
+Build extensible applications where plugins can be loaded at runtime as federated modules, enabling third-party or internal teams to extend functionality without redeploying the core app.
+
+---
+
+## Best Practices
+
+- **Version Control:** Use strict versioning and `singleton` for shared dependencies to avoid conflicts.
+- **Limit Shared Scope:** Only share what is necessary; avoid sharing large libraries unless required.
+- **Testing:** Test integration between host and remotes regularly, especially after dependency upgrades.
+- **Documentation:** Document exposed modules and their interfaces clearly for consumers.
+- **Fallbacks:** Provide fallback UIs or error handling if a remote is unavailable at runtime.
+- **Security:** Avoid exposing sensitive logic or data via federated modules.
+
+---
 
 ## Conclusion
 
-By carefully considering the specific needs and requirements of their applications, developers can determine whether Module Federation is the right solution for their particular use case. Whether it’s micro-frontend architecture, multi-application integration, third-party integrations, or shared libraries, Module Federation can help developers reduce duplication, improve collaboration, and increase flexibility in application design.
+Module Federation is a powerful tool for reducing duplication, improving collaboration, and increasing flexibility in JavaScript application design. By evaluating your application's needs, you can determine if Module Federation is the right solution—whether for micro-frontends, multi-app integration, or shared libraries.
+
+<Callout>
+  For more details, see the [official Webpack Module Federation
+  documentation](https://webpack.js.org/concepts/module-federation/) and
+  [awesome
+  examples](https://github.com/module-federation/module-federation-examples).
+</Callout>

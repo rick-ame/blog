@@ -1,6 +1,6 @@
 ---
 title: 🗂️ Typescript Cheat Sheet
-description: A collection of useful typescript utilities
+description: A collection of useful TypeScript utilities and best practices for safer, more expressive code.
 date: 2024-02-08
 tags: ['typescript']
 published: true
@@ -8,7 +8,7 @@ published: true
 
 ## Function Overload
 
-In `Next.js` you can call server functions from the client side directly, however, the type hints may mislead you and cause error.
+In `Next.js`, you can call server functions from the client side directly. However, type hints may be misleading and cause errors if not handled carefully.
 
 For example:
 
@@ -22,60 +22,71 @@ export function serverAction(data: FormData) {
 }
 ```
 
-We cannot trust what the client submits, the name or age prop may not exist in the real world, we should validate the data first, so change that to:
+> **Problem:** You cannot trust what the client submits—the `name` or `age` property may not exist in reality. Always validate incoming data on the server.
+
+A safer approach:
 
 ```ts
 function validate(data: unknown): FormData {
-  // validates data here
+  // validate data here (e.g., using zod, yup, or manual checks)
   ...
   return data as FormData
 }
 export function serverAction(data: FormData) {
   const validData = validate(data)
-  const { name, age } = data // woops, should be validData here
+  const { name, age } = data // Oops, should use validData here!
 }
 ```
 
-Declaring data as `FormData` type may not be a good idea, since there is no error hints when you accidentally use `data.name` or `data.age`, so you should change its type to `unknown`
+> **Pitfall:** Declaring `data` as `FormData` is not ideal, since TypeScript will not warn you if you accidentally use `data.name` or `data.age` before validation. You should change its type to `unknown`:
 
 ```ts /unknown/
 export function serverAction(data: unknown) {
   const validData = validate(data)
-  // const { name, age } = data, this will show ts error
+  // const { name, age } = data // TypeScript error, as expected
   const { name, age } = validData
 }
 ```
 
-But in this case, we lose type hints on the client side, a better solution is to add another function declaration for the client side using overload.
-
-The final version:
+However, this approach loses type hints on the client side.  
+**Solution:** Use function overloads to provide type hints for the client, while keeping runtime safety on the server:
 
 ```ts
 type FormData = {
   name: string
   age: string
 }
+// Overload for client-side type hints
 export function serverAction(data: FormData): void
+// Implementation for server-side safety
 export function serverAction(data: unknown) {
   const validData = validate(data)
   const { name, age } = validData
 }
+
 function validate(data: unknown): FormData {
-  // validates data here
+  // validate data here
   ...
   return data as FormData
 }
 ```
 
+**Tip:** Use runtime validation libraries like [zod](https://zod.dev/), [yup](https://github.com/jquense/yup), or [io-ts](https://github.com/gcanti/io-ts) for robust type-safe validation.
+
+---
+
 ## DistributiveOmit
 
+TypeScript's built-in `Omit` does not distribute over union types as you might expect.  
+Use `DistributiveOmit` to omit keys from each member of a union:
+
 ```ts
-type DistributiveOmit<T, K extends keyof T> = T extends unknown
+type DistributiveOmit<T, K extends keyof any> = T extends unknown
   ? Omit<T, K>
   : never
 ```
 
-Why not just use `Omit`?
+**Example:**
 
 ```ts
 interface A {
@@ -89,23 +100,37 @@ interface B {
   b: string
 }
 type C = A | B
-type D = Omit<C, 'id'> // can not get correct type, same as Omit<A, 'id'>
+// This does NOT work as expected; it behaves like Omit<A, 'id'>
+type D = Omit<C, 'id'>
+// Use DistributiveOmit for correct behavior:
+type E = DistributiveOmit<C, 'id'>
 ```
 
+---
+
 ## ArrayElement
+
+Extract the element type from an array or tuple:
 
 ```ts
 type ArrayElement<T> = T extends readonly (infer E)[] ? E : never
 ```
 
-Or simplified version
+**Example:**
 
 ```ts
-const chars = ['a', 'b', 'c']
-const char: (typeof chars)[number] = 's'
+const chars = ['a', 'b', 'c'] as const
+type Char = ArrayElement<typeof chars> // 'a' | 'b' | 'c'
+
+// Or, using TypeScript's built-in indexed access:
+const char: (typeof chars)[number] = 'a'
 ```
 
+---
+
 ## Extend Third-party Module Interface
+
+To extend or augment types from a third-party module, use module augmentation:
 
 ```ts title="global.d.ts"
 import 'module-name'
@@ -115,3 +140,66 @@ declare module 'module-name' {
   }
 }
 ```
+
+**Tip:** This is useful for adding custom properties to types from libraries like Express, React, or Next.js.
+
+---
+
+## Utility Types
+
+Some other handy utility types:
+
+- `Partial<T>`: Makes all properties in `T` optional.
+- `Required<T>`: Makes all properties in `T` required.
+- `Readonly<T>`: Makes all properties in `T` readonly.
+- `Record<K, T>`: Constructs an object type with keys of type `K` and values of type `T`.
+- `Pick<T, K>`: Picks a set of properties from `T`.
+- `Exclude<T, U>`: Excludes from `T` those types that are assignable to `U`.
+- `Extract<T, U>`: Extracts from `T` those types that are assignable to `U`.
+
+---
+
+## Type Guards
+
+Type guards help you narrow types at runtime:
+
+```ts
+function isString(value: unknown): value is string {
+  return typeof value === 'string'
+}
+```
+
+**Example:**
+
+```ts
+function printLength(value: unknown) {
+  if (isString(value)) {
+    console.log(value.length)
+  }
+}
+```
+
+---
+
+## Type Inference with as const
+
+Use `as const` to infer literal types:
+
+```ts
+const colors = ['red', 'green', 'blue'] as const
+type Color = (typeof colors)[number] // 'red' | 'green' | 'blue'
+```
+
+---
+
+## Resources
+
+- [TypeScript Handbook](https://www.typescriptlang.org/docs/handbook/utility-types.html)
+- [Type Challenges](https://github.com/type-challenges/type-challenges)
+- [zod - TypeScript-first schema validation](https://zod.dev/)
+- [ts-toolbelt - Advanced TypeScript types](https://millsp.github.io/ts-toolbelt/)
+
+<Callout>
+  TypeScript is a powerful tool for writing safer, more expressive JavaScript.
+  Use these patterns and utilities to write robust, maintainable code!
+</Callout>

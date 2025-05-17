@@ -8,80 +8,75 @@ published: true
 
 ## Background
 
-I'm using `useRequest` from [ahooks](https://ahooks.js.org/) to fetch data, however, it's not easy to track the dependent parameters of `refreshDeps`. One way is to declare a request function using `useCallback`, and then add this function as a dependency, but this way is not very convenient. This plugin adds tips like [`eslint-plugin-react-hooks`](https://www.npmjs.com/package/eslint-plugin-react-hooks) for `useRequest`.
+I'm using `useRequest` from [ahooks](https://ahooks.js.org/) to fetch data, but tracking the dependent parameters of `refreshDeps` can be error-prone and inconvenient. One workaround is to wrap the request function in `useCallback` and add it as a dependency, but this is not ideal for developer experience. To improve this, I created a custom ESLint plugin that provides dependency checking and suggestions for `useRequest`, similar to [`eslint-plugin-react-hooks`](https://www.npmjs.com/package/eslint-plugin-react-hooks) for React hooks.
+
+---
+
+## Why Write a Custom ESLint Plugin?
+
+- **Enforce project-specific best practices** not covered by core ESLint or existing plugins.
+- **Catch bugs early** by statically analyzing code for common mistakes.
+- **Improve code consistency** and maintainability across teams.
+- **Automate tedious code review feedback** with actionable suggestions and autofixes.
+
+---
+
+## Anatomy of an ESLint Plugin
+
+An ESLint plugin is a Node.js module that exports one or more rules, processors, environments, or configs. Each rule is an object with a `meta` property (describing the rule) and a `create` function (which returns visitor functions for AST nodes).
+
+---
 
 ## Adding a Rule
 
-A basic rule starts with minimal codes as follows:
+A basic rule starts with minimal code as follows:
 
 ```js
 module.exports = {
   meta: {
-    type: 'suggestion', // `problem`, `suggestion`, or `layout`
+    type: 'suggestion', // 'problem', 'suggestion', or 'layout'
     docs: {
       description: 'verifies the list of dependencies for useRequest',
-      recommended: true, // Specifies whether the "extends": "eslint:recommended" property in a configuration file enables the rule
+      recommended: true,
       url: null, // URL to the documentation page for this rule
     },
-    fixable: null, // Either `code` or `whitespace` if the --fix option on the command line automatically fixes problems reported by the rule
-    hasSuggestions: true, // Specifies whether rules can return suggestions (defaults to false if omitted)
+    fixable: null, // 'code' or 'whitespace' if the rule supports --fix
+    hasSuggestions: true,
     schema: [], // Add a schema if the rule has options
   },
   create: function (context) {
     return {
       Program: function (node) {
-        // Add the rule here
+        // Add the rule logic here
       },
     }
   },
 }
 ```
 
-And our rule would be something like this:
+You can check out the [Custom Rules](https://eslint.org/docs/latest/extend/custom-rules) documentation for more information.
 
-```js
-module.exports = {
-  meta: {
-    type: 'suggestion',
-    docs: {
-      description: 'verifies the list of dependencies for useRequest',
-      recommended: true,
-    },
-    fixable: 'code',
-    hasSuggestions: true,
-    schema: [
-      {
-        type: 'object',
-        additionalProperties: false,
-        autoFix: false,
-        properties: {
-          autoFix: {
-            type: 'boolean',
-          },
-        },
-      },
-    ],
-  },
-  create: function (context) {
-    return {
-      Program: function (node) {
-        // Add the rule here
-      },
-    }
-  },
-}
-```
-
-You can check out the [Custom Rules](https://eslint.org/docs/latest/extend/custom-rules) for more information.
+---
 
 ## Implementing the Rule
 
-We would use the `eslint-plugin-react-hooks` plugin to track the dependencies, below is the final rule.
+To avoid reinventing the wheel, we can leverage the logic from `eslint-plugin-react-hooks`'s `exhaustive-deps` rule, adapting it for `useRequest`. The rule inspects the dependencies array (`refreshDeps`) and provides suggestions or autofixes if dependencies are missing or extraneous.
+
+**Key points:**
+
+- Detects calls to `useRequest`.
+- Checks the `refreshDeps` property in the options object.
+- Ignores checks if `manual: true` is set.
+- Reports missing or extra dependencies, and can autofix if enabled.
+
+<details>
+  <summary>Here is the code:</summary>
 
 ```js
 const reactHooksPlugin = require('eslint-plugin-react-hooks')
 const reactHooksCreate = reactHooksPlugin.rules['exhaustive-deps'].create
 const depKey = 'refreshDeps'
+
 module.exports = {
   meta: {
     type: 'suggestion',
@@ -106,12 +101,12 @@ module.exports = {
   },
   create(context) {
     return {
-      /** @see https://astexplorer.net/ */
-      CallExpression: function (node) {
+      CallExpression(node) {
         if (
           node.callee.type === 'Identifier' &&
           node.callee.name === 'useRequest'
         ) {
+          // Logic to extract and check refreshDeps...
           const arg1 = node.arguments[1] // useRequest options
           let manual = false
           let refreshDeps
@@ -203,19 +198,55 @@ module.exports = {
 }
 ```
 
-## How to Use It
+This rule uses the AST to find `useRequest` calls, extracts the `refreshDeps` array, and delegates dependency analysis to the React Hooks plugin logic, customizing the error messages and autofix for the ahooks use case.
 
-In the plugin, add the rule to recommend,
+</details>
+
+---
+
+## How to Use Your Custom Plugin
+
+1. **Publish or link your plugin** (e.g., `eslint-plugin-myplugin`) in your project.
+2. **Add it to your ESLint config:**
 
 ```json title=".eslintrc"
 {
-  "extends": [
-    ...
-    "plugin:<plugin-name>"
-  ],
+  "plugins": ["myplugin"],
   "rules": {
-    ...
-    "<plugin-name>/<rule-name>": 1
+    "myplugin/use-request-refresh-deps": "warn"
   }
 }
 ```
+
+3. **Run ESLint** as usual. Violations will be reported with suggestions or autofixes.
+
+---
+
+## Testing Your Rule
+
+- Use [ESLint RuleTester](https://eslint.org/docs/latest/integrate/nodejs-api#ruletester) to write unit tests for your rule logic.
+- Try your rule on real codebases to ensure it catches real-world issues and doesn't produce false positives.
+- Consider publishing your plugin to npm for others to use.
+
+---
+
+## Tips for Writing ESLint Plugins
+
+- Use [AST Explorer](https://astexplorer.net/) to experiment with AST node structures.
+- Follow the [ESLint plugin guidelines](https://eslint.org/docs/latest/extend/plugins).
+- Provide clear documentation and examples for your rules.
+- Support autofix and suggestions where possible for better developer experience.
+
+---
+
+## References & Further Reading
+
+- [ESLint Plugin Guide](https://eslint.org/docs/latest/extend/plugins)
+- [Custom ESLint Rules](https://eslint.org/docs/latest/extend/custom-rules)
+- [eslint-plugin-react-hooks](https://github.com/facebook/react/tree/main/packages/eslint-plugin-react-hooks)
+- [ahooks useRequest](https://ahooks.js.org/hooks/use-request/index)
+- [AST Explorer](https://astexplorer.net/)
+
+---
+
+By creating custom ESLint plugins, you can enforce project-specific conventions, catch bugs early, and improve the overall quality and consistency of your codebase.

@@ -1,6 +1,6 @@
 ---
 title: 🎭 Why Do I Choose Playwright for End-to-End Testing?
-description: Some of the features of playwright I like over other e2e testing frameworks
+description: Some of the features of Playwright I like over other e2e testing frameworks.
 date: 2024-03-25
 tags: ['playwright', 'testing']
 published: true
@@ -8,17 +8,27 @@ published: true
 
 ## Introduction
 
-[Playwright](https://playwright.dev/) enables reliable end-to-end testing for modern web apps. Playwright Test was created specifically to accommodate the needs of end-to-end testing. Playwright supports all modern rendering engines including Chromium, WebKit, and Firefox. Test on Windows, Linux, and macOS, locally or on CI, headless or headed with native mobile emulation of Google Chrome for Android and Mobile Safari.
+[Playwright](https://playwright.dev/) enables reliable end-to-end testing for modern web apps. Playwright Test was created specifically to accommodate the needs of end-to-end testing. Playwright supports all modern rendering engines including Chromium, WebKit, and Firefox. Test on Windows, Linux, and macOS, locally or on CI, headless or headed, with native mobile emulation for Google Chrome for Android and Mobile Safari.
 
-_[Best Practices](https://playwright.dev/docs/best-practices)_
+Key advantages:
+
+- **Cross-browser support:** Test on Chromium, Firefox, WebKit, Chrome, Edge, and mobile devices.
+- **First-class TypeScript support:** Strong typing and autocompletion.
+- **Parallel execution:** Fast test runs with isolated browser contexts.
+- **Powerful automation APIs:** Interact with pages, network, and browser features.
+- **Rich debugging tools:** UI mode, trace viewer, and codegen.
+
+See [Best Practices](https://playwright.dev/docs/best-practices) for more tips.
+
+---
 
 ## Out-of-the-box Test Assertions
 
-`Playwright` includes test assertions in the form of `expect` function. To make an assertion, call `expect(value)` and choose a matcher that reflects the expectation. There are many [generic matchers](https://playwright.dev/docs/api/class-genericassertions) like `toEqual`, `toContain`, and `toBeTruthy` that can be used to assert any conditions.
+Playwright includes test assertions via the `expect` function. To make an assertion, call `expect(value)` and choose a matcher that reflects your expectation. There are many [generic matchers](https://playwright.dev/docs/api/class-genericassertions) like `toEqual`, `toContain`, and `toBeTruthy` for asserting various conditions.
 
 ### Soft Assertions
 
-By default, the failed assertion will terminate the test execution. Playwright also supports soft assertions: failed soft assertions do not terminate test execution, but mark the test as failed.
+By default, a failed assertion will terminate test execution. Playwright also supports soft assertions: failed soft assertions do not terminate test execution, but mark the test as failed.
 
 ```js /expect.soft/
 // Make a few checks that will not stop the test when failed...
@@ -31,7 +41,7 @@ await expect
   .toBeVisible()
 ```
 
-At any point during test execution, you can check whether there were any soft assertion failures:
+At any point during test execution, you can check for soft assertion failures:
 
 ```js
 // Make a few checks that will not stop the test when failed...
@@ -41,49 +51,36 @@ await expect.soft(page.getByTestId('eta')).toHaveText('1 day')
 expect(test.info().errors).toHaveLength(0)
 ```
 
-**Note that soft assertions only work with Playwright test runner.**
+**Note:** Soft assertions only work with the Playwright test runner.
 
-## Support Multiple Browsers
+---
 
-Playwright can run tests on Chromium, WebKit and Firefox browsers as well as branded browsers such as Google Chrome and Microsoft Edge. It can also run on emulated tablets and mobile devices.
+## Support for Multiple Browsers and Devices
 
-Playwright can run your tests in multiple browsers and configurations by setting up projects in the config. You can also add [different options](https://playwright.dev/docs/test-configuration) for each project.
+Playwright can run tests on Chromium, WebKit, and Firefox, as well as branded browsers like Google Chrome and Microsoft Edge. It can also emulate tablets and mobile devices, including device orientation, geolocation, and color scheme.
+
+You can run your tests in multiple browsers and configurations by setting up projects in the config. You can also add [different options](https://playwright.dev/docs/test-configuration) for each project.
 
 ```js
 import { defineConfig, devices } from '@playwright/test'
 
 export default defineConfig({
   projects: [
-    /* Test against desktop browsers */
-    {
-      name: 'chromium',
-      use: { ...devices['Desktop Chrome'] },
-    },
-    {
-      name: 'firefox',
-      use: { ...devices['Desktop Firefox'] },
-    },
-    {
-      name: 'webkit',
-      use: { ...devices['Desktop Safari'] },
-    },
-    /* Test against mobile viewports. */
-    {
-      name: 'Mobile Chrome',
-      use: { ...devices['Pixel 5'] },
-    },
-    {
-      name: 'Mobile Safari',
-      use: { ...devices['iPhone 12'] },
-    },
-    /* Test against branded browsers. */
+    // Desktop browsers
+    { name: 'chromium', use: { ...devices['Desktop Chrome'] } },
+    { name: 'firefox', use: { ...devices['Desktop Firefox'] } },
+    { name: 'webkit', use: { ...devices['Desktop Safari'] } },
+    // Mobile emulation
+    { name: 'Mobile Chrome', use: { ...devices['Pixel 5'] } },
+    { name: 'Mobile Safari', use: { ...devices['iPhone 12'] } },
+    // Branded browsers
     {
       name: 'Google Chrome',
-      use: { ...devices['Desktop Chrome'], channel: 'chrome' }, // or 'chrome-beta'
+      use: { ...devices['Desktop Chrome'], channel: 'chrome' },
     },
     {
       name: 'Microsoft Edge',
-      use: { ...devices['Desktop Edge'], channel: 'msedge' }, // or 'msedge-dev'
+      use: { ...devices['Desktop Edge'], channel: 'msedge' },
     },
   ],
 })
@@ -94,78 +91,89 @@ export default defineConfig({
   and control Google Chrome and Microsoft Edge. Running in an environment with
   browser policies is outside of the Playwright project's scope.
 </Callout>
-User-friendly to develop and debug
+
+---
 
 ## Generating Tests
 
-Use the `codegen` command to run the test generator followed by the URL of the website you want to generate tests for. The URL is optional and you can always run the command without it and then add the URL directly into the browser window instead.
+Use the `codegen` command to run the test generator, followed by the URL of the website you want to generate tests for. The URL is optional; you can always run the command without it and add the URL directly in the browser window.
 
 ```sh
 npx playwright codegen demo.playwright.dev/todomvc
 ```
 
-Run `codegen` and perform actions in the browser. Playwright will generate the code for the user interactions. Codegen will look at the rendered page and figure out the recommended locator, prioritizing role, text and test id locators. If the generator identifies multiple elements matching the locator, it will improve the locator to make it resilient and uniquely identify the target element, therefore eliminating and reducing test(s) failing and flaking due to locators.
+Interact with the browser, and Playwright will generate code for your actions. Codegen prioritizes role, text, and test id locators, and will refine locators to uniquely identify elements, reducing test flakiness.
 
-You can also generate tests using emulation to generate a test for a specific viewport, device, or color scheme, as well as emulate the geolocation, language or timezone. The test generator can also generate a test while preserving the authenticated state. Check out the [Test Generator](https://playwright.dev/docs/codegen#emulation) guide to learn more.
+You can also generate tests using emulation for specific viewports, devices, or color schemes, as well as emulate geolocation, language, or timezone. The generator can also preserve authenticated state. See the [Test Generator](https://playwright.dev/docs/codegen#emulation) guide for more.
 
 With the test generator, you can record:
 
-- `assert visibility` to assert that an element is visible
-- `assert text` to assert that an element contains specific text
-- `assert value` to assert that an element has a specific value
+- `assert visibility` to check if an element is visible
+- `assert text` to check if an element contains specific text
+- `assert value` to check if an element has a specific value
+
+---
 
 ## Debug Tests in UI Mode
 
-It's highly recommended to debug your tests with UI Mode for a better developer experience where you can easily walk through each step of the test and visually see what was happening before, during and after each step. UI mode also comes with many other features such as the locator picker, watch mode and more.
+Debug your tests with UI Mode for a better developer experience. You can walk through each step and visually see what was happening before, during, and after each step. UI mode also includes features like the locator picker and watch mode.
 
 ```sh
 npx playwright test --ui
 ```
 
-While debugging you can use the Pick Locator button to select an element on the page and see the locator that Playwright would use to find that element. You can also edit the locator in the locator playground and see it highlighting live on the Browser window. Use the Copy Locator button to copy the locator to your clipboard and then paste it into your test.
+Use the Pick Locator button to select an element and see the locator Playwright would use. Edit locators in the locator playground and see them highlighted live. Use Copy Locator to copy and paste into your test.
 
-To debug one test file, run the Playwright test command with the name of the test file that you want to debug followed by the `--debug` flag.
+To debug one test file:
 
 ```sh
 npx playwright test example.spec.ts --debug
 ```
 
-To debug a specific test from the line number where the `test(..` is defined, add a colon followed by the line number at the end of the test file name, followed by the `--debug` flag.
+To debug a specific test from a line number:
 
 ```sh
 npx playwright test example.spec.ts:10 --debug
 ```
 
+---
+
 ## Test Reports
 
-The [HTML Reporter](https://playwright.dev/docs/test-reporters#html-reporter) shows you a full report of your tests allowing you to filter the report by browsers, passed tests, failed tests, skipped tests and flaky tests. By default, the HTML report is opened automatically if some of the tests fail, otherwise, you can open it with the following command.
+The [HTML Reporter](https://playwright.dev/docs/test-reporters#html-reporter) shows a full report of your tests, allowing you to filter by browsers, passed, failed, skipped, and flaky tests. By default, the HTML report opens automatically if some tests fail, or you can open it manually:
 
 ```sh
 npx playwright show-report
 ```
 
+You can also use other reporters (list, dot, JSON, JUnit, Allure, etc.) for integration with CI/CD pipelines.
+
+---
+
 ## Trace Viewer
 
-Playwright Trace Viewer is a GUI tool that lets you explore recorded Playwright traces of your tests meaning you can go back and forward through each action of your test and visually see what was happening during each action.
+Playwright Trace Viewer is a GUI tool to explore recorded Playwright traces of your tests. You can go back and forward through each action and visually see what was happening.
 
-In the HTML report click on the trace icon next to the test name file name to directly open the trace for the required test.
+In the HTML report, click the trace icon next to the test name to open the trace for that test.
 ![Playwright HTML Report](../img/2024-03-25/html-report.png)
-You can also click open the detailed view of the test scroll down to the `Traces` tab and open the trace by clicking on the trace screenshot.
+Or, in the detailed view, scroll to the `Traces` tab and open the trace by clicking the screenshot.
 ![Playwright HTML Report Detailed View](../img/2024-03-25/html-report-detailed.png)
 
-View traces of your test by clicking through each action or hovering using the timeline and see the state of the page before and after the action. Inspect the log, source and network, errors and console during each step of the test. The trace viewer creates a DOM snapshot so you can fully interact with it and open the browser DevTools to inspect the HTML, CSS, etc.
+View traces by clicking through each action or hovering on the timeline. Inspect the log, source, network, errors, and console during each step. The trace viewer creates a DOM snapshot so you can interact with it and open DevTools to inspect HTML, CSS, etc.
 ![Playwright Trace Viewer](../img/2024-03-25/trace-viewer.png)
-To learn more about traces check out the detailed guide on [Trace Viewer](https://playwright.dev/docs/trace-viewer).
+See the [Trace Viewer guide](https://playwright.dev/docs/trace-viewer) for more.
 
-## Support Multiple Languages
+---
 
-Playwright is available in multiple languages that share the same underlying implementation. All core features for automating the browser are supported in all languages while testing ecosystem integration is different. You can pick the language based on your experience, familiarity with its testing ecosystem and your project constraints. For more information, check out [supported languages](https://playwright.dev/docs/languages).
+## Support for Multiple Languages
 
-## Mock APIs
+Playwright is available in multiple languages (JavaScript/TypeScript, Python, Java, .NET, Go) that share the same underlying implementation. All core browser automation features are supported in all languages, though testing ecosystem integration may differ. See [supported languages](https://playwright.dev/docs/languages).
 
-Web APIs are usually implemented as HTTP endpoints. Playwright provides APIs to mock and modify network traffic, both HTTP and HTTPS. Any requests that a page does, including XHRs and fetch requests, can be tracked, modified and mocked. With Playwright you can also mock using HAR files that contain multiple network requests made by the page.
+---
 
-The following code will intercept all the calls to `*/**/api/v1/fruits` and will return a custom response instead. No requests to the API will be made. The test goes to the URL that uses the mocked route and asserts that mock data is present on the page.
+## Mock APIs and Network Interception
+
+Playwright provides APIs to mock and modify network traffic, both HTTP and HTTPS. You can also mock using HAR files. For example, intercept all calls to `*/**/api/v1/fruits` and return a custom response:
 
 ```js {3-6}
 test("mocks a fruit and doesn't call api", async ({ page }) => {
@@ -181,12 +189,11 @@ test("mocks a fruit and doesn't call api", async ({ page }) => {
 })
 ```
 
-As more and more front-end projects are turning into microservices, our project can be a small part of a large website, which makes it harder to run our project alone. When we are doing e2e testing online, with the proxy ability playwright offers us, we can easily proxy partial JS and CSS files request to our local dev server, and make it a lot easier to develop test cases when we need to change source code or add test id.
+For microservices or large websites, you can proxy partial JS and CSS file requests to your local dev server, making it easier to develop test cases when you need to change source code or add test ids.
 
 ```js
 export default defineConfig({
-  ...
-  // Run your local dev server before starting the tests.
+  // ...
   webServer: {
     command: 'npm run start',
     url: 'http://127.0.0.1:3000',
@@ -195,48 +202,69 @@ export default defineConfig({
 })
 ```
 
-For more information, check out [webServer](https://playwright.dev/docs/api/class-testconfig#test-config-web-server).
+See [webServer](https://playwright.dev/docs/api/class-testconfig#test-config-web-server) for more.
 
-## Out-of-the-box Snapshot
+---
+
+## Out-of-the-box Snapshot Testing
 
 Playwright provides methods for comparing page and element screenshots with expected values stored in files.
 
 ```js
-expect(screenshot).toMatchSnapshot('landing-page.png')
-```
+import { test, expect } from '@playwright/test'
 
-<Callout type="warning">
-  To compare screenshots, use expect(page).toHaveScreenshot() instead.
-</Callout>
-
-```js
-// Basic usage.
-expect(await page.screenshot()).toMatchSnapshot('landing-page.png')
-// Pass options to customize the snapshot comparison and have a generated name.
-expect(await page.screenshot()).toMatchSnapshot('landing-page.png', {
-  maxDiffPixels: 27, // allow no more than 27 different pixels.
+test('example test', async ({ page }) => {
+  await page.goto('https://playwright.dev')
+  // Basic usage.
+  await expect(page).toHaveScreenshot()
 })
+// Pass options to customize the snapshot comparison and have a generated name.
+await expect(page).toHaveScreenshot('landing-page.png', { maxDiffPixels: 100 })
 // Configure image matching threshold.
 expect(await page.screenshot()).toMatchSnapshot('landing-page.png', {
   threshold: 0.3,
 })
-// Bring some structure to your snapshot files by passing file path segments.
-expect(await page.screenshot()).toMatchSnapshot(['landing', 'step2.png'])
-expect(await page.screenshot()).toMatchSnapshot(['landing', 'step3.png'])
+// Non-image snapshots.
+expect(await page.textContent('.hero__title')).toMatchSnapshot('hero.txt')
 ```
 
 Learn more about [visual comparisons](https://playwright.dev/docs/test-snapshots).
 
-**Note that matching snapshots only work with Playwright test runner.**
+**Note:** Matching snapshots only works with the Playwright test runner.
 
-<Callout>
+<Callout type="warning">
   Since there can be significant differences among snapshots on different OS or
   headed/headless mode, it's better to run snapshot test cases on Linux headless
-  mode using docker image to keep the same environment with CI.
+  mode using the Docker image to keep the same environment as CI.
 </Callout>
 
-Script to run docker image:
+---
+
+## Integration with Docker
+
+Script to run Docker image:
 
 ```sh
 docker run -it --rm --ipc=host -v $(pwd):/work/ -w /work/ mcr.microsoft.com/playwright:v1.42.1-jammy /bin/bash
 ```
+
+See [usage](https://playwright.dev/docs/docker#usage) for more.
+
+---
+
+## Why Playwright Over Other Frameworks?
+
+- **True cross-browser and cross-platform support** (including WebKit/Safari).
+- **Powerful and reliable locators** (role, text, test id, etc.) reduce test flakiness.
+- **Rich debugging and reporting tools** (UI mode, trace viewer, HTML reports).
+- **First-class support for modern web features** (SPA, SSR, network mocking, mobile emulation).
+- **Fast parallel execution** and isolated browser contexts.
+- **Active development and strong community support.**
+
+---
+
+## Further Reading
+
+- [Playwright Official Docs](https://playwright.dev/docs/intro)
+- [Playwright Test Best Practices](https://playwright.dev/docs/best-practices)
+- [Playwright GitHub](https://github.com/microsoft/playwright)

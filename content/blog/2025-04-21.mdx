@@ -14,7 +14,9 @@ To tell the browser to use the whole available space on the screen, and so enabl
 <meta name="viewport" content="viewport-fit=cover" />
 ```
 
-You can then use `env()` in your CSS:
+This is especially important for devices with notches, rounded corners, or home indicator bars (like iPhones with Face ID). Without `viewport-fit=cover`, your content may not extend into these areas, wasting valuable screen space.
+
+You can then use `env()` in your CSS to respect the device's safe areas:
 
 ```css
 body {
@@ -23,27 +25,155 @@ body {
 }
 ```
 
+This ensures your content isn't hidden behind notches or system UI.
+
 <Callout type="warning">
   [`viewport-fit`](https://udn.realityripple.com/docs/Web/CSS/@viewport/viewport-fit)
-  is an experimental technology.
+  is an experimental technology. Always test on real devices.
 </Callout>
+
+---
 
 ## `enterkeyhint` and `inputmode`
 
-The [inputmode](https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Global_attributes/inputmode) provides a hint about the type of data that might be entered by the user while editing the element or its contents. This allows the browser to display an appropriate virtual keyboard.
+The [`inputmode`](https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Global_attributes/inputmode) attribute provides a hint about the type of data that might be entered by the user while editing the element or its contents. This allows the browser to display an appropriate virtual keyboard, improving usability for forms and inputs.
 
-The [enterkeyhint](https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Global_attributes/enterkeyhint) is an enumerated attribute defining what action label (or icon) to present for the enter key on virtual keyboards.
+**Examples:**
 
-_Note: If you define them both at the same time it may not work, so use `type="xx"` for `input` together with enterkeyhint._
+```html
+<input inputmode="numeric" pattern="[0-9]*" />
+<input inputmode="email" />
+<input inputmode="decimal" />
+```
 
-## `dvh`
+The [`enterkeyhint`](https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Global_attributes/enterkeyhint) attribute defines what action label (or icon) to present for the enter key on virtual keyboards. This can improve the user experience by making the keyboard's action button context-aware.
+
+**Examples:**
+
+```html
+<input enterkeyhint="go" />
+<input enterkeyhint="search" />
+<input enterkeyhint="done" />
+```
+
+_Note: If you define both `inputmode` and `type` together, browser support may vary. For best results, use `type="..."` for `input` along with `enterkeyhint`._
+
+---
+
+## CSS Dynamic Viewport Units: `dvh`, `dvw`, `svh`, `lvh`
+
+On mobile browsers, the viewport height can change as the browser UI (address bar, toolbars) appears or disappears. Traditional `vh` units can cause layout jumps. CSS now provides dynamic viewport units:
+
+- `dvh` (dynamic viewport height): Always reflects the current viewport height, even as UI changes.
+- `svh` (small viewport height): The smallest possible viewport (e.g., when browser UI is visible).
+- `lvh` (large viewport height): The largest possible viewport (e.g., when browser UI is hidden).
+
+**Example:**
+
+```css
+.main-content {
+  min-height: 100dvh;
+}
+```
 
 [Understanding dvh: The CSS Dynamic Viewport Height](https://mayank1513.medium.com/understanding-dvh-the-css-dynamic-viewport-height-9ddf70a77c6c)
 
-## `playsinline`
+---
+
+## `playsinline` for Video
 
 ```html
 <video src="..." controls playsinline></video>
 ```
 
-[`playsinline`](https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/video#playsinline) is a Boolean attribute indicating that the video is to be played "inline", that is, within the element's playback area. Note that the absence of this attribute does not imply that the video will always be played in fullscreen. Mobile browsers, will play the video right where it is instead of the default, which is to open it up fullscreen while it plays.
+[`playsinline`](https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/video#playsinline) is a Boolean attribute indicating that the video is to be played "inline", that is, within the element's playback area. On mobile browsers, especially iOS Safari, the default is to play videos fullscreen. Adding `playsinline` allows the video to play within the page, enabling custom controls, overlays, or seamless integration with other content.
+
+**Tip:** Combine with `muted` and `autoplay` for silent, auto-playing inline videos:
+
+```html
+<video src="..." autoplay muted playsinline loop></video>
+```
+
+---
+
+## Touch Action and Scrolling Enhancements
+
+Use the [`touch-action`](https://developer.mozilla.org/en-US/docs/Web/CSS/touch-action) CSS property to control how touch interactions are handled. This can prevent unwanted scrolling or zooming on interactive elements.
+
+**Example:**
+
+```css
+.button {
+  touch-action: manipulation;
+}
+```
+
+On mobile, double-tapping can zoom the page, which may be undesirable for buttons or controls. Prevent this by setting:
+
+```css
+html {
+  touch-action: manipulation;
+}
+```
+
+Or, for specific elements:
+
+```css
+button,
+a {
+  touch-action: manipulation;
+}
+```
+
+---
+
+## Add to Home Screen (A2HS) and Web App Manifest
+
+To make your site installable and provide a native-like experience, add a [Web App Manifest](https://developer.mozilla.org/en-US/docs/Web/Manifest):
+
+```json
+{
+  "name": "My App",
+  "short_name": "App",
+  "start_url": "/",
+  "display": "standalone",
+  "icons": [
+    {
+      "src": "/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    }
+  ]
+}
+```
+
+And link it in your HTML:
+
+```html
+<link rel="manifest" href="/manifest.json" />
+```
+
+---
+
+## Additional Tips
+
+- **Fast tap response:** Use `touch-action` and avoid 300ms click delay by setting `<meta name="viewport" content="width=device-width, initial-scale=1">`.
+- **Disable user scaling (with caution):**
+  ```html
+  <meta name="viewport" content="user-scalable=no" />
+  ```
+  Only use this if you are sure your UI is fully accessible without zoom.
+- **Test on real devices:** Emulators may not reflect all quirks of mobile browsers.
+- **Optimize images:** Use responsive images (`srcset`, `sizes`) and modern formats (WebP, AVIF) for faster loading.
+
+---
+
+## Summary
+
+Enhancing the mobile web experience involves a combination of viewport management, input optimization, media handling, and touch interaction improvements. By leveraging these modern HTML and CSS features, you can deliver a smoother, more native-like experience for your users.
+
+**Further reading:**
+
+- [MDN: Mobile Web Development](https://developer.mozilla.org/en-US/docs/Web/Guide/Mobile)
+- [Web.dev: Responsive Design](https://web.dev/responsive-web-design-basics/)
+- [MDN: Viewport meta tag](https://developer.mozilla.org/en-US/docs/Web/HTML/Viewport_meta_tag)

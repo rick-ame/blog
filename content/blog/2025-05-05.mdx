@@ -6,12 +6,16 @@ tags: ['nextjs']
 published: true
 ---
 
-> https://github.com/vercel/next.js/security/advisories/GHSA-f82v-jwr5-mffw
+_Ref: https://github.com/vercel/next.js/security/advisories/GHSA-f82v-jwr5-mffw_
 
 ## Background
 
 - **Purpose of Next.js Middleware**: Next.js middleware allows developers to execute code before a request reaches a page, commonly used for authentication, redirection, and request/response modification.
 - **Vulnerability Scenario**: Under certain conditions, middleware can become "corrupt", causing it to malfunction or even be bypassed or tampered with.
+
+Middleware is often used as a gatekeeper for protected routes, performing checks such as verifying authentication tokens, user roles, or request integrity. If middleware is bypassed, unauthorized users may gain access to sensitive resources.
+
+---
 
 ## Vulnerability Details
 
@@ -19,24 +23,68 @@ published: true
 
   - Improper handling of edge cases (e.g., malformed headers or paths).
   - Conflicts with other Next.js features (e.g., API routes or static file serving).
+  - Overly broad matcher patterns that unintentionally include or exclude routes.
 
 - **Manifestations**:
 
   - Middleware may fail to intercept or modify requests correctly.
   - Attackers can craft malicious requests to bypass security checks.
+  - Inconsistent behavior across environments (development vs. production).
 
-In this scenario, Next.js uses this header `x-middleware-subrequest` to prevent middleware from max recursion depth error, it will bypass middleware's execution after it has been called over 5 times.
+A key technical detail: Next.js uses the header `x-middleware-subrequest` to prevent infinite recursion in middleware. If a request passes through middleware more than 5 times, Next.js will automatically bypass further middleware execution for that request. Attackers can exploit this by sending requests with the `x-middleware-subrequest` header set, causing the middleware to be skipped and authorization checks to be bypassed.
+
+**Example attack scenario:**
+
+1. Attacker crafts a request to a protected route, manually adding the `x-middleware-subrequest` header.
+2. Next.js detects the header and, thinking the request has already passed through middleware multiple times, skips middleware execution.
+3. The protected route is accessed without any authentication or authorization checks.
+
+---
 
 ## Mitigation & Recommendations
 
-- **Strict Input Validation**: Validate all incoming request paths, headers, and methods.
-- **Robust Error Handling**: Catch and handle exceptions to prevent middleware failure.
-- **Edge Case Testing**: Test against unusual paths, special characters, and non-standard HTTP methods.
-- **Limit Middleware Scope**: Use precise matcher paths to avoid overuse.
-- **Minimize Dependencies**: Reduce reliance on external libraries or complex logic.
+- **Upgrade Next.js**: Always use the latest patched version of Next.js, as this vulnerability has been addressed in recent releases.
+- **Strict Input Validation**: Validate all incoming request paths, headers, and methods. Explicitly reject requests containing suspicious or unexpected headers like `x-middleware-subrequest`.
+- **Robust Error Handling**: Catch and handle exceptions to prevent middleware failure. Use try/catch blocks and log errors for monitoring.
+- **Edge Case Testing**: Test against unusual paths, special characters, non-standard HTTP methods, and malformed headers to ensure middleware behaves as expected.
+- **Limit Middleware Scope**: Use precise matcher paths in your `middleware.js` or `middleware.ts` to avoid unnecessary execution and reduce attack surface.
+- **Minimize Dependencies**: Reduce reliance on external libraries or complex logic within middleware to lower the risk of bugs or conflicts.
+- **Block Suspicious Headers**: At the edge (e.g., CDN, reverse proxy, or load balancer), filter out or block requests from external sources that contain internal-use headers like `x-middleware-subrequest`.
+
+**Example: Rejecting requests with forbidden headers in middleware:**
+
+```js
+import { NextResponse } from 'next/server'
+
+export function middleware(request) {
+  if (request.headers.has('x-middleware-subrequest')) {
+    return new NextResponse('Forbidden', { status: 403 })
+  }
+  // ...rest of your logic
+}
+```
+
+---
+
+## Additional Security Best Practices
+
+- **Never trust client input**: Always validate and sanitize all user-supplied data, including headers, query parameters, and body content.
+- **Defense in depth**: Do not rely solely on middleware for authorization. Implement checks at the API or page level as well.
+- **Monitor and log**: Set up monitoring and alerting for suspicious requests, especially those with unusual headers or patterns.
+- **Review third-party middleware**: Audit any third-party packages or custom middleware for similar vulnerabilities.
+
+---
 
 ## Conclusion
 
-This security issue has been fixed by Next.js. However, if patching to a safe version is infeasible, you may need to prevent external user requests which contain the `x-middleware-subrequest` header from reaching your Next.js application. For technical details or code examples, refer to the original article: [Next.js and the Corrupt Middleware](https://zhero-web-sec.github.io/research-and-things/nextjs-and-the-corrupt-middleware).
+This security issue has been fixed by Next.js. However, if patching to a safe version is infeasible, you must prevent external user requests containing the `x-middleware-subrequest` header from reaching your Next.js application. For technical details or code examples, refer to the original article: [Next.js and the Corrupt Middleware](https://zhero-web-sec.github.io/research-and-things/nextjs-and-the-corrupt-middleware).
 
-To sum up, never trust the client and you should always validate the inputs.
+To sum up: **never trust the client** and always validate all inputs, including headers. Security is a multi-layered process—middleware is just one line of defense.
+
+---
+
+**Further reading:**
+
+- [Next.js Security Advisory GHSA-f82v-jwr5-mffw](https://github.com/vercel/next.js/security/advisories/GHSA-f82v-jwr5-mffw)
+- [Next.js Middleware Documentation](https://nextjs.org/docs/app/building-your-application/routing/middleware)
+- [OWASP Secure Headers Project](https://owasp.org/www-project-secure-headers/)

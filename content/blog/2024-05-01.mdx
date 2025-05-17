@@ -8,30 +8,52 @@ published: true
 
 ## Introduction
 
-One of the reasons that websites are so highly responsive is that the internet is littered with web caches. Web caches store a copy of a given resource—for example, a web page or an image, for a defined time period. The caches intercept client requests and if they have a requested resource cached locally, they return the copy rather than forwarding the request to the target service. Hence, many requests can be satisfied without placing a burden on the service. Also, as the caches are physically closer to the client, the requests will have lower latencies.
+One of the reasons that websites are so highly responsive is that the internet is littered with web caches. Web caches store a copy of a given resource—for example, a web page or an image—for a defined time period. The caches intercept client requests and, if they have a requested resource cached locally, they return the copy rather than forwarding the request to the target service. Hence, many requests can be satisfied without placing a burden on the service. Also, as the caches are physically closer to the client, the requests will have lower latencies.
 
 ![Web caches in the internet](../img/2024-05-01/caches.png)
+
 Multiple levels of caches exist, starting with the client’s web browser cache and local organization-based caches. ISPs will also implement general web proxy caches, and reverse proxy caches can be deployed within the application services execution domain. Web browser caches are also known as private caches (for a single user). Organizational and ISP proxy caches are shared caches that support requests from multiple users. Edge caches, also known as content delivery networks (CDNs), live at various strategic geographical locations globally, so that they cache frequently accessed data close to clients.
 
-Caches typically store the results of HTTP [`GET`](https://developer.mozilla.org/en-US/docs/Web/HTTP/Methods/GET) requests only, and the cache key is the URI of the associated `GET`. When a client sends a `GET` request, it may be intercepted by one or more caches along the request path. Any cache with a fresh copy of the requested resource may respond to the request. If no cached content is found, the request is served by the service endpoint, which is also called the origin server in web technology parlance. Services can control what results are cached and for how long they are stored by using HTTP caching directives. Services set these directives in various HTTP response headers
+**Types of web caches:**
+
+- **Browser cache (private cache):** Stores resources locally for a single user.
+- **Proxy cache (shared cache):** Used by organizations or ISPs to serve multiple users.
+- **Reverse proxy cache:** Placed in front of servers to cache responses for many clients (e.g., Varnish, NGINX).
+- **CDN (edge cache):** Globally distributed caches that bring content closer to users.
+
+Caches typically store the results of HTTP [`GET`](https://developer.mozilla.org/en-US/docs/Web/HTTP/Methods/GET) requests only, and the cache key is the URI of the associated `GET`. When a client sends a `GET` request, it may be intercepted by one or more caches along the request path. Any cache with a fresh copy of the requested resource may respond to the request. If no cached content is found, the request is served by the service endpoint, which is also called the origin server in web technology parlance. Services can control what results are cached and for how long they are stored by using HTTP caching directives. Services set these directives in various HTTP response headers.
+
+---
 
 ## Cache-Control
 
 The [`Cache-Control`](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Cache-Control) HTTP header can be used by client requests and service responses to specify how the caching should be utilized for the resources of interest. Possible values are:
 
-- `no-store`: Specifies that a resource from a request response should not be cached. This is typically used for sensitive data that needs to be retrieved from the origin servers each request.
-- `no-cache`: Specifies that a cached resource must be revalidated with an origin server before use.
-- `private`: Specifies a resource can be cached only by a user-specific device such as a web browser.
-- `public`: Specifies a resource can be cached by any proxy server.
-- `max-age`: Defines the length of time in seconds a cached copy of a resource should be retained. After expiration, a cache must refresh the resource by sending a request to the origin server.
+- `no-store`: Specifies that a resource from a request/response should **never** be cached. This is typically used for sensitive data (e.g., banking information, personal data) that must always be retrieved from the origin server.
+- `no-cache`: Specifies that a cached resource must be revalidated with an origin server before use. The cache can store the resource, but must check with the server before serving it.
+- `private`: Specifies a resource can be cached only by a user-specific device such as a web browser. Shared caches (like proxies or CDNs) must not store it.
+- `public`: Specifies a resource can be cached by any cache, including shared caches.
+- `max-age`: Defines the maximum amount of time (in seconds) a cached copy of a resource is considered fresh. After expiration, a cache must refresh the resource by sending a request to the origin server.
+- `s-maxage`: Like `max-age`, but applies only to shared caches (e.g., CDNs, proxies).
+- `must-revalidate`: Once a resource becomes stale, caches **must** revalidate it with the origin server before serving it.
+- `proxy-revalidate`: Like `must-revalidate`, but applies only to shared caches.
+- `immutable`: Indicates that the resource will not be updated during its freshness lifetime, so the browser can use the cached version without revalidation.
+
+Example:
+
+```http
+Cache-Control: public, max-age=3600, must-revalidate
+```
 
 <Callout type="warning">
   HTTP is designed to cache as much as possible, so even if no `Cache-Control`
-  is given, responses will get stored and reused if certain conditions are met.
+  is given, responses may get stored and reused if certain conditions are met.
   This is called **heuristic caching**. Heuristic caching is a workaround that
   came before `Cache-Control` support became widely adopted, and basically all
   responses should explicitly specify a `Cache-Control` header.
 </Callout>
+
+---
 
 ## Expires and Last-Modified
 
@@ -45,15 +67,70 @@ Expires: Wed, 21 Oct 2015 07:28:00 GMT
 
 As a last resort, the `Last-Modified` header can be used to calculate resource retention periods. This header is set by the origin server to specify when a resource was last updated, and uses the same format as the `Expires` header. A cache server can use `Last-Modified` to determine the freshness lifetime of a resource based on a heuristic calculation that the cache supports. The calculation uses the `Date` header, which specifies the time a response message was sent from an origin server. How long to reuse is up to the implementation, but the specification recommends about 10% of the time after storing, which means a resource retention period subsequently becomes equal to the value of the `Date` header minus the value of the `Last-Modified` header divided by 10.
 
-## Etag
+---
 
-HTTP provides another directive that can be used to control cache item freshness. This is known as an [`Etag`](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Etag). An `Etag` is an opaque value that can be used by a web cache to check if a cached resource is still valid. When a request arrives for a stale resource, the cache forwards it to the origin server with a [`If-None-Match`](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/If-None-Match) directive along with the `Etag` to inquire if the resource is still valid. This is known as _revalidation_.
+## ETag
+
+HTTP provides another directive that can be used to control cache item freshness. This is known as an [`ETag`](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/ETag). An ETag (entity tag) is a unique identifier assigned by the server to a specific version of a resource. When a client requests a resource, the server includes an ETag in the response header. When the client later requests the same resource, it can send the ETag value in the [`If-None-Match`](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/If-None-Match) header to check if the resource has changed.
+
+This is known as _revalidation_.
 
 There are two possible responses to this request:
 
-- If the `Etag` in the request matches the value associated with the resource in the service, the cached value is still valid. The origin server can therefore return a `304 (Not Modified)` response. No response body is needed as the cached value is still current, thus saving bandwidth, especially for large resources. The response may also include new cache directives to update the freshness of the cached resource.
-- The origin server may ignore the revalidation request and respond with a `200 OK` response code, a response body and `Etag` representing the latest version of the resource.
+- If the `ETag` in the request matches the value associated with the resource in the service, the cached value is still valid. The origin server can therefore return a `304 (Not Modified)` response. No response body is needed as the cached value is still current, thus saving bandwidth, especially for large resources. The response may also include new cache directives to update the freshness of the cached resource.
+- If the resource has changed, the origin server responds with a `200 OK` response code, a response body, and a new ETag representing the latest version of the resource.
+
+**Tip:** ETags are especially useful for caching resources that change infrequently or are expensive to generate, such as images, large documents, or API responses.
+
+---
+
+## Cache Invalidation and Purging
+
+A critical aspect of caching is invalidation—ensuring that outdated or incorrect data is not served to users. There are several strategies:
+
+- **Time-based expiration:** Use `max-age`, `Expires`, or similar headers to automatically expire cached content after a certain period.
+- **Manual purging:** Administrators or applications can explicitly remove or refresh cached content (e.g., via CDN APIs).
+- **Revalidation:** Use ETag or `Last-Modified` headers to check with the origin server if the cached resource is still valid.
+- **Cache busting:** Change the resource URL (e.g., by adding a version or hash) to force clients to fetch a new version.
+
+**Pitfall:** If cache invalidation is not handled properly, users may see stale or incorrect data. Always design your cache strategy with invalidation in mind.
+
+---
+
+## Vary Header
+
+The [`Vary`](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Vary) header tells caches to store different versions of a resource based on the value of specified request headers. For example, if a server responds with `Vary: Accept-Encoding`, the cache will store separate versions for gzip, br, or identity encodings.
+
+```http
+Vary: Accept-Encoding, User-Agent
+```
+
+This is important for content negotiation (e.g., language, encoding, device-specific content) to ensure the correct version is served to each client.
+
+---
+
+## Practical Caching Strategies
+
+- **Static assets (JS, CSS, images):** Use long `max-age` and `immutable` for versioned files. Use cache busting (e.g., file hashes) to force updates.
+- **API responses:** Use short `max-age` or `no-cache` for dynamic data. Use ETag or `Last-Modified` for revalidation.
+- **HTML pages:** Use conservative caching, as content may change frequently. Consider using `stale-while-revalidate` for improved perceived performance.
+- **Sensitive data:** Always use `no-store` to prevent caching.
+
+---
 
 ## Summary
 
 When used effectively, web caching can significantly reduce latencies and save network bandwidth. This is especially true for large items such as images and documents. Further, as web caches handle requests rather than application services, this reduces the request load on origin servers, creating additional capacity.
+
+**Key takeaways:**
+
+- Use `Cache-Control` headers to explicitly define caching behavior.
+- Combine `Expires`, `Last-Modified`, and `ETag` for robust cache management.
+- Always consider cache invalidation and purging strategies.
+- Use the `Vary` header for content negotiation.
+- Caching is a powerful tool, but must be used thoughtfully to avoid serving stale data.
+
+<Callout>
+  For more details, see the [MDN HTTP caching
+  documentation](https://developer.mozilla.org/en-US/docs/Web/HTTP/Caching).
+</Callout>

@@ -8,7 +8,7 @@ published: true
 
 ## Introduction
 
-[Data classes](https://docs.python.org/3/library/dataclasses.html) are user-defined types that let you group related data together. Many types, such as integers, strings, and enumerations, are scalar, they represent one and only one value. Other types, such as lists, sets, and dictionaries, represent homogeneous collections. However, you still need to be able to compose multiple fields of data into a single data type. Dictionaries and tuples are OK at this, but they suffer from a few issues. Readability is tricky, as it can be difficult knowing what a dictionary or tuple contains at runtime. When your data is hard to understand, readers will make incorrect assumptions and won't be able to spot bugs as easily. Data classes are easier to read and understand, and the type checker knows how to naturally handle them. Python first supported data classes in Python 3.7.
+[Data classes](https://docs.python.org/3/library/dataclasses.html) are user-defined types that let you group related data together. Many types, such as integers, strings, and enumerations, are scalar—they represent one and only one value. Other types, such as lists, sets, and dictionaries, represent homogeneous collections. However, you still need to be able to compose multiple fields of data into a single data type. Dictionaries and tuples are OK at this, but they suffer from a few issues. Readability is tricky, as it can be difficult knowing what a dictionary or tuple contains at runtime. When your data is hard to understand, readers will make incorrect assumptions and won't be able to spot bugs as easily. Data classes are easier to read and understand, and the type checker knows how to naturally handle them. Python first supported data classes in Python 3.7.
 
 <Callout>
   Homogeneous collections are collections in which every value has the same
@@ -16,12 +16,14 @@ published: true
   types within them.
 </Callout>
 
+---
+
 ## Data Classes in Action
 
 Data classes represent a heterogeneous collection of variables, all rolled into a composite type[^1]. For example, a `Fraction` is an excellent example of a composite type. It contains two scalar values: a `numerator` and a `denominator`.
 
 ```py
-from fraction import Fraction
+from fractions import Fraction
 Fraction(numerator=1, denominator=2)
 ```
 
@@ -29,16 +31,33 @@ To represent a fraction with a `dataclass`, you do the following:
 
 ```py
 from dataclasses import dataclass
+
 @dataclass
 class MyFraction:
     numerator: int
     denominator: int
+
 MyFraction(1, 2)
 ```
 
 By building relationships like this, you are adding to the shared vocabulary in your codebase. Instead of developers always needing to implement each field individually, you provide a reusable grouping. Data classes force you to explicitly assign types to your fields, so there's less chance of type confusion among maintainers.
 
-You can not only add fields in a `dataclass`, but you are also able to add in behaviors in the form of methods.
+You can not only add fields in a `dataclass`, but you are also able to add in behaviors in the form of methods:
+
+```py
+@dataclass
+class Rectangle:
+    width: float
+    height: float
+
+    def area(self) -> float:
+        return self.width * self.height
+
+rect = Rectangle(3, 4)
+print(rect.area())  # 12
+```
+
+---
 
 ## Usage
 
@@ -48,17 +67,30 @@ Data classes have some built-in functions that make them really easy to work wit
 
 There are two special methods, `__str__` and `__repr__`, used to convert your object to its informal and official string representation. They are called when you invoke `str()` or `repr()` on an object. Data classes define these functions, and they will return the same output by default.
 
+```py
+@dataclass
+class Point:
+    x: int
+    y: int
+
+p = Point(1, 2)
+print(str(p))   # Point(x=1, y=2)
+print(repr(p))  # Point(x=1, y=2)
+```
+
 ### Equality
 
-You can test equality(`==`, `!=`) between two data classes by default, you can still specify `eq=True` when defining your `dataclass` explicitly:
+You can test equality (`==`, `!=`) between two data classes by default. You can still specify `eq=True` when defining your `dataclass` explicitly:
 
 ```py
 from copy import deepcopy
 from dataclasses import dataclass
+
 @dataclass(eq=True)
 class MyFraction:
     numerator: int
     denominator: int
+
 num1 = MyFraction(1, 2)
 num2 = MyFraction(2, 3)
 num1 == num2           # False
@@ -69,11 +101,34 @@ By default, equality checks will compare every field across two instances of a `
 
 ### Relational Comparison
 
-By default, data classes do not support relational comparison(`<`, `>`, `<=`, `>=`), so you cannot sort the data classes. If you want to be able to define relational comparison, you need to set `order=True` in the `dataclass` definition. The generated comparison functions will go through each field, comparing them in the order in which they were defined.
+By default, data classes do not support relational comparison (`<`, `>`, `<=`, `>=`), so you cannot sort the data classes. If you want to be able to define relational comparison, you need to set `order=True` in the `dataclass` definition. The generated comparison functions will go through each field, comparing them in the order in which they were defined.
+
+```py
+@dataclass(order=True)
+class Card:
+    rank: int
+    suit: str
+
+c1 = Card(2, 'hearts')
+c2 = Card(3, 'spades')
+print(c1 < c2)  # True
+```
 
 ### Immutability
 
 Sometimes, you need to convey that a `dataclass` should not be able to be changed. In that case, you can specify that a `dataclass` must be `frozen`. To freeze a `dataclass`, add a `frozen=True` to the `dataclass` decorator.
+
+```py
+from dataclasses import dataclass
+
+@dataclass(frozen=True)
+class Point:
+    x: int
+    y: int
+
+p = Point(1, 2)
+# p.x = 3  # Raises FrozenInstanceError
+```
 
 If you want to use your `dataclass` in a set or as a key in a dictionary it must be [hashable](https://docs.python.org/3/library/functions.html#hash). This means it must define a `__hash__` function that takes your object and distills it down to a number. When you freeze a `dataclass`, it automatically becomes hashable, as long as you don't explicitly disable equality checking and all fields are hashable.
 
@@ -83,6 +138,22 @@ If you want to use your `dataclass` in a set or as a key in a dictionary it must
   their values. Frozen data classes do not extend immutability to their
   attributes.
 </Callout>
+
+### Default Values and Field Options
+
+You can provide default values for fields, or use `field()` for more control:
+
+```py
+from dataclasses import dataclass, field
+
+@dataclass
+class User:
+    name: str
+    active: bool = True
+    tags: list[str] = field(default_factory=list)
+```
+
+---
 
 ## Comparison to Other Types
 
@@ -95,6 +166,14 @@ Data classes, however, are a natural fit for fundamentally heterogeneous data. R
 ### Data Classes Versus TypedDict
 
 `TypedDict`, introduced in Python 3.8, is another way to store heterogeneous data that makes sense for readers and type checkers. At first glance, `TypedDict` and data class solve a very similar problem, it can be tough to decide which one is appropriate. In most cases it would be better to choose a `dataclass`, since it provides immutability, comparability, equality and other operations. However, if you are already working with dictionaries, you should reach for a `TypedDict`.
+
+```py
+from typing import TypedDict
+
+class UserDict(TypedDict):
+    name: str
+    active: bool
+```
 
 ### Data Classes Versus Named Tuple
 
@@ -112,8 +191,60 @@ A `namedtuple` goes a long way toward making a tuple more readable, but `datacla
 - Control of immutability, comparability and equality
 - Easier to define functions in the type
 
+---
+
+## Advanced Features
+
+### Post-init Processing
+
+You can define a `__post_init__` method to perform additional initialization after the built-in `__init__` runs:
+
+```py
+from dataclasses import dataclass
+
+@dataclass
+class Product:
+    name: str
+    price: float
+    discounted: float = 0.0
+
+    def __post_init__(self):
+        if self.discounted == 0.0:
+            self.discounted = self.price * 0.9
+```
+
+### Inheritance
+
+Data classes support inheritance, allowing you to build more complex types:
+
+```py
+from dataclasses import dataclass
+
+@dataclass
+class Animal:
+    name: str
+
+@dataclass
+class Dog(Animal):
+    breed: str
+```
+
+---
+
+## When Not to Use Data Classes
+
+A data class, at its heart, represents a conceptual relationship, but it really is only appropriate when the members within the data class are independent of one another. If any of the members should be restricted depending on the other members, a data class will make it harder to reason about your code. Any developer could change the fields during your data classes' lifetime, potentially creating an illegal state. In these cases, a regular class with custom logic and validation would be a better choice.
+
+---
+
 ## Summary
 
-Data classes were a game changer when released, because they allowed developers to define heterogeneous types that were fully typed while still staying lightweight. However, as great as data classes are they should not be universally used. A data class, at its heart, represents a conceptual relationship, but it really is only appropriate when the members within the data class are independent of one another. If any of the members should be restricted depending on the other members, a data class will make it harder to reason about your code. Any developer could change the fields during your data classes' lifetime, potentially creating an illegal state. In these cases, classes would be a better choice.
+Data classes were a game changer when released, because they allowed developers to define heterogeneous types that were fully typed while still staying lightweight. They provide a concise syntax, built-in methods for comparison and representation, and integrate well with type checkers and IDEs. However, as great as data classes are they should not be universally used. Use them when you need to group related, independent fields together, and prefer regular classes when you need more control or invariants.
+
+**Further reading:**
+
+- [Python Data Classes documentation](https://docs.python.org/3/library/dataclasses.html)
+- [PEP 557 – Data Classes](https://peps.python.org/pep-0557/)
+- [Real Python: Python Data Classes](https://realpython.com/python-data-classes/)
 
 [^1]: Composite types are made up of multiple values, and should always represent some sort of relationship or logical grouping.

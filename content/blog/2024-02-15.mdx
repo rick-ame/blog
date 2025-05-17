@@ -34,13 +34,17 @@ While HTTP/2 was initially modeled after SPDY, it was soon modified to include u
 
 ![HTTP/1.1 vs HTTP/2](../img/2024-02-15/http1vs2.webp)
 
+With the explosion of rich, dynamic, and media-heavy web applications, HTTP/1.1’s limitations—such as head-of-line blocking, redundant headers, and inefficient connection management—became bottlenecks for performance. HTTP/2 was designed to address these issues and make the web faster, more efficient, and more secure.
+
+---
+
 ## Key Features of HTTP/2
 
 ### Binary Protocols
 
 ![binary protocols](../img/2024-02-15/binary-protocols.png)
 
-In HTTP/2, the data is divided into smaller units called frames, which are binary packets that carry specific types of information. Each frame has a specific format, including a frame header that indicates its type and length. These frames are then sent over a single client-server connection, allowing for concurrent and interleaved communication. The binary format reduces the amount of data that needs to be transmitted, improving performance.
+HTTP/2 switches from a text-based protocol to a binary protocol. All communication is split into small binary frames, each with a specific type and purpose. This makes parsing more efficient and less error-prone, and enables advanced features like multiplexing and prioritization.
 
 ### Multiplexing
 
@@ -52,13 +56,13 @@ In HTTP/2, the data is divided into smaller units called frames, which are binar
   />
 </div>
 
-HTTP/2 uses multiplexing to allow multiple concurrent requests and responses over a single TCP connection. With multiplexing, requests, and responses are divided into smaller units called frames. These frames are then interleaved and sent in a non-blocking manner. This means that if one request is delayed due to network congestion, other requests can continue to be processed, it eliminates the issue of head-of-line blocking, where one slow request can delay the delivery of subsequent HTTP requests. As a result, this feature helps reduce latency and promotes increased customer satisfaction.
+HTTP/2 allows multiple requests and responses to be in flight simultaneously over a single TCP connection. Frames from different streams can be interleaved, eliminating the head-of-line blocking problem of HTTP/1.1 and reducing latency. This is especially beneficial for web pages that require many resources (CSS, JS, images, etc.).
 
 ### Header Compression
 
 ![header compression](../img/2024-02-15/hpack-compression.png)
 
-HTTP/2 utilizes a header compression mechanism to reduce the overhead associated with HTTP headers. This compression technique reduces the size of the headers, resulting in lower bandwidth consumption and faster communication between the client and server. The mechanism uses the [HPACK](https://httpwg.org/specs/rfc7541.html) (HTTP/2 Static Table and Huffman Encoding) algorithm to compress headers. HPACK utilizes techniques such as Huffman encoding, indexing, and dynamic table management to minimize the size of headers without losing any critical information.
+HTTP/2 uses the [HPACK](https://httpwg.org/specs/rfc7541.html) compression algorithm to reduce the size of HTTP headers. Since many headers (like cookies, user agents) are repeated across requests, HPACK uses static and dynamic tables, as well as Huffman encoding, to minimize bandwidth usage and speed up communication.
 
 ### Server Push
 
@@ -66,16 +70,18 @@ HTTP/2 utilizes a header compression mechanism to reduce the overhead associated
   <img src="../img/2024-02-15/server-push.png" alt="server push" />
 </div>
 
-One of the notable features of HTTP/2 is server push. With it, the server can proactively send resources to satisfy the client’s future requests. This feature reduces the number of round trips required between both – the client and server, resulting in faster page load speed. As the infographic above shows, upon a single client request, the server pushes 3 assets – the HTML along with CSS and images. Thanks to that preemptive push of website assets, HTTP/2 facilitates and speeds up page rendering.
+Server Push allows the server to proactively send resources to the client before they are requested. For example, when a client requests an HTML page, the server can also push associated CSS and JS files. This reduces round trips and can significantly speed up page loads. However, Server Push must be used judiciously to avoid wasting bandwidth on resources the client may already have cached.
 
-HTTP/2 implementation presents significant performance for pushed resources, with other benefits of HTTP/2 explained below:
+**Benefits of Server Push:**
 
-- The client saves pushed resources in the cache.
-- The client can reuse these cached resources across different pages.
-- The server can multiplex pushed resources along with originally requested information within the same TCP connection.
-- The server can prioritize pushed resources – a key performance differentiator in HTTP/2 vs HTTP1.
-- The client can decline pushed resources to maintain an effective repository of cached resources or disable Server Push entirely.
-- The client can also limit the number of pushed streams multiplexed concurrently.
+- Reduces latency by delivering critical resources early.
+- Can improve perceived performance for first-time visitors.
+- Resources pushed are cached and can be reused across pages.
+
+**Limitations:**
+
+- Not all browsers or CDNs support Server Push.
+- Overuse can lead to unnecessary data transfer.
 
 ### Stream Prioritization
 
@@ -86,9 +92,7 @@ HTTP/2 implementation presents significant performance for pushed resources, wit
   />
 </div>
 
-Stream prioritization allows the client to provide preference to particular data streams. Although the server is not bound to follow these instructions from the client, the mechanism allows the server to optimize network resource allocation based on end-user requirements. Stream prioritization works with Dependencies and Weight assigned to each stream. Although all streams are inherently dependent on each other, the dependent streams are also assigned weights between 1 and 256. The details of stream prioritization mechanisms are still debated.
-
-In the real world, however, the server rarely has control over resources such as CPU and database connections. Implementation complexity itself prevents servers from accommodating stream priority requests. Research and development in this area are particularly important for the long-term success of HTTP/2 since the protocol is capable of processing multiple data streams with a single TCP connection.
+Clients can assign priorities and dependencies to streams, allowing important resources (like CSS or above-the-fold images) to be delivered first. The server can use this information to optimize bandwidth and resource allocation, though actual implementation varies by server.
 
 ### Security
 
@@ -96,7 +100,9 @@ In the real world, however, the server rarely has control over resources such as
   <img src="../img/2024-02-15/https.png" alt="https" />
 </div>
 
-Binary HTTP/2 format prevents response splitting attacks common with HTTP/1.1. Hackers carry out response splitting by altering the textual response and inserting whitespaces. This is not a threat to an HTTP/2 binary protocol. Moreover, HTTP/2 comes with TLS encryption, ensuring security and privacy.
+While HTTP/2 can technically run over plain TCP, all major browsers require HTTP/2 to be used with TLS (HTTPS). The binary framing also helps prevent certain attacks (like response splitting). HTTP/2 does not introduce new security flaws, and in practice, it encourages encrypted, secure communication by default.
+
+---
 
 ## HTTP/2 vs HTTP/1.1
 
@@ -110,16 +116,56 @@ Binary HTTP/2 format prevents response splitting attacks common with HTTP/1.1. H
 | Security              | Run with TLS                                                     | Optional (can be run with or without TLS)                          |
 | Resource loading      | More efficient and faster due to multiplexing and prioritization | Inefficient under certain conditions due to connection limitations |
 
+---
+
 ## The Main Benefits of HTTP/2
 
-The main benefits of using HTTP/2 are efficiency solutions to improve web performance, optimize resource use, and reduce browsing latency. One of the most beneficial HTTP/2 features is multiplexing, which handles multiple streams simultaneously over a single connection, reducing network latency. It also improves performance by compressing HTTP headers sent over the network and prioritizing network resource allocation. Moreover, the HTTP/2 binary protocol format and default TLS encryption can help enhance browsing security.
+- **Reduced Latency:** Multiplexing and header compression minimize round trips and data transfer.
+- **Improved Page Load Speed:** Server Push and prioritization help deliver critical resources faster.
+- **Better Resource Utilization:** Fewer TCP connections mean less overhead for both clients and servers.
+- **Enhanced Security:** TLS is required by browsers, making encrypted communication the default.
+- **Backward Compatibility:** HTTP/2 is designed to be compatible with existing HTTP APIs and semantics.
+
+---
 
 ## Client Support
 
 ![browser support](../img/2024-02-15/http2-browser-support.png)
 
-Google Chrome and Firefox have supported the technology for years and Apple added HTTP/2 browser support to the Safari web browser back in 2014. Internet Explorer requires users to run Windows 8 to support the latest application protocol. Major mobile web browsers including Android’s aptly named Browser, Chrome for Android and iOS, as well as Safari in iOS 8 and above support HTTP/2 for mobile web access.
+HTTP/2 is widely supported by all major browsers (Chrome, Firefox, Safari, Edge, Opera) and most modern HTTP servers (Nginx, Apache, Caddy, etc.). Mobile browsers and platforms also support HTTP/2, making it a safe choice for most web projects.
+
+---
 
 ## Why is HTTP/2 Not Widely Used?
 
-The adoption of HTTP/2 is not as widespread as network engineers might have expected. This could be due to several reasons. First, employing HTTP/2 might be costly and complex for organizations with widespread infrastructure. Correctly establishing HTTP/2 may require extra technical knowledge. Moreover, some older browsers may not be compatible with the HTTP/2 protocol. So organizations that serve a diverse user base may hesitate to adopt it. Furthermore, the performance gain from HTTP/2 may not be sufficient enough to invest funds and human and server resources into adopting the protocol for smaller websites. Another reason system admins opt out of HTTP/2 is that the content delivery network that enhances web performance cannot fully support HTTP/2, reducing the expected needs.
+Despite its advantages, HTTP/2 adoption is not universal. Reasons include:
+
+- **Infrastructure Complexity:** Migrating legacy systems and CDNs to support HTTP/2 can be costly and complex.
+- **Compatibility:** Some older browsers and proxies do not support HTTP/2, requiring fallback to HTTP/1.1.
+- **Marginal Gains for Small Sites:** For simple or low-traffic sites, the performance gains may not justify the migration effort.
+- **Server Push Limitations:** Not all CDNs or browsers fully support Server Push, and improper use can waste bandwidth.
+- **TLS Requirement:** While beneficial for security, requiring HTTPS can be a barrier for some legacy systems.
+
+---
+
+## Best Practices for HTTP/2
+
+- **Enable HTTPS:** All browsers require HTTP/2 over TLS. Use strong ciphers and keep certificates up to date.
+- **Optimize Server Push:** Only push critical resources, and avoid pushing assets the client may already have cached.
+- **Monitor Performance:** Use tools like [WebPageTest](https://www.webpagetest.org/) or [Lighthouse](https://developers.google.com/web/tools/lighthouse) to measure the impact of HTTP/2.
+- **Review CDN Support:** Ensure your CDN or reverse proxy fully supports HTTP/2 features.
+- **Fallback Gracefully:** Configure servers to fall back to HTTP/1.1 for clients that do not support HTTP/2.
+
+---
+
+## Further Reading
+
+- [HTTP/2 Specification (RFC 7540)](https://httpwg.org/specs/rfc7540.html)
+- [MDN: HTTP/2](https://developer.mozilla.org/en-US/docs/Web/HTTP/Overview#http2)
+- [Google Developers: Introduction to HTTP/2](https://developers.google.com/web/fundamentals/performance/http2)
+
+<Callout>
+  HTTP/2 is a major step forward for web performance and security. By
+  understanding its features and limitations, you can make informed decisions
+  about when and how to adopt it for your projects.
+</Callout>

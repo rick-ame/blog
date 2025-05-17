@@ -8,74 +8,17 @@ published: true
 
 ## Introduction
 
-Functional programming is a declarative programming paradigm style where one applies pure functions in sequence to solve complex problems. Functions take an input value and produce an output value without being affected by the program. Functional programming mainly focuses on what to solve and uses expressions instead of statements. Functional programming excels mostly at mathematical functions where the values don’t have any correlation and don’t make use of concepts like shared state and mutable data used in object-oriented programming.
+Functional programming (FP) is a declarative programming paradigm where problems are solved by composing pure functions. Functions take input values and produce output values without being affected by the program's state. This style emphasizes "what to solve" rather than "how to solve," using expressions instead of statements. Functional programming excels at mathematical computations and avoids concepts like shared state and mutable data, which are common in object-oriented programming.
+
+FP is rooted in lambda calculus and has influenced many modern languages, including JavaScript, Haskell, Scala, and Clojure. In JavaScript, FP techniques are increasingly popular due to their ability to produce more predictable, testable, and maintainable code.
+
+---
 
 ## Functional Programming Concepts
 
-### First-class Functions
+### First-class and Higher-order Functions
 
-First-class functions in functional programming are treated as data type variables and can be used like any other variables. These first-class variables can be passed to functions as parameters, or stored in data structures.
-
-### Recursion
-
-Unlike object-oriented programming, functional programming doesn’t make use of “while” or ”for” loops or “if-else” statements. Functional programs avoid constructions that create different outputs on every execution. Instead, recursive functions call themselves repeatedly until they reach the desired state or solution known as the base case.
-
-```js
-const range = (a, b) => (a > b ? [] : [a, ...range(a + 1, b)])
-```
-
-### Immutability
-
-In functional programming, we can’t modify a variable after being created. The reason for this is that we would want to maintain the program's state throughout the runtime of the program. It is best practice to program each function to produce the same result irrespective of the program's state. This means that when we create a variable and assign a value, we can run the program with ease fully knowing that the value of the variables will remain constant and can never change.
-
-### Pure vs. Impure Functions
-
-Pure functions form the foundation of functional programming and have two major properties:
-
-- They produce the same output if the given input is the same
-- They have no side effects
-
-```js
-const add = (a, b) => a + b
-```
-
-Here, add is a pure function. This is because, for a fixed value of a and b, the output will always be the same.
-
-#### Filter
-
-As the name suggests, this filters the array.
-
-```js
-array.filter(condition)
-```
-
-#### Reduce
-
-`reducer` is a function that takes the accumulated value and the next item in the array and returns the new value. The function call applies to all values in the array, one after another.
-
-```js
-const sum = (accumulatedSum, arrayItem) => accumulatedSum + arrayItem
-;[1, 2, 3].reduce(sum) // 6
-```
-
-#### Object.assign
-
-```js
-const obj = { a: 2 }
-const newObj = Object.assign({}, obj)
-newObj.a = 3
-obj.a // 2
-```
-
-With the advent of ES6, this can also be done using the spread operator.
-
-```js
-const newObj = { ...obj }
-```
-
-### High Order Functions
-
-A function that accepts other functions as parameters or returns functions as outputs is called a high-order function. This process applies a function to its parameters at each iteration while returning a new function that accepts the next parameter.
+Functions are treated as first-class citizens, meaning they can be assigned to variables, passed as arguments, and returned from other functions. A higher-order function is a function that takes one or more functions as arguments or returns a function as its result.
 
 ```js
 const withLog = (fn) => {
@@ -86,53 +29,134 @@ const withLog = (fn) => {
 }
 ```
 
-In the above example, we create a `withLog` higher-order function that takes a function and returns a function that logs a message before the wrapped function runs.
+### Pure vs. Impure Functions
 
-```js
-const add = (a, b) => a + b
-const addWithLogging = withLog(add)
-addWithLogging(3, 4)
-// calling add
-// 7
-```
+**Pure functions:**
 
-### Currying
-
-Currying means breaking down a function that takes multiple arguments into one or multiple levels of higher-order functions.
-
-Let’s take the `add` function.
+- Always return the same output for the same input.
+- Have no side effects (do not modify external state, files, databases, or global variables).
 
 ```js
 const add = (a, b) => a + b
 ```
 
-When we are to curry it, we rewrite it distributing arguments into multiple levels as follows.
+**Impure functions** may depend on or modify external state, making them harder to test and reason about.
+
+### Immutability
+
+Variables, once created, are not modified. This ensures that program state remains predictable and consistent. Instead of changing existing data, you create new copies with the desired changes.
 
 ```js
-const add = (a) => {
-  return (b) => {
-    return a + b
-  }
-}
-add(3)(4) // 7
+const obj = { a: 2 }
+const newObj = Object.assign({}, obj)
+newObj.a = 3
+// obj.a is still 2
+
+// ES6 spread syntax
+const newObj2 = { ...obj, a: 5 }
 ```
 
-The benefit of currying is memoization. We can now memoize certain arguments in a function call so that they can be reused later without duplication and re-computation.
+### Recursion
 
-### Composition
-
-In mathematics, composition is defined as passing the output of one function into the input of another to create a combined output. The same is possible in functional programming since we are using pure functions.
+Functional programming avoids traditional looping constructs like `while` or `for` and instead uses recursion. Recursive functions call themselves until reaching a base case.
 
 ```js
 const range = (a, b) => (a > b ? [] : [a, ...range(a + 1, b)])
-const multiply = (arr) => arr.reduce((p, a) => p * a)
-const factorial = (n) => multiply(range(1, n))
-factorial(5) // 120
-factorial(6) // 720
 ```
 
-The first function is a `range`, which takes a starting number `a` and an ending number `b` and creates an array consisting of numbers from a to b. Then we have a function `multiply` that takes an array and multiplies all the numbers in it. The above function for calculating `factorial` is similar to f(x) = g(h(x)), thus demonstrating the composition property.
+### Array Methods: Map, Filter & Reduce
+
+- **Map:** Transforms each element in an array.
+
+  ```js
+  ;[1, 2, 3].map((x) => x * 2) // [2, 4, 6]
+  ```
+
+- **Filter:** Returns a new array containing elements that match a condition.
+
+  ```js
+  ;[1, 2, 3, 4].filter((x) => x % 2 === 0) // [2, 4]
+  ```
+
+- **Reduce:** Applies a reducer function to each element, accumulating a single result.
+
+  ```js
+  const sum = (acc, item) => acc + item[(1, 2, 3)].reduce(sum, 0) // 6
+  ```
+
+### Currying
+
+Currying transforms a function with multiple arguments into a sequence of functions, each taking a single argument.
+
+```js
+const add = (a) => (b) => a + b
+add(3)(4) // 7
+```
+
+Currying enables memoization and partial application of arguments.
+
+### Partial Application
+
+Partial application fixes a number of arguments to a function, producing another function of smaller arity.
+
+```js
+const multiply = (a, b) => a * b
+const double = multiply.bind(null, 2)
+double(5) // 10
+```
+
+### Composition
+
+Function composition combines multiple functions, passing the output of one as the input to another. This enables building complex operations from simple, reusable functions.
+
+```js
+const range = (a, b) => (a > b ? [] : [a, ...range(a + 1, b)])
+const multiplyArr = (arr) => arr.reduce((p, a) => p * a, 1)
+const factorial = (n) => multiplyArr(range(1, n))
+factorial(5) // 120
+```
+
+A generic compose function:
+
+```js
+const compose =
+  (...fns) =>
+  (x) =>
+    fns.reduceRight((v, f) => f(v), x)
+```
+
+### Referential Transparency
+
+An expression is referentially transparent if it can be replaced with its value without changing the program's behavior. Pure functions and immutability help achieve this property, making code easier to reason about and refactor.
+
+---
+
+## Benefits of Functional Programming
+
+- **Predictability:** Pure functions and immutability reduce bugs caused by hidden state and side effects.
+- **Testability:** Functions are easier to test in isolation.
+- **Reusability:** Small, composable functions can be reused across your codebase.
+- **Concurrency:** Immutability makes it easier to write concurrent or parallel code without race conditions.
+
+---
+
+## When to Use Functional Programming
+
+- Data transformation pipelines (e.g., processing arrays, streams)
+- Mathematical computations
+- UI rendering (React and other frameworks use FP concepts)
+- Any scenario where predictability and maintainability are priorities
+
+---
 
 ## Conclusion
 
-Functional programming is a well-researched and robust paradigm for writing computer programs. With the introduction of `ESNext`, JavaScript allows for a much better functional programming experience than ever before.
+Functional programming is a robust and well-researched paradigm for building reliable software. With modern JavaScript (ESNext), functional programming techniques are more accessible and powerful than ever. By embracing pure functions, immutability, and composition, you can write code that is easier to test, maintain, and reason about.
+
+<Callout>
+  For further reading, see [Professor Frisby’s Mostly Adequate Guide to
+  Functional
+  Programming](https://mostly-adequate.gitbooks.io/mostly-adequate-guide/) and
+  [MDN: Functional programming in
+  JavaScript](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Functions#functional_programming).
+</Callout>

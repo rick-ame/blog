@@ -14,7 +14,9 @@ By default, [Corepack](https://github.com/nodejs/corepack#readme) is included wi
 corepack enable
 ```
 
-This command sets up shims for supported package managers, allowing you to use commands like yarn or pnpm directly.
+This command sets up shims for supported package managers, allowing you to use commands like `yarn`, `pnpm`, or `npm` directly, even if they are not globally installed.
+
+---
 
 ## 📦 Installing Package Managers with Corepack
 
@@ -28,7 +30,7 @@ If your project's `package.json` includes a `packageManager` field, Corepack aut
 }
 ```
 
-or version along with the SHA-224 hash for validation:
+or specify the version along with the SHA-224 hash for integrity validation:
 
 ```json
 {
@@ -36,36 +38,81 @@ or version along with the SHA-224 hash for validation:
 }
 ```
 
-Running `yarn install` will prompt Corepack to download and use the specified version.
+When you run `yarn install` (or `pnpm install`), Corepack will download and use the specified version, ensuring consistency across all contributors and CI environments.
+
+> **Why use the hash?**  
+> The SHA-224 hash ensures that the downloaded package manager binary matches the expected version, protecting against supply chain attacks.
 
 ### Global Installation
 
-To install a package manager globally, use:
+To install a package manager globally (for use outside of specific projects), use:
 
 ```sh
 corepack install -g pnpm@10.11.0
 ```
 
-This makes the specified version available system-wide.
+This makes the specified version available system-wide, but project-specific versions (from `package.json`) will always take precedence when inside a project directory.
+
+---
 
 ## 🛠️ Additional Corepack Commands
 
 ```sh
-# Clear the local `COREPACK_HOME` cache directory.
+# Clear the local Corepack cache directory.
 corepack cache clean
 corepack cache clear
-# Retrieve the latest available version for the current major release line of the package manager used in the local project, and update the project to use it.
+
+# Upgrade the package manager version in your project to the latest for the current major version.
 corepack up
+
+# Disables Corepack shims, reverting to globally installed package managers.
+corepack disable
 ```
+
+---
 
 ## 🧪 Corepack in CI/CD and Docker Environments
 
-In continuous integration or Docker setups, you might wonder if running `corepack install` is necessary. If your `package.json` specifies the `packageManager` field and you've enabled Corepack, it will automatically handle the required installations. However, pre-installing the package manager using `corepack install` can be beneficial in environments with limited or no internet access.
+In continuous integration or Docker setups, you might wonder if running `corepack install` is necessary. If your `package.json` specifies the `packageManager` field and you've enabled Corepack, it will automatically handle the required installations. However, pre-installing the package manager using `corepack prepare` or `corepack install` can be beneficial in environments with limited or no internet access, or to ensure deterministic builds.
+
+**Example Dockerfile snippet:**
+
+```dockerfile
+FROM node:20
+RUN corepack enable
+WORKDIR /app
+COPY package.json pnpm-lock.yaml ./
+RUN pnpm install --frozen-lock
+```
+
+---
 
 ## ⚠️ Important Considerations
 
-- **Exact Version Specification**: Ensure that the `packageManager` field specifies an exact version (`packageManager@x.y.z`). Using version ranges or tags like `latest` is not supported and will result in errors. The SHA-224 hash is optional but strongly recommended as a security practice.
-- **Supported Package Managers**: Currently, permitted values for the package manager are `yarn`, `npm`, and `pnpm`.
+- **Exact Version Specification**:  
+  Ensure that the `packageManager` field specifies an exact version (`packageManager@x.y.z`). Using version ranges or tags like `latest` is not supported and will result in errors. The SHA-224 hash is optional but strongly recommended as a security practice.
+- **Supported Package Managers**:  
+  Currently, permitted values for the package manager are `yarn`, `npm`, and `pnpm`.
+- **Legacy Node.js**:  
+  If you are using Node.js versions older than v14.19.0 or v16.9.0, Corepack is not included by default. You can install it globally via npm:
+  ```sh
+  npm i -g corepack
+  ```
+- **Lockfile Consistency**:  
+  Always commit your lockfiles (`yarn.lock`, `pnpm-lock.yaml`, or `package-lock.json`) to ensure reproducible installs.
+
+---
+
+## 🧩 Troubleshooting
+
+- **"Command not found" errors:**  
+  Make sure Corepack is enabled (`corepack enable`) and your Node.js version is recent enough.
+- **Version mismatch warnings:**  
+  If the locally installed package manager version does not match the one specified in `package.json`, Corepack will warn you and use the correct version.
+- **Network issues:**  
+  If Corepack cannot download the required package manager, check your proxy settings or pre-prepare the version with `corepack prepare`.
+
+---
 
 ## 📚 Conclusion
 
@@ -74,5 +121,6 @@ Corepack streamlines the management of package managers in Node.js projects, ens
 - Automatically install and use the correct package manager versions specified in your projects.
 - Simplify onboarding for new contributors by eliminating manual package manager installations.
 - Enhance reproducibility across different environments, including CI/CD pipelines and Docker containers.
+- Improve security by pinning exact package manager versions and hashes.
 
 For more detailed information, refer to the [official Node.js Corepack documentation](https://github.com/nodejs/corepack#readme).

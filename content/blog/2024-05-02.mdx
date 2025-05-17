@@ -10,9 +10,12 @@ published: true
 
 [SameSite](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Set-Cookie#samesitesamesite-value) is a browser security mechanism that determines when a website's cookies are included in requests originating from other websites. SameSite cookie restrictions provide partial protection against a variety of cross-site attacks, including [CSRF](https://developer.mozilla.org/en-US/docs/Glossary/CSRF), [cross-site leaks](https://en.wikipedia.org/wiki/Cross-site_leaks), and some [CORS](https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS) exploits.
 
+---
+
 ## What is a Site in the Context of SameSite Cookies?
 
 ![Site Definition](../img/2024-05-02/site-definition.png)
+
 In the context of SameSite cookie restrictions, a site is defined as the top-level domain ([TLD](https://developer.mozilla.org/en-US/docs/Glossary/TLD)), usually something like `.com` or `.net`, plus one additional level of the domain name. This is often referred to as the TLD+1.
 
 <Callout>
@@ -21,10 +24,15 @@ In the context of SameSite cookie restrictions, a site is defined as the top-lev
   top-level domains in practice, such as `.co.uk`.
 </Callout>
 
+---
+
 ## What's the Difference Between a Site and an Origin?
 
 ![Site vs Origin](../img/2024-05-02/site-vs-origin.png)
-The difference between a site and an origin is their scope; a site encompasses multiple domain names, whereas an origin only includes one. Two URLs are considered to have the same origin if they share the exact same scheme, domain name, and port. Although note that the port is often inferred from the scheme. The term "site" is much less specific as it only accounts for the scheme and last part of the domain name. Crucially, this means that a cross-origin request can still be same-site, but not the other way around.
+
+The difference between a site and an origin is their scope; a site encompasses multiple domain names, whereas an origin only includes one. Two URLs are considered to have the same origin if they share the exact same scheme, domain name, and port. The port is often inferred from the scheme (e.g., 443 for HTTPS, 80 for HTTP).
+
+The term "site" is less specific: it only accounts for the scheme and the eTLD+1. This means that a cross-origin request can still be same-site, but not the other way around.
 
 | Request from              | Request to                 | Same-site?            | Same-origin?               |
 | ------------------------- | -------------------------- | --------------------- | -------------------------- |
@@ -33,6 +41,8 @@ The difference between a site and an origin is their scope; a site encompasses m
 | `https://example.com`     | `https://example.com:8080` | Yes                   | No: mismatched port        |
 | `https://example.com`     | `https://example.co.uk`    | No: mismatched eTLD   | No: mismatched domain name |
 | `https://example.com`     | `http://example.com`       | No: mismatched scheme | No: mismatched scheme      |
+
+---
 
 ## How does SameSite Work?
 
@@ -52,27 +62,34 @@ Set-Cookie: session=sessionId; SameSite=Strict
 
 <Callout>
   If the website issuing the cookie doesn't explicitly set a SameSite attribute,
-  Chrome automatically applies `Lax` restrictions by default. This means that
-  the cookie is only sent in cross-site requests that meet specific criteria,
-  even though the developers never configured this behavior.
+  Chrome and most modern browsers automatically apply `Lax` restrictions by
+  default. This means that the cookie is only sent in cross-site requests that
+  meet specific criteria, even though the developers never configured this
+  behavior.
 </Callout>
+
+---
+
+## SameSite Attribute Values
 
 ### Strict
 
-If a cookie is set with the `SameSite=Strict` attribute, browsers will not send it in any cross-site requests. In simple terms, this means that if the target site for the request does not match the site currently shown in the browser's address bar, it will not include the cookie. Although this is the most secure option, it can negatively impact the user experience in cases where cross-site functionality is desirable.
+If a cookie is set with the `SameSite=Strict` attribute, browsers will **not** send it in any cross-site requests. In simple terms, this means that if the target site for the request does not match the site currently shown in the browser's address bar, it will not include the cookie. This is the most secure option, but it can negatively impact the user experience in cases where cross-site functionality is desirable (e.g., following a link from an email to a logged-in session).
 
 ### Lax
 
-If a cookie is set with the `SameSite=Lax` attribute, this means that browsers will send the cookie in cross-site requests, but only if both of the following conditions are met:
+If a cookie is set with the `SameSite=Lax` attribute, browsers will send the cookie in cross-site requests, but only if **both** of the following conditions are met:
 
 - The request uses the `GET` method.
-- The request resulted from a top-level navigation by the user.[^1]
+- The request resulted from a top-level navigation by the user (such as clicking a link or entering a URL).
+
+The cookie is **not** included in background requests, such as those initiated by scripts, iframes, or references to images and other resources.
 
 ### None
 
-If a cookie is set with the `SameSite=None` attribute, this effectively disables SameSite restrictions altogether, regardless of the browser. As a result, browsers will send this cookie in all requests to the site that issued it, even those that were triggered by completely unrelated third-party sites.
+If a cookie is set with the `SameSite=None` attribute, this disables SameSite restrictions altogether, regardless of the browser. As a result, browsers will send this cookie in **all** requests to the site that issued it, even those that were triggered by completely unrelated third-party sites.
 
-There are legitimate reasons for disabling SameSite, such as when the cookie is intended to be used from a third-party context and doesn't grant the bearer access to any sensitive data or functionality. Tracking cookies are a typical example.
+There are legitimate reasons for disabling SameSite, such as when the cookie is intended to be used from a third-party context and doesn't grant the bearer access to any sensitive data or functionality. Tracking cookies and some federated login flows are typical examples.
 
 <Callout type="warning">
   The
@@ -82,5 +99,55 @@ There are legitimate reasons for disabling SameSite, such as when the cookie is 
   request over the HTTPS protocol. Note that insecure sites (`http:`) can't set
   cookies with the `Secure` directive, and therefore can't use `SameSite=None`.
 </Callout>
+
+---
+
+## Practical Examples
+
+### Setting SameSite Cookies
+
+```http
+Set-Cookie: sessionId=abc123; SameSite=Strict; Secure; HttpOnly
+Set-Cookie: analytics=xyz789; SameSite=None; Secure
+Set-Cookie: preference=dark; SameSite=Lax
+```
+
+### Use Cases
+
+- **Authentication cookies:** Use `SameSite=Strict` or `Lax` to prevent CSRF attacks.
+- **Third-party integrations (e.g., payment, widgets):** Use `SameSite=None; Secure` if the cookie must be sent in cross-site contexts.
+- **Analytics/tracking:** Often use `SameSite=None; Secure` to work across sites.
+
+---
+
+## Security Implications
+
+SameSite cookies are a powerful tool for mitigating CSRF and some cross-site data leaks, but they are not a silver bullet. Developers should combine SameSite with other security measures:
+
+- Always use the `Secure` and `HttpOnly` attributes for sensitive cookies.
+- Implement CSRF tokens for critical actions.
+- Validate user input and use proper CORS headers.
+
+---
+
+## Browser Support and Defaults
+
+- Most modern browsers default to `SameSite=Lax` if the attribute is not specified.
+- Older browsers may not support SameSite at all, so always test your application in multiple browsers.
+- Cookies set with `SameSite=None` **must** also be marked as `Secure` or they will be rejected by modern browsers.
+
+For the latest compatibility, see [Can I use: SameSite cookies](https://caniuse.com/samesite-cookie-attribute).
+
+---
+
+## Summary
+
+SameSite cookies are an important part of modern web security, helping to prevent cross-site request forgery and information leakage. By understanding the differences between `Strict`, `Lax`, and `None`, and setting the appropriate attributes, you can better protect your users and your application.
+
+**Further reading:**
+
+- [MDN: SameSite cookies](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Set-Cookie#samesitesamesite-value)
+- [OWASP: Cross-Site Request Forgery Prevention Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Cross-Site_Request_Forgery_Prevention_Cheat_Sheet.html)
+- [Google: SameSite Updates](https://web.dev/samesite-cookies-explained/)
 
 [^1]: Such as clicking on a link. The cookie is not included in background requests, such as those initiated by scripts, iframes, or references to images and other resources.

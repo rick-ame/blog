@@ -8,37 +8,50 @@ published: true
 
 ## Setup your Express.js app
 
-For simple apps, you can follow theses instructions in the [doc](https://vercel.com/guides/using-express-with-vercel), first you need to create a directory named `/api` (do NOT change to other names) in the project root, under this folder create a file named `index.ts` or `index.js`, this would be your main server file, you can see it as you app's entry file.
+For simple apps, you can follow these instructions in the [official doc](https://vercel.com/guides/using-express-with-vercel):
 
-Since backend files deployed to Vercel actually are serverless functions, each file is an entry point, and free plans they are limited to most 14, you can put your actual routes and all other files under different folders, in `index.js` file just import them.
+1. **Create an `/api` directory** (do NOT change the name) in your project root.
+2. Inside `/api`, create an `index.js` or `index.ts` file—this is your main server entry point.
+
+> **Note:** On Vercel, backend files are deployed as [serverless functions](https://vercel.com/docs/functions/serverless-functions/introduction). Each file in `/api` is an entry point. On the free plan, you are limited to 14 serverless functions. To keep things organized, put your actual routes and logic outside api folder and import them in `index.js`, or put them all in the main file.
+
+**Example `/api/index.js`:**
+
+```js
+const express = require('express')
+const app = express()
+
+// Import your routes
+const userRoutes = require('./routes/user')
+app.use('/user', userRoutes)
+
+// Export as Vercel handler
+module.exports = app
+```
+
+---
 
 ## Configure your project for Vercel
+
+Create a file named `vercel.json` in your project root. This file tells Vercel how to route requests.
 
 ```json title="vercel.json"
 {
   "version": 2,
   "routes": [
     {
-      // api call send to express server
       "src": "/api/(.*)",
       "dest": "api/index.js"
     },
     {
-      // frontend static files let vercel to handle,
-      // and we place them under `assets` folder to
-      // distinguish from api calls
       "src": "/assets/(.*)",
       "dest": "/assets/$1"
     },
     {
-      // because of the last rule, any static files out of `assets` folder,
-      // will return the `index.html` file, we don't want that to happen,
-      // config individual rules for them, eg. favicon.
       "src": "/favicon.ico",
       "dest": "/favicon.ico"
     },
     {
-      // for SPA apps, any not found files redirect to `index.html`
       "src": "/(.+)",
       "dest": "/"
     }
@@ -46,17 +59,76 @@ Since backend files deployed to Vercel actually are serverless functions, each f
 }
 ```
 
-Create a file named `vercel.json` under your project root, copy the configurations and paste them to that file.
+- **API calls** (`/api/*`) are sent to your Express server.
+- **Static files** under `/assets` are served directly by Vercel.
+- **Favicon and other static files** are handled explicitly.
+- **SPA fallback:** Any other route falls back to `/index.html` (for single-page apps).
 
-API calls send to Express, static files still handled by Vercel.
+> **Tip:** If you use TypeScript, make sure your build outputs JavaScript files to the `/api` directory, or adjust your build process accordingly.
+
+---
+
+## Environment Variables
+
+Set environment variables in the Vercel dashboard under **Project Settings > Environment Variables**.  
+You can access them in your Express app using `process.env.MY_VARIABLE`.
+
+---
 
 ## Custom Domain
 
-If you have a custom domain, say from [dynadot](https://www.dynadot.com/). You can first config it on dynadot,
+If you have a custom domain (e.g., from [Dynadot](https://www.dynadot.com/)), configure DNS as follows:
 
 |                   | Record Type | IP Address/Destination    | Subdomain |
 | ----------------- | ----------- | ------------------------- | --------- |
 | Domain Record     | A           | 76.223.126.88             | N/A       |
 | Subdomain Records | CNAME       | name-china.vercel-dns.com | www       |
 
-And then add two domains to Vercel, first is the domain name you owned, and also add `www.<your domain>`, config the redirect rule for it, which is used to redirect requests starting with `www` to you domain.
+1. Add your domain and `www.<your-domain>` in the Vercel dashboard.
+1. Set up a redirect rule in Vercel to forward `www.<your-domain>` to `<your-domain>` for canonical URLs.
+
+---
+
+## Use Vercel CLI (optional)
+
+1. **Install Vercel CLI:**
+
+   ```sh
+   npm i -g vercel
+   ```
+
+1. **Deploy your project:**
+
+   ```sh
+   vercel
+   ```
+
+   Follow the prompts to link your project and deploy.
+
+1. **Automatic Deployments:**  
+   If your project is connected to GitHub/GitLab/Bitbucket, every push to the main branch will trigger a deployment.
+
+---
+
+## Limitations and Best Practices
+
+- **Cold starts:** Serverless functions may have a short delay on the first request after inactivity.
+- **No persistent filesystem:** Use external storage (e.g., S3, databases) for file uploads or persistent data.
+- **Timeouts:** Serverless functions have execution time limits (10s for Hobby, 60s for Pro/Enterprise).
+- **Keep dependencies minimal:** Only include what you need in `/api` to reduce cold start times.
+
+---
+
+## Debugging
+
+- **Logs:** View logs in the Vercel dashboard under your project’s "Functions" tab.
+- **Local testing:** You can run your Express app locally with `node api/index.js` or use [vercel dev](https://vercel.com/docs/cli/dev) for local emulation.
+
+---
+
+## References
+
+- [Vercel: Using Express with Vercel](https://vercel.com/guides/using-express-with-vercel)
+- [Vercel Serverless Functions](https://vercel.com/docs/functions/serverless-functions/introduction)
+- [Vercel Routing](https://vercel.com/docs/projects/project-configuration#routes)
+- [Vercel Custom Domains](https://vercel.com/docs/concepts/projects/custom-domains)

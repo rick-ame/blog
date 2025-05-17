@@ -1,71 +1,85 @@
 ---
 title: 🎨 Tailwind CSS
-description: Getting started with tailwind css
+description: Getting started with Tailwind CSS.
 date: 2024-03-22
 tags: ['tailwindcss', 'css']
 published: true
 ---
 
-## Why to use Tailwind CSS
+## Why Use Tailwind CSS
 
-There are two main types of CSS frameworks. One is based around components - a group that includes frameworks such as [Bootstrap](https://getbootstrap.com/). The other type of CSS framework is based around utilities — a group that includes the likes of [Tailwind CSS](https://tailwindcss.com/), and [UnoCSS](https://unocss.dev/).
+There are two main types of CSS frameworks. One is component-based—such as [Bootstrap](https://getbootstrap.com/)—which provides prebuilt UI components. The other is utility-based, including frameworks like [Tailwind CSS](https://tailwindcss.com/) and [UnoCSS](https://unocss.dev/).
 
-For many years, component-based frameworks were the de facto standard for building websites quickly and easily. But all this magic comes with a price. Without serious customization, sites built with such frameworks look similar to each other. And customization is a real pain in the neck for anyone who wants to build something more complex and/or creative. Component-based styles are easy to implement, but inflexible and confined to certain boundaries.
+Component-based frameworks have long been the standard for quickly building websites. However, they often lead to sites that look similar unless heavily customized, and deep customization can be difficult and time-consuming. Component-based styles are easy to use but can be inflexible.
 
-“Utility-first” frameworks were created to solve this problem. A utility-first framework is built with low-level functionality in mind. Utility classes offer much more power and flexibility than component classes, they are completely customizable and extensible, and it’s easier to build unique, custom website designs without fighting with unwanted styles. Utility classes have consistent styles, which gives us a ready-to-use [design system](https://uxdesign.cc/everything-you-need-to-know-about-design-systems-54b109851969). We can also create our own design system if we need to. With utility classes, we can still extract common, repetitive patterns into custom, reusable components. But in contrast to predefined components, custom components will be exactly what we need. In summary, we can say that a utility-first framework gives us a balance between the concrete and the abstract.
+Utility-first frameworks were created to address these limitations. Utility classes provide low-level styling options, offering more power and flexibility than component classes. They are fully customizable and extensible, making it easier to build unique, custom designs without fighting against unwanted styles. Utility classes also help enforce a consistent [design system](https://uxdesign.cc/everything-you-need-to-know-about-design-systems-54b109851969), but you can still extract common patterns into your own reusable components. In summary, utility-first frameworks offer a balance between flexibility and structure.
 
-## Getting Started with Tailwind
+**Additional Benefits:**
 
-You can follow the [guide](https://tailwindcss.com/docs/installation) to implement Tailwind CSS in your project.
+- **No naming headaches:** No need to invent class names for every style or component.
+- **Dead code elimination:** Tailwind’s [content configuration](https://tailwindcss.com/docs/content-configuration) removes unused CSS, resulting in tiny production bundles.
+- **Rapid prototyping:** Quickly iterate on designs directly in your markup.
+- **Consistent spacing and color scales:** Enforces design consistency across your project.
+- **First-class support for dark mode, logical properties, and CSS variables (v4+).**
+- **Great integration:** Works seamlessly with React, Vue, Svelte, Next.js, Nuxt, and more.
+- **Excellent documentation and ecosystem:** Rich plugin system, official UI kits, and a vibrant community.
 
-## Building Complex Designs with Tailwind
+---
 
-### Utility-First Fundamentals
+## Getting Started
 
-Using utility classes to build custom designs without writing CSS
+Tailwind CSS v4 brings a simplified setup, improved performance, and new features like built-in CSS variables and logical properties.
 
-```html
-<div
-  class="mx-auto flex max-w-sm items-center space-x-4 rounded-xl bg-white p-6 shadow-lg"
->
-  <div class="shrink-0">
-    <img class="h-12 w-12" src="/img/logo.svg" alt="ChitChat Logo" />
-  </div>
-  <div>
-    <div class="text-xl font-medium text-black">ChitChat</div>
-    <p class="text-slate-500">You have a new message!</p>
-  </div>
-</div>
-```
+**Recommended:** Use [pnpm](https://pnpm.io/) as your package manager for speed and disk efficiency.
 
-#### Why not just use inline styles?
+<Callout>
+  **For installation and integration, always refer to the official
+  documentation:** [Tailwind CSS Installation
+  Guide](https://tailwindcss.com/docs/installation) and [Tailwind
+  CLI](https://tailwindcss.com/docs/installation/tailwind-cli). The official
+  docs provide up-to-date instructions for different stacks (Vite, Next.js,
+  Nuxt, plain HTML/CSS, etc.) and are the best source for the latest setup
+  practices.
+</Callout>
 
-Utility classes have a few important advantages over inline styles:
+### What’s New in Tailwind CSS v4
 
-- Designing with constraints. Using inline styles, every value is a magic number. With utilities, you’re choosing styles from a predefined design system, which makes it much easier to build visually consistent UIs.
-- Responsive design. You can’t use media queries in inline styles, but you can use Tailwind’s responsive utilities to build fully responsive interfaces easily.
-- Hover, focus, and other states. Inline styles can’t target states like hover or focus, but Tailwind’s state variants make it easy to style those states with utility classes.
+- **CSS Variables:** All colors, spacing, and other design tokens are now CSS variables, making them easier to customize and theme.
+- **Logical Properties:** Utilities like `ps-4` (padding-inline-start) and `pe-4` (padding-inline-end) support RTL layouts out of the box.
+- **Faster builds:** The JIT engine is always on, with improved performance for large projects.
+- **Simplified configuration:** Smarter defaults and a smaller config file.
+- **Preflight off by default:** The CSS reset is now opt-in.
+- **Enhanced dark mode:** Supports `media`, `class`, and `selector` strategies.
+- **Improved plugin API:** Easier to write and maintain custom plugins.
 
-### Handling Hover, Focus, and Other States
+See the [v4 release notes](https://tailwindcss.com/blog/tailwindcss-v4) for more details.
 
-Every utility class in Tailwind can be applied conditionally by adding a modifier to the beginning of the class name that describes the condition you want to target.
+---
 
-For example, to apply the bg-sky-700 class on hover, use the hover:bg-sky-700 class:
+## Handling Hover, Focus, and Other States
+
+Every utility class in Tailwind can be conditionally applied by adding a modifier to the beginning of the class name.
+
+For example, to apply `bg-sky-700` on hover, use `hover:bg-sky-700`:
 
 ```html /hover:bg-sky-700/
 <button class="bg-sky-500 hover:bg-sky-700 ...">Save changes</button>
 ```
 
-Tailwind includes modifiers for just about everything you’ll ever need, including:
+Tailwind includes modifiers for:
 
-- Pseudo-classes, like `:hover`, `:focus`, `:first-child`, and `:required`
-- Pseudo-elements, like `::before`, `::after`, `::placeholder`, and `::selection`
-- Media and feature queries, like responsive breakpoints, dark mode, and prefers-reduced-motion
-- Attribute selectors, like `[dir="rtl"]` and `[open]`
+- **Pseudo-classes:** `:hover`, `:focus`, `:active`, `:first-child`, `:required`, etc.
+- **Pseudo-elements:** `::before`, `::after`, `::placeholder`, `::selection`
+- **Media and feature queries:** Responsive breakpoints, dark mode, prefers-reduced-motion, print, etc.
+- **Attribute selectors:** `[dir="rtl"]`, `[open]`, `[aria-*]`, etc.
 
-### Responsive Design
+You can also combine multiple modifiers for complex states, e.g. `md:hover:bg-blue-700 focus:ring-2`.
 
-There are five breakpoints by default, inspired by common device resolutions:
+---
+
+## Responsive Design
+
+Tailwind provides five default breakpoints inspired by common device resolutions:
 
 | Breakpoint prefix | Minimum width | CSS                                  |
 | ----------------- | ------------- | ------------------------------------ |
@@ -80,16 +94,16 @@ There are five breakpoints by default, inspired by common device resolutions:
 <img class="w-16 md:w-32 lg:w-48" src="..." />
 ```
 
-#### Working mobile-first
+### Mobile-first workflow
 
-Use unprefixed utilities to target mobile, and override them at larger breakpoints
+Use unprefixed utilities for mobile, and override them at larger breakpoints:
 
 ```html
-<!-- This will center text on mobile, and left align it on screens 640px and wider -->
+<!-- Center text on mobile, left-align on screens 640px and wider -->
 <div class="text-center sm:text-left"></div>
 ```
 
-#### Targeting a breakpoint range
+### Targeting a breakpoint range
 
 ```html
 <div class="md:max-xl:flex">
@@ -97,9 +111,13 @@ Use unprefixed utilities to target mobile, and override them at larger breakpoin
 </div>
 ```
 
-### Dark Mode
+You can customize breakpoints in your `tailwind.config.js` to fit your design system.
 
-To make this as easy as possible, Tailwind includes a dark variant that lets you style your site differently when dark mode is enabled:
+---
+
+## Dark Mode
+
+Tailwind includes a `dark` variant to style your site differently when dark mode is enabled:
 
 ```html /dark:bg-slate-800/ /dark:text-white/ /dark:text-slate-400/
 <div class="bg-white dark:bg-slate-800">
@@ -110,38 +128,80 @@ To make this as easy as possible, Tailwind includes a dark variant that lets you
 </div>
 ```
 
-#### Toggling dark mode manually
+- By default, Tailwind uses the `media` strategy (respects OS preference).
+- You can build sites that support [toggling dark mode manually](https://tailwindcss.com/docs/dark-mode#toggling-dark-mode-manually) by overriding the dark variant.
+- Combine with logical properties for full RTL and dark mode support.
 
-If you want to support toggling dark mode manually instead of relying on the operating system preference, use the `selector`[^1] strategy instead of the media strategy:
+---
 
-```js showLineNumbers {3} title="tailwind.config.js"
-/** @type {import('tailwindcss').Config} */
-module.exports = {
-  darkMode: 'selector',
-  // ...
+## Accessibility
+
+Accessibility is a first-class concern in Tailwind:
+
+- **Screen readers:** Use `sr-only` to visually hide content but keep it accessible.
+  ```html /sr-only/
+  <a href="#">
+    <svg><!-- ... --></svg>
+    <span class="sr-only">Settings</span>
+  </a>
+  ```
+- **Show/hide for different breakpoints:** Use `not-sr-only` to reveal content at certain breakpoints.
+  ```html /sm:not-sr-only/
+  <span class="sr-only sm:not-sr-only">Settings</span>
+  ```
+- **Focus states:** Use `focus:ring`, `focus-visible:ring`, and outline utilities for keyboard navigation.
+- **Color contrast:** Tailwind’s palette is designed for accessibility, but always check your combinations with tools like [WebAIM Contrast Checker](https://webaim.org/resources/contrastchecker/).
+- **ARIA and attribute selectors:** Easily style elements based on ARIA attributes or state.
+
+---
+
+## Customization and Plugins
+
+Tailwind is highly customizable. Extend the default theme, add custom colors, fonts, spacing, and more in your css entry file.
+
+```css
+@import 'tailwindcss';
+@plugin "@tailwindcss/typography";
+@theme {
+  --font-display: 'Satoshi', 'sans-serif';
+
+  --color-avocado-100: oklch(0.99 0 0);
+
+  --ease-fluid: cubic-bezier(0.3, 0, 0, 1);
+
+  --breakpoint-xs: 30rem;
+  --breakpoint-2xl: 100rem;
+  /* Remove default breakpoints */
+  --breakpoint-3xl: initial;
 }
 ```
 
-### Accessibility
+---
 
-#### Screen Readers
+## Best Practices
 
-Use sr-only to hide an element visually without hiding it from screen readers:
+- **Extract components:** Use [@apply](https://tailwindcss.com/docs/reusing-styles#extracting-classes-with-apply) in your CSS for repeated patterns.
+- **Use Prettier plugins:** [prettier-plugin-tailwindcss](https://github.com/tailwindlabs/prettier-plugin-tailwindcss) auto-sorts class names.
+- **Leverage JIT:** JIT is always on in v4.
+- **Document your design tokens:** Keep your design system and Tailwind config in sync.
+- **Prefer logical properties:** Use logical utilities for better internationalization and RTL support.
+- **Stay up to date:** Regularly check the [release notes](https://tailwindcss.com/blog) for new features and best practices.
 
-```html /sr-only/
-<a href="#">
-  <svg><!-- ... --></svg>
-  <span class="sr-only">Settings</span>
-</a>
-```
+---
 
-Use not-sr-only to undo sr-only, making an element visible to sighted users as well as screen readers. This can be useful when you want to visually hide something on small screens but show it on larger screens for example:
+## Resources
 
-```html /sm:not-sr-only/
-<a href="#">
-  <svg><!-- ... --></svg>
-  <span class="sr-only sm:not-sr-only">Settings</span>
-</a>
-```
+- [Tailwind CSS Documentation](https://tailwindcss.com/docs)
+- [Tailwind Play (online playground)](https://play.tailwindcss.com/)
+- [shadcn/ui](https://ui.shadcn.com/) – A set of beautifully-designed, accessible components and a code distribution platform.
+- [Headless UI](https://headlessui.com/) – Unstyled, accessible UI primitives for React and Vue
+- [Heroicons](https://heroicons.com/) – Beautiful hand-crafted SVG icons by the makers of Tailwind CSS
+- [Awesome Tailwind CSS](https://github.com/aniftyco/awesome-tailwindcss) – Curated list of Tailwind resources
+
+---
+
+## Summary
+
+Tailwind CSS v4 is a powerful, flexible utility-first CSS framework that enables rapid UI development, consistent design, and easy customization. With built-in CSS variables, logical properties, and a blazing-fast JIT engine, Tailwind is ready for modern web development. By mastering its utility classes, responsive design, dark mode, accessibility features, and customization options, you can build modern, maintainable, and beautiful web interfaces with ease.
 
 [^1]: The selector strategy replaced the class strategy in Tailwind CSS v3.4.1.

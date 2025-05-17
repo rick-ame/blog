@@ -6,7 +6,7 @@ tags: ['compiler', 'javascript']
 published: true
 ---
 
-_ref: [the-super-tiny-compiler](https://github.com/jamiebuilds/the-super-tiny-compiler)_
+_Ref: [the-super-tiny-compiler](https://github.com/jamiebuilds/the-super-tiny-compiler)_
 
 ## Introduction
 
@@ -25,6 +25,8 @@ Most compilers break down into three primary stages: `Parsing`, `Transformation`
 1. `Parsing` is taking raw code and turning it into a more abstract representation of the code.
 1. `Transformation` takes this abstract representation and manipulates it to do whatever the compiler wants it to.
 1. `Code Generation` takes the transformed representation of the code and turns it into new code.
+
+---
 
 ## Parsing
 
@@ -315,6 +317,8 @@ function parser(tokens) {
 
 </details>
 
+---
+
 ## Transformation
 
 The next type of stage for a compiler is transformation. Again, this just takes the AST from the last step and makes changes to it. It can manipulate the AST in the same language or it can translate it into an entirely new language.
@@ -342,6 +346,8 @@ Or maybe a node for a "CallExpression":
 
 When transforming the AST we can manipulate nodes by adding/removing/replacing properties, we can add new nodes, remove nodes, or we could leave the existing AST alone and create an entirely new one based
 on it. Since we’re targeting a new language, we’re going to focus on creating an entirely new AST that is specific to the target language.
+
+---
 
 ### Traversal
 
@@ -650,6 +656,8 @@ function transformer(ast) {
 
 </details>
 
+---
+
 ## Code Generation
 
 The final phase of a compiler is code generation. Sometimes compilers will do things that overlap with transformation, but for the most part code generation just means taking our AST and string-ify code back out.
@@ -701,6 +709,8 @@ function codeGenerator(node) {
 ```
 
 </details>
+
+---
 
 ## The Compiler
 

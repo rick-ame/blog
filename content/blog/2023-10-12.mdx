@@ -1,124 +1,180 @@
 ---
-title: 🛠️ Awesome Tools
-description: Some tools you can use for entertainment or development on MacOS and Windows
+title: 🛠️ Awesome Tools for MacOS & Windows
+description: A curated list of useful tools for development, productivity, and entertainment on MacOS and Windows. This guide covers terminal customization, package management, VPN, media players, Python/Node.js environment management, and more.
 date: 2023-10-12
 tags: ['tool']
 published: true
 ---
 
-## MacOS
+## 🍎 MacOS
 
-### Terminal
+### Terminal Customization
 
-_This adds a new theme to the Terminal App of MacOS_
+Enhance your MacOS Terminal with a custom theme:
 
-1. [Download the file](/assets/rick.terminal)
-1. Import it to the Terminal App
+1. [Download the theme file](/assets/rick.terminal)
+1. Import it into the Terminal App via Preferences > Profiles > Import.
+1. Set your preferred font and color scheme for better readability (e.g., Fira Code, JetBrains Mono).
+
+**Tip:** Try [iTerm2](https://iterm2.com/) for advanced features like split panes, search, and better color support.
 
 ### Homebrew
 
 > The Missing Package Manager for macOS (or Linux)
 
-[Install](https://brew.sh/)
+Homebrew makes installing and managing software on MacOS effortless.
+
+- [Install Homebrew](https://brew.sh/)
+
+**Common Homebrew commands:**
+
+```sh
+brew install <package>   # Install a package
+brew update              # Update Homebrew
+brew upgrade             # Upgrade installed packages
+brew search <name>       # Search for packages
+brew list                # List installed packages
+```
+
+**Useful Homebrew packages:**  
+`wget`, `htop`, `fzf`, `bat`, `ripgrep`, `tmux`, `tree`, `jq`, `mas` (Mac App Store CLI)
 
 ### Oh My Zsh
 
-_This adds a new theme to [Oh My Zsh](https://ohmyz.sh)_
+> A delightful, open source, community-driven framework for managing your Zsh configuration.
 
-1. [Download the file](/assets/rick.zsh-theme)
-1. Place it under `$HOME/.oh-my-zsh/custom/themes` folder
-1. Change `ZSH_THEME` to "rick" in `$HOME/.zshrc`
+1. [Download the custom theme](/assets/rick.zsh-theme)
+1. Place it in `$HOME/.oh-my-zsh/custom/themes`
+1. Set `ZSH_THEME="rick"` in your `$HOME/.zshrc`
+
+Explore more themes and plugins at [Oh My Zsh](https://ohmyz.sh).
+
+**Recommended plugins:**  
+`zsh-autosuggestions`, `zsh-syntax-highlighting`, `fzf`, `git`, `docker`
 
 ### FortiClient VPN
 
-> The VPN-only version of FortiClient offers SSL VPN and IPSecVPN.
+> Lightweight VPN client supporting SSL VPN and IPSecVPN.
 
-[Download](https://www.fortinet.com/support/product-downloads#vpn)
+- [Download FortiClient VPN](https://www.fortinet.com/support/product-downloads#vpn)
+
+**Tip:** For open-source alternatives, try [Tunnelblick](https://tunnelblick.net/) (OpenVPN) or [WireGuard](https://www.wireguard.com/).
 
 ### IINA
 
-> IINA is the modern video player for macOS.
+> A modern, open-source video player for macOS with a beautiful interface and wide format support.
 
-[Download](https://iina.io/) \
-[GitHub](https://github.com/iina/iina)
+- [Download](https://iina.io/)
+- [GitHub](https://github.com/iina/iina)
+
+**Alternative:** [VLC Media Player](https://www.videolan.org/vlc/)
 
 ### The Unarchiver
 
-> The Unarchiver is the only app you need to open RAR on Mac. It’s times more powerful than the native macOS utility and supports infinitely more archive formats.
+> Powerful archive extraction tool supporting many formats beyond the native Mac utility.
 
-[Download](https://theunarchiver.com/)
+- [Download](https://theunarchiver.com/)
 
-## Node.js
+---
+
+## 🟩 Node.js Environment
 
 ### fnm
 
-> 🚀 Fast and simple Node.js version manager, built in Rust
+> 🚀 Fast and simple Node.js version manager, built in Rust.
 
-[GitHub](https://github.com/Schniz/fnm)
+- [GitHub](https://github.com/Schniz/fnm)
 
-1. Install using [Homebrew](https://brew.sh/)
+**Install with Homebrew:**
 
-   ```sh
-   brew install fnm
-   ```
+```sh
+brew install fnm
+```
 
-1. To automatically run fnm use when a directory contains a .node-version or .nvmrc file, add the following to `$HOME/.zshrc` profile:
+**Enable automatic version switching:**  
+Add to your `$HOME/.zshrc`:
 
-   ```sh
-   eval "$(fnm env --use-on-cd)"
-   ```
+```sh
+eval "$(fnm env --use-on-cd)"
+```
 
-1. Usage
+[See all commands and usage](https://github.com/Schniz/fnm/blob/master/docs/commands.md)
 
-   [Available commands for extended usage documentation](https://github.com/Schniz/fnm/blob/master/docs/commands.md)
+**Alternative managers:**  
+[nvm](https://github.com/nvm-sh/nvm), [volta](https://volta.sh/)
 
-## Python
+---
+
+## 🐍 Python Environment
 
 ### Virtual Environment
 
-1. To use python venv module
+Create and manage isolated Python environments:
 
-   ```sh
-   python3 -m venv .venv     # This creates virtual environment under current working directory in `.venv` folder
-   source .venv/bin/activate # To activate venv
-   deactivate                # To deactivate venv
-   ```
+```sh
+python3 -m venv .venv     # Create a virtual environment in .venv
+source .venv/bin/activate # Activate the environment
+deactivate                # Deactivate when done
+```
 
-1. Poetry \
-   [Poetry](https://python-poetry.org/) is a tool for **dependency management** and **packaging** in Python. It allows you to declare the libraries your project depends on and it will manage (install/update) them for you. Poetry offers a lockfile to ensure repeatable installs, and can build your project for distribution.
-1. uv (Recommended) \
-   [uv](https://docs.astral.sh/uv/) is an extremely fast Python package and project manager, written in Rust.
+**Tip:** Use [direnv](https://direnv.net/) for automatic environment activation.
+
+### Poetry
+
+> Modern Python dependency management and packaging tool with lockfile support.
+
+- [Poetry](https://python-poetry.org/)
+
+**Install Poetry:**
+
+```sh
+curl -sSL https://install.python-poetry.org | python3 -
+```
+
+### uv (Recommended)
+
+> Extremely fast Python package and project manager, written in Rust.
+
+- [uv documentation](https://docs.astral.sh/uv/)
 
 ### Jupyter Notebook
 
-**Preferred online jupyter notebook**
-https://colab.research.google.com/
+**Recommended online notebook:**  
+[Google Colab](https://colab.research.google.com/)
 
-#### To execute shell command in notebook
+**Run shell commands in a notebook:**
 
-1. With leading `!`
+- With leading `!`:
 
-   ```ipynb /!/
-   !python -V
-   ```
+  ```ipynb
+  !python -V
+  ```
 
-1. `%%bash`
+- With `%%bash` cell magic:
 
-   ```ipynb {1}
-   %%bash
-   python -V
-   ```
+  ```ipynb
+  %%bash
+  python -V
+  ```
 
-## Windows
+**Tip:** Try [JupyterLab](https://jupyter.org/) for a more powerful notebook interface.
+
+---
+
+## 🪟 Windows
 
 ### Development Environment Setup
 
-**WSL is recommended.** [Install WSL](/blog/2024-09-17)
+**WSL (Windows Subsystem for Linux) is highly recommended.**  
+[Install WSL](/blog/2024-09-17)
 
-1. First, turn on settings under `System > Developer > PowerShell > Scripts Policy`, this grants permission for local scripts to run.
+- Use [Ubuntu](https://www.microsoft.com/store/productId/9NBLGGH4MSV6) or [Debian](https://www.microsoft.com/store/productId/9MSVKQC78PK6) from the Microsoft Store for a full Linux experience.
+- Integrate with Windows Terminal for seamless shell switching.
+
+1. Enable script execution: `System > Developer > PowerShell > Scripts Policy`
 1. Install `oh-my-posh` from Microsoft Store.
 1. Install [posh-git](https://github.com/dahlbyk/posh-git)
-1. Run `code $PROFILE` (use VS Code to edit profile of PowerShell), add following scripts:
+1. Edit your PowerShell profile (`code $PROFILE`) and add:
 
    ```ps1
    oh-my-posh init pwsh --config "$env:POSH_THEMES_PATH\huvix.omp.json" | Invoke-Expression
@@ -127,13 +183,20 @@ https://colab.research.google.com/
    clear # clear terminal output
    ```
 
-   Check out more `oh-my-posh` [Themes](https://ohmyposh.dev/docs/themes)
+   More themes: [oh-my-posh Themes](https://ohmyposh.dev/docs/themes)
 
-### Terminal
+**Tip:** Use [Windows Package Manager (winget)](https://learn.microsoft.com/en-us/windows/package-manager/winget/) for easy software installation.
 
-[Windows Terminal](https://apps.microsoft.com/detail/9N0DX20HK701)
+### Windows Terminal
 
-### Themes
+> Modern terminal with tabs, themes, and customization.
+
+- [Download from Microsoft Store](https://apps.microsoft.com/detail/9N0DX20HK701)
+
+**Features:**  
+Split panes, GPU-accelerated rendering, Unicode support, custom key bindings, and JSON-based configuration.
+
+### Recommended Themes
 
 - [Mountain Light PREMIUM](https://apps.microsoft.com/detail/9NDSDFS8K786)
 - [Snowy Mountains](https://apps.microsoft.com/detail/9ncc12h4qbnv)
@@ -145,4 +208,34 @@ https://colab.research.google.com/
 
 ### Microsoft PowerToys
 
-[Microsoft PowerToys](https://learn.microsoft.com/en-us/windows/powertoys/) is a set of utilities for power users to tune and streamline their Windows experience for greater productivity.
+> A set of utilities for power users to tune and streamline their Windows experience for greater productivity.
+
+- [Learn more about PowerToys](https://learn.microsoft.com/en-us/windows/powertoys/)
+
+**Popular PowerToys modules:**  
+PowerToys Run (quick launcher), FancyZones (window manager), Color Picker, Keyboard Manager, File Explorer add-ons.
+
+---
+
+## 🌐 Cross-Platform Essentials
+
+- [Visual Studio Code](https://code.visualstudio.com/): Powerful, extensible code editor for all platforms.
+- [Docker Desktop](https://www.docker.com/products/docker-desktop/): Container management for Mac, Windows, and Linux.
+- [Obsidian](https://obsidian.md/): Markdown knowledge base and note-taking app.
+- [Bitwarden](https://bitwarden.com/): Open-source password manager.
+- [Figma](https://figma.com/): Collaborative design tool.
+- [Notion](https://www.notion.so/): All-in-one workspace for notes, tasks, and wikis.
+
+---
+
+## 📝 Tips
+
+- Regularly update your tools for security and new features.
+- Use keyboard shortcuts and automation (e.g., [AutoHotkey](https://www.autohotkey.com/) on Windows, [Hammerspoon](https://www.hammerspoon.org/) on Mac) to boost productivity.
+- Back up your configuration files (dotfiles) with Git for easy migration and recovery.
+- Explore [Setapp](https://setapp.com/) for curated Mac apps.
+
+<Callout>
+  For more details and advanced tips, see the official documentation for each
+  tool.
+</Callout>

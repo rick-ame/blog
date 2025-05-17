@@ -8,44 +8,66 @@ published: true
 
 ## Why You Should Write Unit Tests
 
-Unit testing is a crucial step in the software development process, where developers meticulously examine the smallest functional components, known as units, to ensure their proper functioning. This process involves thorough testing conducted by software developers, and occasionally by QA personnel, as an integral part of the development lifecycle. Unit testing helps us have faith and strong faith at that, that our software works well and in the most bizarre use cases. Sometimes, it's difficult to test and cover all use cases before the software is deployed, but unit testing helps us test different independent units of our software. Making sure that they are working correctly and will stand the test of time.
+Unit testing is a crucial step in the software development process, where developers meticulously examine the smallest functional components, known as units, to ensure their proper functioning. This process involves thorough testing conducted by software developers, and occasionally by QA personnel, as an integral part of the development lifecycle. Unit testing helps us have confidence that our software works well, even in unusual use cases. While it's difficult to cover every scenario before deployment, unit testing helps ensure that independent units of our software work correctly and are robust over time.
+
+**Benefits of unit testing:**
+
+- Catches bugs early, reducing the cost of fixing them later.
+- Encourages modular, maintainable code.
+- Provides documentation for how components are expected to behave.
+- Enables safe refactoring and upgrades.
+- Increases developer confidence and speeds up development.
+
+---
 
 ## What Should You Test
 
-As the name suggests we should be testing a unit, not more, not less. If it is a function we should be testing only that function and not its dependencies. If it's a react component it should only be that react component.
+As the name suggests, you should be testing a unit—no more, no less. If it is a function, test only that function and not its dependencies. If it's a React component, test only that component.
 
 ### What to Test
 
-In general, your tests should cover the following aspects of your code:
+Generally, your tests should cover:
 
-- If a component renders with or without props
+- Whether a component renders with or without props
 - How a component renders with state changes
-- How a component reacts to user interactions
+- How a component reacts to user interactions (clicks, typing, etc.)
+- Conditional rendering and edge cases
+- Output based on different prop values
+- Integration with callbacks or context
 
 ### What Not to Test
 
-Testing most of your code is important, but here are some things you do not need to test:
+You do not need to test:
 
-- Actual Implementation: You do not need to test the actual implementation of a functionality. Just test if the component is behaving correctly.
-- Third-Party libraries: If you are using any third-party libraries like Material UI, no need to test those – they should already be tried and tested.
+- The actual implementation details of a functionality—just test if the component behaves correctly.
+- Third-party libraries (like Material UI)—these are already tested by their maintainers.
+- Browser APIs or framework internals.
+
+---
 
 ## Tools for React Unit Testing
 
 ### React Testing Library
 
-The React [Testing Library](https://testing-library.com/) has a set of packages that help you test UI components in a user-centric way. This means it tests based on how the user interacts with the various elements displayed on the page.
+The [React Testing Library](https://testing-library.com/) provides utilities to test UI components in a user-centric way, focusing on how users interact with your app. It encourages best practices by querying elements the way users do (by text, label, role, etc.).
 
 ### Vitest
 
-[Vitest](https://vitest.dev/) is a next-generation testing framework powered by [Vite](https://vitejs.dev/). You can check out the [Comparisons](https://vitest.dev/guide/comparisons.html) section on vitest website for more details on how Vitest differs from other similar tools.
+[Vitest](https://vitest.dev/) is a fast, Vite-powered testing framework. It is compatible with Jest APIs and integrates well with modern frontend tooling. See the [Comparisons](https://vitest.dev/guide/comparisons.html) section for details on how Vitest differs from other tools.
+
+### Jest
+
+[Jest](https://jestjs.io/) is a widely used JavaScript testing framework, often used with React. It provides a rich API for assertions, mocking, and snapshot testing.
+
+---
 
 ## How to Write Unit Tests
 
-We are not going to deep dive into how to set up, configure and the file paths of tests. we’ll check the general idea and the strategy of writing unit tests. and try to talk through that.
+This section covers the general strategy for writing unit tests, not setup or configuration.
 
 ### Test Rendering Components
 
-Let's write a component that renders "Hello World" and test that the component renders the popular greeting:
+Example: Test that a component renders "Hello World":
 
 ```jsx title="HelloWorld.jsx"
 const HelloWorld = () => {
@@ -54,9 +76,9 @@ const HelloWorld = () => {
 export default HelloWorld
 ```
 
-Now, we will create a test file:
+Test file:
 
-```jsx title="HelloWorld.test.jsx" {6}
+```jsx title="HelloWorld.test.jsx"
 import { render } from '@testing-library/react'
 import { expect, it } from 'vitest'
 import HelloWorld from './HelloWorld'
@@ -68,9 +90,7 @@ it('should render "Hello World" text', () => {
 })
 ```
 
-In this test case, we render the `HelloWorld` component using the `render` function provided by React Testing Library, The `render` function is used to render the component in a DOM, this is similar to the DOM in the browser. Once this is done we can then test the component using DOM API-like functions provided by the React Testing Library. We then use the `getByText` function to retrieve the element that contains the "Hello World" text. Finally, we use the toBeInTheDocument matcher to check if the element is present in the rendered component.
-
-We can assign a `test-id` to elements in our component so we can pinpoint them directly by using the getTestById function provided by React Testing Library.
+You can use `data-testid` for more precise selection:
 
 ```jsx title="HelloWorld.jsx" /data-testid/
 const HelloWorld = () => {
@@ -79,9 +99,7 @@ const HelloWorld = () => {
 export default HelloWorld
 ```
 
-See the use of `data-testid` property in the div element there. To get the div element, we will call the `getByTestId` function passing in the value of the `data-testid` to the function. This returns the HTMLElement instance of the div element and then we can test the Hello World text node using the `textContent` DOM property.
-
-```jsx title="HelloWorld.test.jsx" {6,9}
+```jsx title="HelloWorld.test.jsx" {6-7}
 import { render } from '@testing-library/react'
 import { expect, it } from 'vitest'
 import HelloWorld from './HelloWorld'
@@ -96,18 +114,16 @@ it('should render "Hello World" text', () => {
 
 ### Test Firing Events
 
-Let's say we have a Counter application that updates the DOM with the click of a button:
+Example: Counter component that updates on button click.
 
 ```jsx title="Counter.jsx"
 import { useState } from 'react'
-const Counter = ({ count }) => {
-  const [increment, setIncrement] = useState(0)
-  const handleIncrement = () => {
-    setIncrement(increment + 1)
-  }
+const Counter = () => {
+  const [count, setCount] = useState(0)
+  const handleIncrement = () => setCount(count + 1)
   return (
     <div>
-      <p>Increment: {increment}</p>
+      <p>Count: {count}</p>
       <button onClick={handleIncrement}>Increment</button>
     </div>
   )
@@ -115,33 +131,31 @@ const Counter = ({ count }) => {
 export default Counter
 ```
 
-Now, we have a state increment that holds the state of the application, and it is displayed in the DOM. The Increment button when clicked increases the state increment by one. So let's write a test for this component to make sure that the increment state is increased when the Increment button is clicked.
+Test:
 
-```jsx title="Counter.test.jsx" {9}
+```jsx title="Counter.test.jsx"
 import { render, fireEvent } from '@testing-library/react'
 import { expect, it } from 'vitest'
 import Counter from './Counter'
 
 it('should increment count on button click', () => {
   const { getByText } = render(<Counter />)
-  const incrementElement = getByText('Increment: 0')
+  const countElement = getByText('Count: 0')
   const buttonElement = getByText('Increment')
   fireEvent.click(buttonElement)
-  expect(incrementElement.textContent).toBe('Increment: 1')
+  expect(getByText('Count: 1')).toBeInTheDocument()
 })
 ```
 
-See that we got the DOM instance of the button by calling this `getByText('Increment')`, then we called the `click` method on its instance, this will fire the click event on the button causing the increment state to be increased by one, then we will thereafter to see if the state was really updated. See in the last line, we got the text node of the div element and expect it to be `Increment: 1`.
-
 ### State and Props of the Components
+
+Test how components behave with different props and state changes.
 
 ```jsx title="Counter.jsx"
 import { useState } from 'react'
-const Counter = ({ initialCount }) => {
+const Counter = ({ initialCount = 0 }) => {
   const [count, setCount] = useState(initialCount)
-  const increment = () => {
-    setCount(count + 1)
-  }
+  const increment = () => setCount(count + 1)
   return (
     <div>
       <p>
@@ -156,7 +170,7 @@ const Counter = ({ initialCount }) => {
 export default Counter
 ```
 
-We have a state `count`, its initial value is from `props` and it is displayed in the DOM in the `p` element. The Increment button when clicked increments the state of the count by 1 and this in turn makes the component re-render and displays the updated value of the count state.
+Test:
 
 ```jsx title="Counter.test.jsx"
 import { render, fireEvent } from '@testing-library/react'
@@ -175,26 +189,23 @@ it('should render initial count and increment count on button click', () => {
 
 ### Mocking Function Calls
 
-During testing, we might not really want an actual function to be called based on some factors. For example, the function might have a number of calls set on it. The only way to go about this is to mock that function, ie, to create a dumb version function of that actual function.
+Mock functions to test if callbacks are called:
 
 ```jsx title="Foobar.jsx"
-const Foobar = ({ done }) => {
-  return (
-    <div>
-      <button onClick={done}>Call DONE</button>
-    </div>
-  )
-}
+const Foobar = ({ done }) => (
+  <div>
+    <button onClick={done}>Call DONE</button>
+  </div>
+)
+export default Foobar
 ```
 
-We have a simple component here, it accepts a function in its props object via the `done` property. This `done` props function is called when the Call DONE button is clicked.
-
-```jsx title="Foobar.test.jsx" {6}
-import { render } from '@testing-library/react'
+```jsx title="Foobar.test.jsx"
+import { render, fireEvent } from '@testing-library/react'
 import { expect, it, vi } from 'vitest'
 import Foobar from './Foobar'
 
-it('test mock function props is called', () => {
+it('calls the done callback when button is clicked', () => {
   const fn = vi.fn()
   const { getByText } = render(<Foobar done={fn} />)
   const button = getByText('Call DONE')
@@ -207,22 +218,20 @@ it('test mock function props is called', () => {
 
 ### Testing React Hooks
 
+Use [@testing-library/react-hooks](https://react-hooks-testing-library.com/) or built-in utilities to test custom hooks.
+
 ```js title="useCounter.js"
 import { useState } from 'react'
 const useCounter = () => {
   const [count, setCount] = useState(0)
-  const increment = () => {
-    setCount((prevCount) => prevCount + 1)
-  }
-  const decrement = () => {
-    setCount((prevCount) => prevCount - 1)
-  }
+  const increment = () => setCount((prev) => prev + 1)
+  const decrement = () => setCount((prev) => prev - 1)
   return { count, increment, decrement }
 }
 export default useCounter
 ```
 
-Now, let's write a test case for this custom hook:
+Test:
 
 ```js title="useCounter.test.js"
 import { renderHook, act } from '@testing-library/react-hooks'
@@ -231,22 +240,21 @@ import useCounter from './useCounter'
 
 it('should increment and decrement counter correctly', () => {
   const { result } = renderHook(() => useCounter())
-  const { count, increment, decrement } = result.current
-  expect(count).toBe(0)
+  expect(result.current.count).toBe(0)
   act(() => {
-    increment()
+    result.current.increment()
   })
-  expect(count).toBe(1)
+  expect(result.current.count).toBe(1)
   act(() => {
-    decrement()
+    result.current.decrement()
   })
-  expect(count).toBe(0)
+  expect(result.current.count).toBe(0)
 })
 ```
 
 ### Testing Asynchronous Operations
 
-Let's see a component that on render makes an HTTP call to an endpoint and then renders the result of the fetch.
+Mock async calls to avoid real network requests:
 
 ```jsx title="AsyncComponent.jsx"
 import { useState, useEffect } from 'react'
@@ -265,85 +273,89 @@ const AsyncComponent = () => {
 export default AsyncComponent
 ```
 
-This component fetches data from https://api.example.com/data and renders it. Now, we want to test this component but we don't want the component to make an actual HTTP call to the endpoint. We will mock the fetch call.
+Test:
 
 ```jsx title="AsyncComponent.test.js"
 import { render, waitFor } from '@testing-library/react'
-import { expect, it } from 'vitest'
+import { expect, it, vi } from 'vitest'
 import AsyncComponent from './AsyncComponent'
 
 it('should render fetched data after async call', async () => {
   const mockData = { message: 'Test Message' }
-  // Mock the fetch API
   vi.stubGlobal('fetch', () =>
     Promise.resolve({
       json: () => Promise.resolve(mockData),
     }),
   )
   const { getByText } = render(<AsyncComponent />)
-  // Assert that "Loading..." is initially rendered
   expect(getByText('Loading...')).toBeInTheDocument()
-  // Wait for the async operation to complete
   await waitFor(() => {
     expect(getByText(mockData.message)).toBeInTheDocument()
   })
-  // Restore the original fetch implementation
   vi.unstubAllGlobals()
 })
 ```
 
-You can also use `waitForNextUpdate` here for data fetching.
+You can also use `waitForNextUpdate` for data fetching in hooks.
 
-```jsx
-...
-it('should render fetched data after async call', async () => {
-  ...
-  const { getByText, waitForNextUpdate } = render(<AsyncComponent />)
-  expect(getByText('Loading...')).toBeInTheDocument()
-  await waitForNextUpdate()
-  expect(getByText(mockData.message)).toBeInTheDocument()
-  ...
-})
-```
+---
 
 ### Snapshot Testing
 
-Snapshot testing is quite different from what we have seen above. This type of testing is classified as output comparison testing. In the case of React component snapshot testing, the UI of the component is taken first and saved, then on subsequent testing, a current snapshot of the component is taken and compared with the previous snapshot to check for changes that may cause breaks.
+Snapshot testing compares the rendered output to a saved snapshot.
 
 ```jsx title="Button.jsx"
-const Button = ({ text, onClick }) => {
-  return (
-    <button onClick={onClick} className="button">
-      {text}
-    </button>
-  )
-}
+const Button = ({ text, onClick }) => (
+  <button onClick={onClick} className="button">
+    {text}
+  </button>
+)
 export default Button
 ```
 
-To create a snapshot test for this component, you can write a test case using the `toMatchSnapshot` matcher:
+Test:
 
-```jsx title="Button.test.jsx"
+```jsx title="Button.test.jsx" {7}
 import { render } from '@testing-library/react'
 import { expect, it } from 'vitest'
 import Button from './Button'
 
-it('should Button component match snapshot', () => {
+it('should match the snapshot', () => {
   const { asFragment } = render(<Button text="Click me" onClick={() => {}} />)
   expect(asFragment()).toMatchSnapshot()
 })
 ```
 
-If you intentionally make changes to the component's output and want to update the snapshot, you can update the snapshot file using the following command:
+Update the snapshot file if you intentionally change the output:
 
 ```sh
 vitest -u
 ```
 
+---
+
+## Advanced Tips
+
+- **Test accessibility:** Use queries like `getByRole`, `getByLabelText`, and [axe](https://github.com/dequelabs/axe-core) for accessibility checks.
+- **Test context and providers:** Wrap components with context providers in tests if needed.
+- **Mock modules:** Use `vi.mock()` or `jest.mock()` to mock modules or API calls.
+- **Test error boundaries:** Simulate errors and assert fallback UI.
+- **Use coverage reports:** Run `vitest --coverage` or `jest --coverage` to see which lines are tested.
+
+---
+
 ## Summary
 
-In summary, I’d say the most important thing is writing testable code. That allows you to write better unit tests and write them fast. Key facts in writing testable code are:
+The most important thing is writing testable code. This allows you to write better unit tests, faster. Key points for testable code:
 
-- Separation of UI and logic
-- Passing dependencies to function (or dependency injection)
-- Make sure to test a single unit of code
+- Separate UI and logic
+- Pass dependencies to functions (dependency injection)
+- Test a single unit of code at a time
+- Prefer user-centric queries and avoid testing implementation details
+- Keep tests fast, isolated, and maintainable
+
+**Further Reading:**
+
+- [React Testing Library Docs](https://testing-library.com/docs/react-testing-library/intro/)
+- [Vitest Docs](https://vitest.dev/)
+- [Jest Docs](https://jestjs.io/docs/getting-started)

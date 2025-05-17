@@ -6,116 +6,211 @@ tags: ['tool']
 published: true
 ---
 
+## What is WSL?
+
+[WSL (Windows Subsystem for Linux)](https://learn.microsoft.com/en-us/windows/wsl/) is a compatibility layer for running Linux binary executables natively on Windows. It allows developers to use Linux tools, shells, and applications directly within Windows, without the need for a full virtual machine or dual-boot setup. WSL 2 uses a lightweight virtual machine for improved performance and compatibility.
+
+---
+
 ## Install WSL Command
 
-Open PowerShell or Windows Command, run
+Open PowerShell or Windows Command Prompt as Administrator, then run:
 
 ```sh
 wsl --install
 ```
 
-_or_
+This command installs WSL 2 and the default Linux distribution (usually Ubuntu LTS).
+
+To see available distributions and install a specific one:
 
 ```sh
-wsl --list --online # For a valid list of distribution names
-wsl --install -d <Distribution Name> # <Distribution Name> from the list got by upper command
+wsl --list --online           # List available distributions
+wsl --install -d <DistroName> # Replace <DistroName> with your choice, e.g., Ubuntu-22.04
 ```
 
-## Add a User for WSL (Optional)
+After installation, restart your computer if prompted.
+
+---
+
+## Initial Setup and User Management
+
+When you launch your new Linux distribution for the first time, you'll be prompted to create a user and password. If you want to add additional users later:
 
 ```sh
-adduser <username>
-usermod -aG sudo <username> # Add user to sudoers
+sudo adduser <username>
+sudo usermod -aG sudo <username> # Add user to sudoers group
 ```
+
+Switch to the new user:
+
+```sh
+su - <username>
+```
+
+---
 
 ## Install Visual Studio Code
 
-[Download](https://code.visualstudio.com/)
+[Download Visual Studio Code](https://code.visualstudio.com/) and install it on Windows.
 
-## Use Windows Proxy
+To use VS Code with WSL, install the [Remote - WSL extension](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-wsl). This allows you to open and develop inside your WSL environment directly from VS Code.
 
-**Ubuntu version at least to be 22.04**
+---
 
-In your `%UserProfile%` directory (use `cd ~` to access your home directory, which is typically your user profile, `C:\Users\<UserName>`), create `.wslconfig` file, paste the following configurations into it:
+## Use Windows Proxy in WSL2
 
-```
-[wsl2]
-networkingMode=mirrored
-```
+**Note:** Ubuntu version should be at least 22.04 for best compatibility.
 
-<Callout type="warning">
-  After configuring this, you need to run `wsl --shutdown` to stop WSL first,
-  and then relaunch terminal.
-</Callout>
+To enable mirrored networking (useful for proxy and network access):
 
-_If you are using [Clash Verge](https://github.com/clash-verge-rev/clash-verge-rev) for proxy, [TUN](https://wiki.metacubex.one/en/config/inbound/tun/) mode is recommended. FYI, the network hotspot sharing only works in `GVisor` mode._
+1. In your Windows home directory (`%UserProfile%`, typically `C:\Users\<UserName>`), create a `.wslconfig` file:
 
-## Install zsh
+   ```
+   [wsl2]
+   networkingMode=mirrored
+   ```
+
+1. After saving, restart WSL:
+
+   ```sh
+   wsl --shutdown
+   ```
+
+   Then relaunch your terminal.
+
+_If you use [Clash Verge](https://github.com/clash-verge-rev/clash-verge-rev) for proxy, [TUN mode](https://wiki.metacubex.one/en/config/inbound/tun/) is recommended. Note: network hotspot sharing only works in `GVisor` mode._
+
+---
+
+## Install zsh and oh-my-zsh
 
 ```sh
+sudo apt update
 sudo apt install zsh
-# Make zsh the default shell.
-# NOTE: Run below command WITHOUT sudo!
-# If you use `sudo` it will change the shell not for your working user but for root
+# Make zsh the default shell for your user (do NOT use sudo)
 chsh -s $(which zsh)
 ```
 
-1. Install [oh-my-zsh](https://ohmyz.sh/)
-1. [Change theme](/blog/2023-10-12#oh-my-zsh)
+1. Install [oh-my-zsh](https://ohmyz.sh/) for a better shell experience:
 
-## Install Homebrew
+   ```sh
+   sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+   ```
 
-[Homebrew on Linux](https://docs.brew.sh/Homebrew-on-Linux#install)
+1. [Change theme](/blog/2023-10-12#oh-my-zsh) or customize plugins as desired.
 
-## Useful Commands
+---
+
+## Install Homebrew (Linuxbrew)
+
+[Homebrew on Linux](https://docs.brew.sh/Homebrew-on-Linux#install) is a popular package manager. Install it with:
 
 ```sh
-explorer.exe .       # Open current folder in windows
-wsl.exe hostname -I  # get the ip address
-wsl.exe --update
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 ```
+
+After installation, follow the instructions to add Homebrew to your shell profile.
+
+---
+
+## Useful WSL Commands
+
+```sh
+explorer.exe .       # Open current folder in Windows Explorer
+wsl.exe hostname -I  # Get the WSL2 IP address
+wsl.exe --update     # Update WSL to the latest version
+wsl --status         # Show WSL configuration and version info
+```
+
+---
 
 ## Configure Port Forwarding to Access WSL2 from the Local Network
 
-To allow devices on your local network to access services running in WSL2, follow these steps:
+By default, WSL2 runs in a virtualized network, so services (e.g., web servers) are not accessible from other devices on your LAN. To expose a port:
 
 <Callout type="warning">
   Run the following commands in PowerShell (Admin).
 </Callout>
 
-1. Enable port forwarding from windows to WSL2
+1. Enable port forwarding from Windows to WSL2:
 
    ```ps1
    netsh interface portproxy add v4tov4 listenaddress=0.0.0.0 listenport=<PORT> connectaddress=<WSL2_IP> connectport=<PORT>
-   # for example port 3000
+   # Example for port 3000:
    netsh interface portproxy add v4tov4 listenaddress=0.0.0.0 listenport=3000 connectaddress=localhost connectport=3000
    ```
 
-1. Allow the port in windows firewall
+1. Allow the port in Windows Firewall:
 
    ```ps1
    New-NetFirewallRule -DisplayName "Allow_TCP_<PORT>" -Direction Inbound -LocalPort <PORT> -Protocol TCP -Action Allow
-   # for example port 3000
+   # Example for port 3000:
    New-NetFirewallRule -DisplayName "Allow_TCP_3000" -Direction Inbound -LocalPort 3000 -Protocol TCP -Action Allow
    ```
 
-1. Verify forwarding
+1. Verify forwarding:
 
    ```ps1
-   # Check active port proxies:
    netsh interface portproxy show all
    ```
 
-1. Delete an unwanted forwarding rule
+1. Delete an unwanted forwarding rule:
 
    ```ps1
    netsh interface portproxy delete v4tov4 listenaddress=0.0.0.0 listenport=<PORT>
    ```
 
-## Additional Information
+---
+
+## Additional Tips
 
 ### Terminal Configurations
 
-1. Size: 72 x 20
-1. Theme: Campbell
-1. Opacity: 95%
+- **Size:** 72 x 20
+- **Theme:** Campbell (or your preference)
+- **Opacity:** 95%
+
+### File System Interoperability
+
+- Access Windows files from WSL at `/mnt/c/Users/<UserName>/`
+- Access WSL files from Windows at `\\wsl$\Ubuntu-22.04\home\<username>\`
+
+### Updating and Upgrading
+
+Keep your Linux environment up to date:
+
+```sh
+sudo apt update && sudo apt upgrade
+```
+
+### Clipboard Integration
+
+Copy from WSL to Windows clipboard:
+
+```sh
+echo "hello" | clip.exe
+```
+
+Paste from Windows clipboard into WSL:
+
+```sh
+powershell.exe Get-Clipboard
+```
+
+---
+
+## Troubleshooting
+
+- If you encounter networking issues, try restarting WSL: `wsl --shutdown`
+- For GUI apps, install [WSLg](https://learn.microsoft.com/en-us/windows/wsl/tutorials/gui-apps) (included by default in recent WSL2).
+- For more advanced networking, see [WSL Networking Docs](https://learn.microsoft.com/en-us/windows/wsl/networking).
+
+---
+
+## References
+
+- [Microsoft Docs: WSL](https://learn.microsoft.com/en-us/windows/wsl/)
+- [Awesome WSL](https://github.com/sirredbeard/Awesome-WSL)
+- [Homebrew on Linux](https://docs.brew.sh/Homebrew-on-Linux)
+- [oh-my-zsh](https://ohmyz.sh/)

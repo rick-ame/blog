@@ -8,29 +8,31 @@ published: true
 
 ## Getting Started
 
-To use Next.jsW 15, you can run this command:
+To try out Next.js 15, run:
 
 ```sh
 pnpx create-next-app@rc
 ```
 
-and follow the prompts to generate a new project.
+and follow the prompts to generate a new project. You can also upgrade an existing project by updating your `next` dependency to `15.0.0-rc` and following the [migration guide](https://nextjs.org/docs/upgrading).
+
+---
 
 ## React Compiler (Experimental)
 
-The [React Compiler](https://react.dev/learn/react-compiler) is a feature of React 19 that allows it to add automatic optimizations to your code and reduces the necessity of doing manual memoization with APIs such as `useMemo` and `useCallback`, improving code simplicity and maintainability.
+The [React Compiler](https://react.dev/learn/react-compiler) is a major new feature in React 19, enabling automatic optimizations and reducing the need for manual memoization with hooks like `useMemo` and `useCallback`. This can simplify your code and improve maintainability.
 
-Next.js 15 now supports for the React Compiler,
+Next.js 15 supports the React Compiler via a Babel plugin:
 
-1. Install `babel-plugin-react-compiler`:
+1. Install the plugin:
 
    ```sh
    pnpm add -D babel-plugin-react-compiler
    ```
 
-1. Add `experimental.reactCompiler` option in `next.config.mjs`:
+1. Enable the compiler in your `next.config.mjs`:
 
-   ```js title="next.config.mjs" {2-4}
+   ```js title="next.config.mjs"
    const nextConfig = {
      experimental: {
        reactCompiler: true,
@@ -39,9 +41,9 @@ Next.js 15 now supports for the React Compiler,
    export default nextConfig
    ```
 
-   Or you can configure the compiler to run in "opt-in" mode as follows:
+   Or, for opt-in compilation using the `"use memo"` directive:
 
-   ```js title="next.config.mjs" {2-6}
+   ```js title="next.config.mjs"
    const nextConfig = {
      experimental: {
        reactCompiler: {
@@ -49,10 +51,10 @@ Next.js 15 now supports for the React Compiler,
        },
      },
    }
-   module.exports = nextConfig
+   export default nextConfig
    ```
 
-   This makes it so the compiler will only compile components and hooks annotated with a `use memo` directive. Please note that the annotation mode is a temporary one to aid early adopters, and that React don’t intend for the `use memo` directive to be used for the long term.
+   Annotate components or hooks to opt-in:
 
    ```tsx
    export default function App() {
@@ -62,60 +64,61 @@ Next.js 15 now supports for the React Compiler,
    ```
 
 <Callout>
-  The React Compiler is currently only possible to use in Next.js through a
-  Babel plugin, which could result in slower build times.
+  The React Compiler is currently only available in Next.js via a Babel plugin,
+  which may increase build times. Expect further integration and performance
+  improvements in future releases.
 </Callout>
 
-## Hydration error improvements
+---
 
-Next.js 14.1 [made improvements](https://nextjs.org/blog/next-14-1#improved-error-messages-and-fast-refresh) to error messages and hydration errors, but Next.js 15 makes them even better. Hydration errors now display the source code of the error with suggestions on how to fix the problem.
+## Hydration Error Improvements
 
-For example, this was a previous hydration error message in Next.js 14.1:
+Next.js 14.1 improved error messages for hydration issues, but Next.js 15 goes further. Hydration errors now display the relevant source code and provide actionable suggestions, making debugging much easier.
+
+**Before (Next.js 14.1):**
 ![Hydration Error Before](../img/2024-05-25/hydration-error-before-light.avif)
 
-Next.js 15 RC has improved this to:
+**After (Next.js 15 RC):**
 ![Hydration Error After](../img/2024-05-25/hydration-error-after-light.avif)
 
-## Caching updates
+---
 
-With Next.js 15, they’re changing how caching works for fetch requests, GET Route Handlers, and Client Router Cache. Before, things were cached by default, now they won’t be unless you choose to. If you want to retain the previous behavior, you can continue to opt-into caching.
+## Caching Updates
 
-### `fetch` Requests are no longer cached by default
+Next.js 15 changes the default caching behavior for fetch requests, GET Route Handlers, and the Client Router Cache. **By default, these are no longer cached unless you explicitly opt in.** This gives you more control and helps avoid stale data.
 
-Next.js uses the Web [Fetch API](https://developer.mozilla.org/zh-CN/docs/Web/API/Fetch_API) cache option to configure how a server-side fetch request interacts with the framework's persistent HTTP cache:
+### `fetch` Requests
+
+In Next.js 15, server-side `fetch` requests are **not cached by default**. You must specify the cache mode if you want caching:
 
 ```ts
 fetch('https://...', { cache: 'force-cache' | 'no-store' })
 ```
 
-- `no-store` - fetch a resource from a remote server on every request and do not update the cache. In Next.js 15, this is used by default if a `cache` option is not provided. This means **fetch requests will not be cached by default**.
-- `force-cache` - fetch a resource from the cache (if it exists) or a remote server and update the cache. In Next.js 14, this was used by default if a `cache` option was not provided, unless a dynamic function or dynamic config option was used.
+- `no-store` (default): Always fetch from the remote server.
+- `force-cache`: Use the cache if available, otherwise fetch and cache.
 
-### `GET` Route Handlers are no longer cached by default
+### `GET` Route Handlers
 
-In Next 14, Route Handlers that used the `GET` HTTP method were cached by default unless they used a dynamic function or dynamic config option. In Next.js 15, `GET` functions are **not cached by default**.
-
-You can still opt into caching using a static route config option using the following code:
+Route Handlers using the `GET` method are **not cached by default**. To opt in to static caching, use:
 
 ```ts
-export dynamic = 'force-static'
+export const dynamic = 'force-static'
 ```
 
-Special Route Handlers like `sitemap.ts`, `opengraph-image.tsx`, and `icon.tsx`, and other `metadata files` remain static by default unless they use dynamic functions or dynamic config options.
+Special files like `sitemap.ts`, `opengraph-image.tsx`, and `icon.tsx` remain static by default unless they use dynamic features.
 
-### Client Router Cache no longer caches Page components by default
+### Client Router Cache
 
-In Next.js 14.2.0, an experimental [`staleTimes`](https://rc.nextjs.org/docs/app/api-reference/next-config-js/staleTimes) flag was introduced to allow custom configuration of the Router Cache.
+The client router cache no longer caches Page components by default (`staleTime` is now 0). This ensures users always see the latest data when navigating. However:
 
-In Next.js 15, the client router cache no longer caches Page components by default, setting the default `staleTime` to 0. This ensures that navigating through the app always reflects the latest data for Page components. Despite this change, some behaviors remain the same:
+- Shared layout data is not refetched to support [partial rendering](https://rc.nextjs.org/docs/app/building-your-application/routing/linking-and-navigating#4-partial-rendering).
+- Cache is still used for back/forward navigation to maintain scroll position.
+- The [`Loading.js`](https://rc.nextjs.org/docs/app/api-reference/file-conventions/loading) file is cached for 5 minutes or as configured.
 
-- Shared layout data isn’t refetched to support [partial rendering](https://rc.nextjs.org/docs/app/building-your-application/routing/linking-and-navigating#4-partial-rendering).
-- Cache is used for back/forward navigation to maintain scroll position.
-- The [`Loading.js`](https://rc.nextjs.org/docs/app/api-reference/file-conventions/loading) file is cached for 5 minutes or according to the `staleTimes.static` configuration.
+To restore previous caching behavior, set:
 
-You can opt into the previous Client Router Cache behavior by setting the following configuration:
-
-```js title="next.config.mjs" {2-6}
+```js title="next.config.mjs"
 const nextConfig = {
   experimental: {
     staleTimes: {
@@ -123,16 +126,14 @@ const nextConfig = {
     },
   },
 }
-module.exports = nextConfig
+export default nextConfig
 ```
 
-## Incremental adoption of Partial Prerendering (Experimental)
+---
 
-Next.js 14 introduced [Partial Prerendering (PPR)](https://nextjs.org/blog/next-14#partial-prerendering-preview) - an optimization that combines static and dynamic rendering on the same page.
+## Incremental Adoption of Partial Prerendering (Experimental)
 
-Next.js currently defaults to static rendering unless you use dynamic functions such as `cookies()`, `headers()`, and uncached data requests. These APIs opt an entire route into dynamic rendering. With PPR, you can wrap any dynamic UI in a Suspense boundary. When a new request comes in, Next.js will immediately serve a static HTML shell, then render and stream the dynamic parts in the same HTTP request.
-
-To allow for incremental adoption, there is an `experimental_ppr` route config option for opting specific Layouts and Pages into PPR:
+[Partial Prerendering (PPR)](https://nextjs.org/blog/next-14#partial-prerendering-preview) allows you to combine static and dynamic rendering on the same page. In Next.js 15, you can incrementally adopt PPR by enabling it for specific layouts or pages:
 
 ```tsx {3}
 import { Suspense } from "react"
@@ -140,99 +141,108 @@ import { StaticComponent, DynamicComponent } from "@/app/ui"
 export const experimental_ppr = true
 export default function Page() {
   return (
-     <>
-	     <StaticComponent />
-	     <Suspense fallback={...}>
-		     <DynamicComponent />
-	     </Suspense>
-     </>
+    <>
+      <StaticComponent />
+      <Suspense fallback={...}>
+        <DynamicComponent />
+      </Suspense>
+    </>
   )
 }
 ```
 
-To use the new option, you’ll need to set the `experimental.ppr` config in your `next.config.mjs` file to `incremental`:
+Enable incremental PPR in your config:
 
-```js title="next.config.mjs" {2-4}
+```js title="next.config.mjs"
 const nextConfig = {
   experimental: {
     ppr: 'incremental',
   },
 }
-module.exports = nextConfig
+export default nextConfig
 ```
 
 <Callout>
-  Once all the segments have PPR enabled, it’ll be considered safe for you to
-  set the ppr value to true, and enable it for the entire app and all future
-  routes.
+  Once all segments have PPR enabled, you can set `ppr: true` to enable it for
+  the entire app.
 </Callout>
 
-## Executing code after a response with `next/after` (Experimental)
+---
 
-When you process a user request, you probably need to perform tasks such as logging, analysis, and other external system synchronization.
+## Executing Code After a Response with `next/after` (Experimental)
 
-Since these tasks are not directly related to the response, the user should not have to wait for them to complete. Deferring the work after responding to the user poses a challenge because serverless functions stop computation immediately after the response is closed.
+The new `after()` API allows you to schedule work (like logging, analytics, or syncing with external systems) to run **after** the response has finished streaming. This is especially useful in serverless environments where computation usually stops immediately after the response.
 
-`after()` is a new experimental API that solves this problem by allowing you to schedule work to be done after the response has finished streaming, allowing secondary tasks to run without blocking the primary response.
+Enable in your config:
 
-To use it, add `experimental.after` to `next.config.mjs`:
-
-```js title="next.config.mjs" {2-4}
+```js title="next.config.mjs"
 const nextConfig = {
   experimental: {
     after: true,
   },
 }
-module.exports = nextConfig
+export default nextConfig
 ```
 
-Then, import the function in Server Components, Server Actions, Route Handlers, or Middleware.
+Usage example:
 
-```tsx {5-7}
+```tsx
 import { unstable_after as after } from 'next/server'
 import { log } from '@/app/utils'
 export default function Layout({ children }) {
-  // Secondary task
   after(() => {
     log()
   })
-  // Primary task
   return <>{children}</>
 }
 ```
 
-## Changes to the `create-next-app`
+---
 
-The template design has been changed to a more minimalist design:
-![Create Next App Design](../img/2024-05-25/create-next-app-light.avif)
+## Changes to `create-next-app`
 
-When running `create-next-app`, there’s a new prompt asking if you want to enable `TurboPack` for development (defaults to No).:
-
-```sh
-✔ Would you like to use Turbopack for next dev? … No / Yes
-```
-
-To make getting started on a new project even easier, a new --empty flag has been added to the CLI. This will remove any extraneous files and styles, resulting in a minimal "hello world" page.
+- **Minimalist template:** The default template is now more minimal.
+  ![Create Next App Design](../img/2024-05-25/create-next-app-light.avif)
+- **Turbopack prompt:** When running `create-next-app`, you’ll be prompted to enable [Turbopack](https://turbo.build/pack) for development (defaults to No).
+- **Empty flag:** Use `--empty` to generate a minimal "hello world" project with no extra files or styles.
 
 ```sh
 pnpx create-next-app@rc --empty
 ```
 
-## Optimizing bundling of external packages (Stable)
+---
 
-Bundling external packages can improve the cold start performance of your application. In the App Router, external packages are bundled by default, and you can opt-out specific packages using the new [`serverExternalPackages`](https://rc.nextjs.org/docs/app/api-reference/next-config-js/serverExternalPackages) config option.
+## Optimizing Bundling of External Packages (Stable)
 
-In the Pages Router, external packages are not bundled by default, but you can provide a list of packages to bundle using the existing [`transpilePackages`](https://rc.nextjs.org/docs/pages/api-reference/next-config-js/transpilePackages) option. With this configuration option, you need to specify each package.
+- **App Router:** External packages are bundled by default. You can opt out specific packages using the new [`serverExternalPackages`](https://rc.nextjs.org/docs/app/api-reference/next-config-js/serverExternalPackages) config option.
+- **Pages Router:** External packages are not bundled by default, but you can specify packages to bundle using [`transpilePackages`](https://rc.nextjs.org/docs/pages/api-reference/next-config-js/transpilePackages).
+
+Bundling external packages can improve cold start performance, especially in serverless environments.
+
+---
+
+## Other Notable Improvements
+
+- **React 19 RC support:** Next.js 15 is compatible with the latest React 19 RC, unlocking new React features.
+- **Improved error overlays:** Error overlays are more informative and actionable.
+- **Better TypeScript support:** Type checking and type inference have been improved.
+- **Performance enhancements:** Faster builds and improved serverless cold starts.
+
+---
 
 ## Summary
 
-- React: Support for the React 19 RC, React Compiler (Experimental), and hydration error improvements
-- Caching: fetch requests, GET Route Handlers, and client navigations are no longer cached by default
-- Partial Prerendering (Experimental): New Layout and Page config option for incremental adoption
-- next/after (Experimental): New API to execute code after a response has finished streaming
-- create-next-app: Updated design and a new flag to enable Turbopack in local development
-- Bundling external packages (Stable): New config options for App and Pages Router
+- **React:** Support for React 19 RC, React Compiler (Experimental), and improved hydration error messages.
+- **Caching:** fetch requests, GET Route Handlers, and client navigations are no longer cached by default.
+- **Partial Prerendering:** Incremental adoption with new config options.
+- **next/after:** New API to execute code after a response has finished streaming.
+- **create-next-app:** Updated design, Turbopack prompt, and new `--empty` flag.
+- **Bundling:** New config options for App and Pages Router to optimize external package bundling.
+
+---
 
 ## Additional Information
 
-[Next.js 15 Full Tutorial - Beginner to Advanced](https://www.youtube.com/watch?v=k7o9R6eaSes)
+- [Next.js 15 Full Tutorial - Beginner to Advanced](https://www.youtube.com/watch?v=k7o9R6eaSes)
+- [Next.js 15 Release Notes](https://nextjs.org/blog/next-15)
+- [Next.js Documentation](https://nextjs.org/docs)
