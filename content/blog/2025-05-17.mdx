@@ -1,0 +1,212 @@
+---
+title: 📝 Understanding and Enhancing Logging in Next.js Applications
+description: Logging is an essential aspect of application development and maintenance. In Next.js, while the framework provides basic logging capabilities out of the box, understanding its default behavior and knowing how to customize or enhance it can significantly improve debugging and monitoring, especially in production environments.
+date: 2025-05-17
+tags: ['nextjs']
+published: true
+---
+
+## Default Logging Behavior in Next.js
+
+### Development Mode (`next dev`)
+
+- **Request Logging:** By default, Next.js logs incoming HTTP requests, displaying the method, URL, status code, and response time in the terminal. This aids in real-time debugging during development.
+- **Console Output Forwarding:** Server-side `console.log` outputs are forwarded to the browser's developer console, providing a unified view of logs from both server and client components.
+
+### Production Mode (`next start`)
+
+- **Limited Logging:** In production, Next.js suppresses automatic request logging. Only explicit console statements in your code are output, and these logs appear solely in the server's terminal, not in the browser console.
+
+---
+
+## Configuring Logging in `next.config.js`
+
+Starting from Next.js 14, you can fine-tune logging behavior using the `logging` option in your `next.config.js` file.
+
+### Example Configuration
+
+```js
+module.exports = {
+  logging: {
+    fetches: {
+      fullUrl: true, // Logs the full URL in fetch requests
+      hmrRefreshes: true, // Logs fetch requests during HMR refreshes
+    },
+    incomingRequests: {
+      ignore: [/^\/api\/health$/], // Ignores logging for specific routes
+    },
+  },
+}
+```
+
+- `fetches.fullUrl`: Logs the complete URL for fetch requests, aiding in debugging API calls.
+- `fetches.hmrRefreshes`: Logs fetch requests triggered during Hot Module Replacement (HMR), useful for tracking dynamic updates.
+- `incomingRequests.ignore`: Specifies routes to exclude from logging, reducing noise from routine health checks or static asset requests.
+
+---
+
+## Disabling Logging
+
+To disable all development logging:
+
+```js
+module.exports = {
+  logging: false,
+}
+```
+
+This setting turns off both fetch and incoming request logs during development.
+
+---
+
+## Removing Console Logs in Production
+
+Leaving `console.log` statements in production code can lead to performance issues and potential exposure of sensitive information. Next.js allows you to remove these statements during the build process.
+
+### Configuration
+
+```js
+module.exports = {
+  compiler: {
+    removeConsole: process.env.NODE_ENV === 'production',
+  },
+}
+```
+
+This configuration ensures that all `console` statements are stripped out during the production build, except for `console.error`, which is preserved for critical error reporting.
+
+---
+
+## Integrating Structured Logging: Pino vs Winston
+
+For advanced logging needs, integrating a structured logging library is highly recommended. Two of the most popular Node.js logging libraries are **Pino** and **Winston**. Both can be used in Next.js, but they have different strengths and trade-offs.
+
+### Pino
+
+- **Performance:** Pino is designed for speed. It is one of the fastest logging libraries available, making it ideal for high-throughput production environments.
+- **Structured Logging:** Outputs logs as JSON by default, which is suitable for log aggregation and analysis tools.
+- **Ecosystem:** Integrates well with tools like [pino-pretty](https://github.com/pinojs/pino-pretty) for human-readable logs and [pino-http](https://github.com/pinojs/pino-http) for HTTP request logging.
+- **Usage Example:**
+
+  ```js
+  const pino = require('pino')
+  const logger = pino()
+  logger.info('Hello from Pino!')
+  ```
+
+- **Integration:** Use with [next-logger](https://github.com/sainsburys-tech/next-logger#readme) to patch Next.js logging and output structured logs.
+
+### Winston
+
+- **Flexibility:** Winston is highly configurable, supporting multiple transports (console, file, HTTP, etc.), log levels, and custom formats.
+- **Format Options:** Supports both JSON and custom/human-readable formats out of the box.
+- **Ecosystem:** Mature and widely used, with plugins for log rotation, cloud logging, and more.
+- **Performance:** Slightly slower than Pino due to its flexibility and feature set, but sufficient for most applications.
+- **Usage Example:**
+
+  ```js
+  const winston = require('winston')
+  const logger = winston.createLogger({
+    level: 'info',
+    format: winston.format.json(),
+    transports: [
+      new winston.transports.Console(),
+      new winston.transports.File({ filename: 'combined.log' }),
+    ],
+  })
+  logger.info('Hello from Winston!')
+  ```
+
+- **Integration:** Can be used in Next.js API routes, middleware, or custom server setups.
+
+### Comparison Table
+
+| Feature       | Pino                          | Winston                      |
+| ------------- | ----------------------------- | ---------------------------- |
+| Performance   | ⭐⭐⭐⭐⭐ (very fast)        | ⭐⭐⭐ (good)                |
+| Output Format | JSON (default), pretty-print  | JSON, custom, human-readable |
+| Transports    | Console, file (via pino/file) | Console, file, HTTP, custom  |
+| Ecosystem     | Modern, focused               | Mature, very flexible        |
+| Use Case      | High-performance, structured  | Flexible, multi-destination  |
+
+---
+
+## Example: Integrating Pino with Next.js
+
+1. **Install Dependencies**
+
+   ```sh
+   npm install pino next-logger
+   ```
+
+1. **Enable Instrumentation Hook**
+
+   ```js title="next.config.js"
+   module.exports = {
+     experimental: {
+       instrumentationHook: true,
+     },
+   }
+   ```
+
+1. **Set Up Instrumentation**
+
+   Create an `instrumentation.ts|js` file:
+
+   ```ts
+   export async function register() {
+     if (process.env.NEXT_RUNTIME === 'nodejs') {
+       await require('pino')
+       await require('next-logger')
+     }
+   }
+   ```
+
+With this setup, all `console` outputs are transformed into structured JSON logs, enriched with metadata like timestamps and hostnames, making them suitable for log aggregation and analysis tools.
+
+---
+
+## Example: Integrating Winston with Next.js
+
+Winston is typically used in API routes or custom server logic:
+
+```js
+// lib/logger.js
+const winston = require('winston')
+const logger = winston.createLogger({
+  level: 'info',
+  format: winston.format.json(),
+  transports: [
+    new winston.transports.Console(),
+    new winston.transports.File({ filename: 'combined.log' }),
+  ],
+})
+module.exports = logger
+
+// In your API route
+const logger = require('../../lib/logger')
+export default function handler(req, res) {
+  logger.info('API request received', { url: req.url })
+  res.status(200).json({ message: 'Logged!' })
+}
+```
+
+---
+
+## Best Practices and Recommendations
+
+- **Development:** Utilize Next.js's default logging for quick debugging. Customize logging configurations in `next.config.js` to suit your development needs.
+- **Production:** Remove unnecessary `console` statements to enhance performance and security. Implement structured logging for better observability.
+- **Structured Logging:** For applications requiring detailed logging, integrate libraries like Pino (for performance and JSON output) or Winston (for flexibility and multiple transports).
+- **Log Aggregation:** Use log management tools (e.g., Datadog, ELK, Loki, CloudWatch) to collect and analyze logs from production environments.
+
+By understanding and configuring Next.js's logging capabilities appropriately—and choosing the right logging library for your needs—you can create a more maintainable and observable application, facilitating easier debugging and monitoring across different environments.
+
+---
+
+**Further reading:**
+
+- [Next.js Logging Documentation](https://nextjs.org/docs/app/api-reference/config/next-config-js/logging)
+- [Pino Logging](https://getpino.io/)
+- [Winston Logging](https://github.com/winstonjs/winston)
+- [next-logger](https://github.com/sainsburys-tech/next-logger)
