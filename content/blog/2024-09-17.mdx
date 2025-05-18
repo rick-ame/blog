@@ -8,7 +8,7 @@ published: true
 
 ## What is WSL?
 
-[WSL (Windows Subsystem for Linux)](https://learn.microsoft.com/en-us/windows/wsl/) is a compatibility layer for running Linux binary executables natively on Windows. It allows developers to use Linux tools, shells, and applications directly within Windows, without the need for a full virtual machine or dual-boot setup. WSL 2 uses a lightweight virtual machine for improved performance and compatibility.
+[WSL (Windows Subsystem for Linux)](https://learn.microsoft.com/en-us/windows/wsl/) is a compatibility layer for running Linux binary executables natively on Windows. It allows developers to use Linux tools, shells, and applications directly within Windows, without the need for a full virtual machine or dual-boot setup. WSL 2 uses a lightweight virtual machine for improved performance and compatibility, supporting full Linux kernel features, better system call compatibility, and faster file system performance compared to WSL 1.
 
 ---
 
@@ -16,7 +16,7 @@ published: true
 
 Open PowerShell or Windows Command Prompt as Administrator, then run:
 
-```sh
+```sh title="powershell"
 wsl --install
 ```
 
@@ -24,12 +24,14 @@ This command installs WSL 2 and the default Linux distribution (usually Ubuntu L
 
 To see available distributions and install a specific one:
 
-```sh
+```sh title="powershell"
 wsl --list --online           # List available distributions
 wsl --install -d <DistroName> # Replace <DistroName> with your choice, e.g., Ubuntu-22.04
 ```
 
 After installation, restart your computer if prompted.
+
+> **Tip:** You can upgrade from WSL 1 to WSL 2 with `wsl --set-version <DistroName> 2`.
 
 ---
 
@@ -37,16 +39,18 @@ After installation, restart your computer if prompted.
 
 When you launch your new Linux distribution for the first time, you'll be prompted to create a user and password. If you want to add additional users later:
 
-```sh
+```sh title="WSL"
 sudo adduser <username>
 sudo usermod -aG sudo <username> # Add user to sudoers group
 ```
 
 Switch to the new user:
 
-```sh
+```sh title="WSL"
 su - <username>
 ```
+
+> **Tip:** You can set the default user for your distro with `wsl -d <DistroName> -u <username>`.
 
 ---
 
@@ -54,7 +58,7 @@ su - <username>
 
 [Download Visual Studio Code](https://code.visualstudio.com/) and install it on Windows.
 
-To use VS Code with WSL, install the [Remote - WSL extension](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-wsl). This allows you to open and develop inside your WSL environment directly from VS Code.
+To use VS Code with WSL, install the [Remote - WSL extension](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-wsl). This allows you to open and develop inside your WSL environment directly from VS Code, with full access to Linux tools and files.
 
 ---
 
@@ -73,7 +77,7 @@ To enable mirrored networking (useful for proxy and network access):
 
 1. After saving, restart WSL:
 
-   ```sh
+   ```sh title="powershell"
    wsl --shutdown
    ```
 
@@ -85,7 +89,7 @@ _If you use [Clash Verge](https://github.com/clash-verge-rev/clash-verge-rev) fo
 
 ## Install zsh and oh-my-zsh
 
-```sh
+```sh title="WSL"
 sudo apt update
 sudo apt install zsh
 # Make zsh the default shell for your user (do NOT use sudo)
@@ -94,7 +98,7 @@ chsh -s $(which zsh)
 
 1. Install [oh-my-zsh](https://ohmyz.sh/) for a better shell experience:
 
-   ```sh
+   ```sh title="WSL"
    sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
    ```
 
@@ -106,21 +110,22 @@ chsh -s $(which zsh)
 
 [Homebrew on Linux](https://docs.brew.sh/Homebrew-on-Linux#install) is a popular package manager. Install it with:
 
-```sh
+```sh title="WSL"
 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 ```
 
-After installation, follow the instructions to add Homebrew to your shell profile.
+After installation, follow the instructions to add Homebrew to your shell profile (e.g., add `eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"` to your `.zshrc` or `.bashrc`).
 
 ---
 
 ## Useful WSL Commands
 
-```sh
+```sh title="WSL"
 explorer.exe .       # Open current folder in Windows Explorer
 wsl.exe hostname -I  # Get the WSL2 IP address
 wsl.exe --update     # Update WSL to the latest version
-wsl --status         # Show WSL configuration and version info
+wsl.exe --status     # Show WSL configuration and version info
+wsl.exe --shutdown   # Restart WSL (helpful for networking issues)
 ```
 
 ---
@@ -135,31 +140,35 @@ By default, WSL2 runs in a virtualized network, so services (e.g., web servers) 
 
 1. Enable port forwarding from Windows to WSL2:
 
-   ```ps1
+   ```sh title="powershell"
    netsh interface portproxy add v4tov4 listenaddress=0.0.0.0 listenport=<PORT> connectaddress=<WSL2_IP> connectport=<PORT>
-   # Example for port 3000:
-   netsh interface portproxy add v4tov4 listenaddress=0.0.0.0 listenport=3000 connectaddress=localhost connectport=3000
+   # Example for port 4000 to 3000:
+   netsh interface portproxy add v4tov4 listenaddress=0.0.0.0 listenport=4000 connectaddress=localhost connectport=3000
    ```
 
 1. Allow the port in Windows Firewall:
 
-   ```ps1
+   ```ps1 title="powershell"
    New-NetFirewallRule -DisplayName "Allow_TCP_<PORT>" -Direction Inbound -LocalPort <PORT> -Protocol TCP -Action Allow
-   # Example for port 3000:
-   New-NetFirewallRule -DisplayName "Allow_TCP_3000" -Direction Inbound -LocalPort 3000 -Protocol TCP -Action Allow
+   # Example for port 4000:
+   New-NetFirewallRule -DisplayName "Allow_TCP_4000" -Direction Inbound -LocalPort 4000 -Protocol TCP -Action Allow
    ```
 
 1. Verify forwarding:
 
-   ```ps1
+   ```sh title="powershell"
    netsh interface portproxy show all
    ```
 
 1. Delete an unwanted forwarding rule:
 
-   ```ps1
+   ```sh title="powershell"
    netsh interface portproxy delete v4tov4 listenaddress=0.0.0.0 listenport=<PORT>
    ```
+
+**Note:** If your app can bind to address `0.0.0.0`, you don't need portproxy—just add the firewall rule and access the service directly via your Windows host's IP.
+
+> **Tip:** To check your WSL2 IP address, run `hostname -I` inside WSL.
 
 ---
 
@@ -175,28 +184,19 @@ By default, WSL2 runs in a virtualized network, so services (e.g., web servers) 
 
 - Access Windows files from WSL at `/mnt/c/Users/<UserName>/`
 - Access WSL files from Windows at `\\wsl$\Ubuntu-22.04\home\<username>\`
+- You can drag and drop files between Windows Explorer and your WSL home directory.
 
 ### Updating and Upgrading
 
 Keep your Linux environment up to date:
 
-```sh
+```sh title="WSL"
 sudo apt update && sudo apt upgrade
 ```
 
-### Clipboard Integration
+### Running GUI Linux Apps
 
-Copy from WSL to Windows clipboard:
-
-```sh
-echo "hello" | clip.exe
-```
-
-Paste from Windows clipboard into WSL:
-
-```sh
-powershell.exe Get-Clipboard
-```
+Recent WSL2 versions support running Linux GUI apps natively (via [WSLg](https://learn.microsoft.com/en-us/windows/wsl/tutorials/gui-apps)). Just install your favorite Linux GUI app and launch it from the WSL terminal.
 
 ---
 
@@ -205,6 +205,7 @@ powershell.exe Get-Clipboard
 - If you encounter networking issues, try restarting WSL: `wsl --shutdown`
 - For GUI apps, install [WSLg](https://learn.microsoft.com/en-us/windows/wsl/tutorials/gui-apps) (included by default in recent WSL2).
 - For more advanced networking, see [WSL Networking Docs](https://learn.microsoft.com/en-us/windows/wsl/networking).
+- If you have DNS or proxy issues, try editing `/etc/resolv.conf` or resetting your `.wslconfig`.
 
 ---
 
@@ -214,3 +215,4 @@ powershell.exe Get-Clipboard
 - [Awesome WSL](https://github.com/sirredbeard/Awesome-WSL)
 - [Homebrew on Linux](https://docs.brew.sh/Homebrew-on-Linux)
 - [oh-my-zsh](https://ohmyz.sh/)
+- [WSL Networking](https://learn.microsoft.com/en-us/windows/wsl/networking)
