@@ -1,6 +1,6 @@
 ---
 title: 🛠️ Awesome Tools for MacOS & Windows
-description: A curated list of useful tools for development, productivity, and entertainment on MacOS and Windows. This guide covers terminal customization, package management, VPN, media players, Python/Node.js environment management, and more.
+description: A curated list of useful tools for development, productivity, and entertainment on MacOS and Windows. This guide covers terminal customization, package management, media players, Python/Node.js environment management, and more.
 date: 2023-10-12
 tags: ['tool']
 published: true
@@ -14,7 +14,6 @@ Enhance your MacOS Terminal with a custom theme:
 
 1. [Download the theme file](/assets/rick.terminal)
 1. Import it into the Terminal App via Preferences > Profiles > Import.
-1. Set your preferred font and color scheme for better readability (e.g., Fira Code, JetBrains Mono).
 
 **Tip:** Try [iTerm2](https://iterm2.com/) for advanced features like split panes, search, and better color support.
 
@@ -29,36 +28,32 @@ Homebrew makes installing and managing software on MacOS effortless.
 **Common Homebrew commands:**
 
 ```sh
-brew install <package>   # Install a package
-brew update              # Update Homebrew
-brew upgrade             # Upgrade installed packages
-brew search <name>       # Search for packages
-brew list                # List installed packages
+brew search <name>        # Search for packages
+brew info <package>       # Show package details
+brew install <package>    # Install a package
+brew update               # Update Homebrew
+brew upgrade              # Upgrade installed packages
+brew list                 # List installed packages, alias brew ls
+brew uninstall <package>  # Remove a package, alias brew remove/rm
 ```
 
-**Useful Homebrew packages:**  
-`wget`, `htop`, `fzf`, `bat`, `ripgrep`, `tmux`, `tree`, `jq`, `mas` (Mac App Store CLI)
+**Tip:** Use `brew doctor` to troubleshoot issues and `brew autoremove`, `brew cleanup` to free up disk space.
 
 ### Oh My Zsh
 
 > A delightful, open source, community-driven framework for managing your Zsh configuration.
 
+- [Install oh-my-zsh](https://ohmyz.sh/#install)
+
+#### Theme Customization
+
 1. [Download the custom theme](/assets/rick.zsh-theme)
 1. Place it in `$HOME/.oh-my-zsh/custom/themes`
 1. Set `ZSH_THEME="rick"` in your `$HOME/.zshrc`
 
+**Tip:** If you use Miniconda, try [this theme](/assets/rick-conda.zsh-theme) and set `ZSH_THEME="rick-conda"`.
+
 Explore more themes and plugins at [Oh My Zsh](https://ohmyz.sh).
-
-**Recommended plugins:**  
-`zsh-autosuggestions`, `zsh-syntax-highlighting`, `fzf`, `git`, `docker`
-
-### FortiClient VPN
-
-> Lightweight VPN client supporting SSL VPN and IPSecVPN.
-
-- [Download FortiClient VPN](https://www.fortinet.com/support/product-downloads#vpn)
-
-**Tip:** For open-source alternatives, try [Tunnelblick](https://tunnelblick.net/) (OpenVPN) or [WireGuard](https://www.wireguard.com/).
 
 ### IINA
 
@@ -67,13 +62,13 @@ Explore more themes and plugins at [Oh My Zsh](https://ohmyz.sh).
 - [Download](https://iina.io/)
 - [GitHub](https://github.com/iina/iina)
 
-**Alternative:** [VLC Media Player](https://www.videolan.org/vlc/)
-
 ### The Unarchiver
 
 > Powerful archive extraction tool supporting many formats beyond the native Mac utility.
 
 - [Download](https://theunarchiver.com/)
+
+**Tip:** Use [Keka](https://www.keka.io/) for advanced compression and extraction.
 
 ---
 
@@ -100,8 +95,7 @@ eval "$(fnm env --use-on-cd)"
 
 [See all commands and usage](https://github.com/Schniz/fnm/blob/master/docs/commands.md)
 
-**Alternative managers:**  
-[nvm](https://github.com/nvm-sh/nvm), [volta](https://volta.sh/)
+**Tip:** Use [Corepack](/blog/2025-05-16) to manage package manager versions (`yarn`, `pnpm`) across projects.
 
 ---
 
@@ -116,8 +110,6 @@ python3 -m venv .venv     # Create a virtual environment in .venv
 source .venv/bin/activate # Activate the environment
 deactivate                # Deactivate when done
 ```
-
-**Tip:** Use [direnv](https://direnv.net/) for automatic environment activation.
 
 ### Poetry
 
@@ -136,6 +128,8 @@ curl -sSL https://install.python-poetry.org | python3 -
 > Extremely fast Python package and project manager, written in Rust.
 
 - [uv documentation](https://docs.astral.sh/uv/)
+
+**Tip:** Use `uv venv` and `uv pip` for blazing-fast installs.
 
 ### Jupyter Notebook
 
@@ -163,6 +157,15 @@ curl -sSL https://install.python-poetry.org | python3 -
 
 ## 🪟 Windows
 
+### Windows Terminal
+
+> Modern terminal with tabs, themes, and customization.
+
+- [Download from Microsoft Store](https://apps.microsoft.com/detail/9N0DX20HK701)
+
+**Features:**  
+Split panes, GPU-accelerated rendering, Unicode support, custom key bindings, and JSON-based configuration.
+
 ### Development Environment Setup
 
 **WSL (Windows Subsystem for Linux) is highly recommended.**  
@@ -170,6 +173,7 @@ curl -sSL https://install.python-poetry.org | python3 -
 
 - Use [Ubuntu](https://www.microsoft.com/store/productId/9NBLGGH4MSV6) or [Debian](https://www.microsoft.com/store/productId/9MSVKQC78PK6) from the Microsoft Store for a full Linux experience.
 - Integrate with Windows Terminal for seamless shell switching.
+- [Set up zsh and oh-my-zsh in WSL](/blog/2024-09-17#install-zsh-and-oh-my-zsh)
 
 1. Enable script execution: `System > Developer > PowerShell > Scripts Policy`
 1. Install [`oh-my-posh`](https://apps.microsoft.com/detail/XP8K0HKJFRXGCK) from Microsoft Store.
@@ -186,15 +190,6 @@ curl -sSL https://install.python-poetry.org | python3 -
    More themes: [oh-my-posh Themes](https://ohmyposh.dev/docs/themes)
 
 **Tip:** Use [Windows Package Manager (winget)](https://learn.microsoft.com/en-us/windows/package-manager/winget/) for easy software installation.
-
-### Windows Terminal
-
-> Modern terminal with tabs, themes, and customization.
-
-- [Download from Microsoft Store](https://apps.microsoft.com/detail/9N0DX20HK701)
-
-**Features:**  
-Split panes, GPU-accelerated rendering, Unicode support, custom key bindings, and JSON-based configuration.
 
 ### Recommended Themes
 
@@ -213,27 +208,7 @@ Split panes, GPU-accelerated rendering, Unicode support, custom key bindings, an
 - [Learn more about PowerToys](https://learn.microsoft.com/en-us/windows/powertoys/)
 
 **Popular PowerToys modules:**  
-PowerToys Run (quick launcher), FancyZones (window manager), Color Picker, Keyboard Manager, File Explorer add-ons.
-
----
-
-## 🌐 Cross-Platform Essentials
-
-- [Visual Studio Code](https://code.visualstudio.com/): Powerful, extensible code editor for all platforms.
-- [Docker Desktop](https://www.docker.com/products/docker-desktop/): Container management for Mac, Windows, and Linux.
-- [Obsidian](https://obsidian.md/): Markdown knowledge base and note-taking app.
-- [Bitwarden](https://bitwarden.com/): Open-source password manager.
-- [Figma](https://figma.com/): Collaborative design tool.
-- [Notion](https://www.notion.so/): All-in-one workspace for notes, tasks, and wikis.
-
----
-
-## 📝 Tips
-
-- Regularly update your tools for security and new features.
-- Use keyboard shortcuts and automation (e.g., [AutoHotkey](https://www.autohotkey.com/) on Windows, [Hammerspoon](https://www.hammerspoon.org/) on Mac) to boost productivity.
-- Back up your configuration files (dotfiles) with Git for easy migration and recovery.
-- Explore [Setapp](https://setapp.com/) for curated Mac apps.
+PowerToys Run (quick launcher), Color Picker, Keyboard Manager.
 
 <Callout>
   For more details and advanced tips, see the official documentation for each
