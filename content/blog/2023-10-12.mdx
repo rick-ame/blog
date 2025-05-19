@@ -13,7 +13,7 @@ published: true
 Enhance your MacOS Terminal with a custom theme:
 
 1. [Download the theme file](/assets/rick.terminal)
-1. Import it into the Terminal App via Preferences > Profiles > Import.
+1. Import it into the Terminal App via **Preferences > Profiles > Import**.
 
 **Tip:** Try [iTerm2](https://iterm2.com/) for advanced features like split panes, search, and better color support.
 
@@ -45,7 +45,7 @@ brew uninstall <package>  # Remove a package, alias brew remove/rm
 
 - [Install oh-my-zsh](https://ohmyz.sh/#install)
 
-#### Theme Customization
+#### Oh My Zsh Theme Customization
 
 1. [Download the custom theme](/assets/rick.zsh-theme)
 1. Place it in `$HOME/.oh-my-zsh/custom/themes`
@@ -168,16 +168,9 @@ Split panes, GPU-accelerated rendering, Unicode support, custom key bindings, an
 
 ### Development Environment Setup
 
-**WSL (Windows Subsystem for Linux) is highly recommended.**  
-[Install WSL](/blog/2024-09-17)
-
-- Use [Ubuntu](https://www.microsoft.com/store/productId/9NBLGGH4MSV6) or [Debian](https://www.microsoft.com/store/productId/9MSVKQC78PK6) from the Microsoft Store for a full Linux experience.
-- Integrate with Windows Terminal for seamless shell switching.
-- [Set up zsh and oh-my-zsh in WSL](/blog/2024-09-17#install-zsh-and-oh-my-zsh)
-
-1. Enable script execution: `System > Developer > PowerShell > Scripts Policy`
-1. Install [`oh-my-posh`](https://apps.microsoft.com/detail/XP8K0HKJFRXGCK) from Microsoft Store.
-1. Install [posh-git](https://github.com/dahlbyk/posh-git)
+1. Enable script execution: **Settings > System > Developer > PowerShell > Scripts Policy**.
+1. Install [oh-my-posh](https://apps.microsoft.com/detail/XP8K0HKJFRXGCK) from Microsoft Store.
+1. Install [posh-git](https://github.com/dahlbyk/posh-git).
 1. Edit your PowerShell profile (`code $PROFILE`) and add:
 
    ```ps1
@@ -187,9 +180,16 @@ Split panes, GPU-accelerated rendering, Unicode support, custom key bindings, an
    clear # clear terminal output
    ```
 
-   More themes: [oh-my-posh Themes](https://ohmyposh.dev/docs/themes)
+   More themes: [Oh My Posh Themes](https://ohmyposh.dev/docs/themes)
 
-**Tip:** Use [Windows Package Manager (winget)](https://learn.microsoft.com/en-us/windows/package-manager/winget/) for easy software installation.
+**Tip:** Use [Windows Package Manager (WinGet)](https://learn.microsoft.com/en-us/windows/package-manager/winget/) for easy software installation.
+
+**Tip:** WSL (Windows Subsystem for Linux) is highly recommended.
+[Install WSL](/blog/2024-09-17)
+
+- Use [Ubuntu](https://apps.microsoft.com/detail/9NZ3KLHXDJP5) from the Microsoft Store for a full Linux experience.
+- Integrate with Windows Terminal for seamless shell switching.
+- [Set up zsh and oh-my-zsh in WSL](/blog/2024-09-17#install-zsh-and-oh-my-zsh)
 
 ### Recommended Themes
 
