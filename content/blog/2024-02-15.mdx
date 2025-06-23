@@ -18,7 +18,7 @@ Hypertext Transfer Protocol version 2 (HTTP/2 or HTTP/2.0) is an application pro
 
 ### The Evolution of HTTP
 
-![HTTP timeline](../img/2024-02-15/http-timeline.png)
+![HTTP timeline](/images/2024-02-15/http-timeline.png)
 
 Hypertext Transfer Protocol (HTTP) is a network protocol for communication on the web introduced in 1991. The initial version of HTTP was a simple protocol for retrieving HTML documents. It didn’t include response headers or support for status codes.
 
@@ -32,7 +32,7 @@ While HTTP/2 was initially modeled after SPDY, it was soon modified to include u
 
 ### The Need for HTTP/2
 
-![HTTP/1.1 vs HTTP/2](../img/2024-02-15/http1vs2.webp)
+![HTTP/1.1 vs HTTP/2](/images/2024-02-15/http1vs2.webp)
 
 With the explosion of rich, dynamic, and media-heavy web applications, HTTP/1.1’s limitations—such as head-of-line blocking, redundant headers, and inefficient connection management—became bottlenecks for performance. HTTP/2 was designed to address these issues and make the web faster, more efficient, and more secure.
 
@@ -42,7 +42,7 @@ With the explosion of rich, dynamic, and media-heavy web applications, HTTP/1.1�
 
 ### Binary Protocols
 
-![binary protocols](../img/2024-02-15/binary-protocols.png)
+![binary protocols](/images/2024-02-15/binary-protocols.png)
 
 HTTP/2 switches from a text-based protocol to a binary protocol. All communication is split into small binary frames, each with a specific type and purpose. This makes parsing more efficient and less error-prone, and enables advanced features like multiplexing and prioritization.
 
@@ -50,7 +50,7 @@ HTTP/2 switches from a text-based protocol to a binary protocol. All communicati
 
 <div align="center">
   <img
-    src="../img/2024-02-15/multiplexing.png"
+    src="/images/2024-02-15/multiplexing.png"
     alt="multiplexing"
     width="250"
   />
@@ -60,14 +60,14 @@ HTTP/2 allows multiple requests and responses to be in flight simultaneously ove
 
 ### Header Compression
 
-![header compression](../img/2024-02-15/hpack-compression.png)
+![header compression](/images/2024-02-15/hpack-compression.png)
 
 HTTP/2 uses the [HPACK](https://httpwg.org/specs/rfc7541.html) compression algorithm to reduce the size of HTTP headers. Since many headers (like cookies, user agents) are repeated across requests, HPACK uses static and dynamic tables, as well as Huffman encoding, to minimize bandwidth usage and speed up communication.
 
 ### Server Push
 
 <div align="center">
-  <img src="../img/2024-02-15/server-push.png" alt="server push" />
+  <img src="/images/2024-02-15/server-push.png" alt="server push" />
 </div>
 
 Server Push allows the server to proactively send resources to the client before they are requested. For example, when a client requests an HTML page, the server can also push associated CSS and JS files. This reduces round trips and can significantly speed up page loads. However, Server Push must be used judiciously to avoid wasting bandwidth on resources the client may already have cached.
@@ -87,7 +87,7 @@ Server Push allows the server to proactively send resources to the client before
 
 <div align="center">
   <img
-    src="../img/2024-02-15/stream-prioritization.png"
+    src="/images/2024-02-15/stream-prioritization.png"
     alt="stream prioritization"
   />
 </div>
@@ -97,7 +97,7 @@ Clients can assign priorities and dependencies to streams, allowing important re
 ### Security
 
 <div align="center">
-  <img src="../img/2024-02-15/https.png" alt="https" />
+  <img src="/images/2024-02-15/https.png" alt="https" />
 </div>
 
 While HTTP/2 can technically run over plain TCP, all major browsers require HTTP/2 to be used with TLS (HTTPS). The binary framing also helps prevent certain attacks (like response splitting). HTTP/2 does not introduce new security flaws, and in practice, it encourages encrypted, secure communication by default.
@@ -130,7 +130,7 @@ While HTTP/2 can technically run over plain TCP, all major browsers require HTTP
 
 ## Client Support
 
-![browser support](../img/2024-02-15/http2-browser-support.png)
+![browser support](/images/2024-02-15/http2-browser-support.png)
 
 HTTP/2 is widely supported by all major browsers (Chrome, Firefox, Safari, Edge, Opera) and most modern HTTP servers (Nginx, Apache, Caddy, etc.). Mobile browsers and platforms also support HTTP/2, making it a safe choice for most web projects.
 
