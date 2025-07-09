@@ -1,0 +1,449 @@
+---
+title: 📖 Efficient EPUB Editing with Calibre - Productivity Tips and Compatibility Notes
+description: A practical guide to editing EPUB eBooks in Calibre, covering its main features, custom code snippets, keyboard shortcuts, Apple Books compatibility, and best practices for efficient eBook development.
+date: 2025-07-07
+tags: ['calibre', 'tool']
+published: true
+---
+
+## Why Choose Calibre for EPUB Editing?
+
+Calibre is not only a free and open-source eBook manager, but also a powerful EPUB editor suitable for both beginners and professionals. Whether you need to batch convert formats, fine-tune book structure, or ensure compatibility across devices, Calibre provides a one-stop solution. Typical scenarios include personal library management, academic publishing, and preparing eBooks for commercial distribution.
+
+---
+
+## Overview of Calibre Features
+
+[Calibre](https://calibre-ebook.com/) covers the entire workflow of eBook management and editing:
+
+- **Library Management:** Organize, search, and edit metadata for your eBook collection.
+- **Format Conversion:** Convert between major eBook formats (EPUB, MOBI, AZW3, PDF, etc.).
+- **eBook Editing:** Direct HTML/CSS editing, structure adjustment, spell check, and code snippets.
+- **Device Sync:** Seamlessly transfer and sync eBooks with popular eReaders.
+- **Content Fetching:** Download news and web content as eBooks.
+- **eBook Viewer:** Read and annotate eBooks in all major formats.
+- **Extensibility:** Enhance Calibre with plugins and interface customization.
+
+---
+
+## Edit EPUB Books
+
+<Callout>Open Calibre’s Book Editor First.</Callout>
+
+### Clean and Organize Resource Files
+
+- `Tools > Upgrade book internals`
+
+- `Tools > Beautify all files`
+
+- `Tools > Compress images losslessly`
+
+- `Tools > Arrange into folders`
+  ```
+  Text (HTML) files - text/
+  Style (CSS) files - styles/
+  Images            - images/
+  Fonts             - fonts/
+  ```
+
+### Recommend General CSS Snippets
+
+#### Fonts
+
+_Paste fonts into `fonts.css`._
+
+- English \
+   `Noto` fonts are recommended, you can download them [here](https://fonts.google.com/noto), and then import.
+
+  ```css
+  @charset "utf-8";
+  @font-face {
+    font-family: 'Noto Sans';
+    src: url(fonts/NotoSans-Regular.ttf) format('truetype');
+    font-weight: normal;
+    font-style: normal;
+  }
+  @font-face {
+    font-family: 'Noto Sans';
+    src: url(fonts/NotoSans-Bold.ttf) format('truetype');
+    font-weight: bold;
+    font-style: normal;
+  }
+  @font-face {
+    font-family: 'Noto Serif';
+    src: url(fonts/NotoSerif-Regular.ttf) format('truetype');
+    font-weight: normal;
+    font-style: normal;
+  }
+  @font-face {
+    font-family: 'Noto Serif';
+    src: url(fonts/NotoSerif-Bold.ttf) format('truetype');
+    font-weight: bold;
+    font-style: normal;
+  }
+  @font-face {
+    font-family: 'Noto Serif';
+    src: url(fonts/NotoSerif-Italic.ttf) format('truetype');
+    font-weight: normal;
+    font-style: italic;
+  }
+  @font-face {
+    font-family: 'Noto Serif';
+    src: url(fonts/NotoSerif-BoldItalic.ttf) format('truetype');
+    font-weight: bold;
+    font-style: italic;
+  }
+  ```
+
+- Simplified Chinese
+
+  ```css
+  @charset "utf-8";
+  @font-face {
+    font-family: 'songti';
+    src:
+      local('Noto Serif SC'), local('Source Han Serif SC'), local('STSong'),
+      local('宋体'), local('华文中宋'), local('Noto Serif TC'),
+      local('Source Han Serif TC'), local('Songti TC'), local('PMingLiU'),
+      local('Georgia'), local('Times New Roman');
+  }
+  @font-face {
+    font-family: 'heiti';
+    src:
+      local('PingFang SC'), local('Microsoft YaHei'), local('微软雅黑'),
+      local('Heiti SC'), local('PingFang TC'), local('Heiti TC'),
+      local('JhengHei'), local('Helvetica'), local('Arial');
+  }
+  @font-face {
+    font-family: 'kaiti';
+    src:
+      local('KaiTi'), local('KaiTi_GB2312'), local('KaiTi SC'), local('楷体'),
+      local('DFKai-SB'), local('KaiTi TC'), local('BiauKai'), local('cwTeKai');
+  }
+  ```
+
+- Traditional Chinese
+
+  ```css
+  @charset "utf-8";
+  @font-face {
+    font-family: 'songti';
+    src:
+      local('Noto Serif TC'), local('Source Han Serif TC'), local('Songti TC'),
+      local('PMingLiU'), local('Noto Serif SC'), local('Source Han Serif SC'),
+      local('STSong'), local('宋体'), local('华文中宋'), local('Georgia'),
+      local('Times New Roman');
+  }
+  @font-face {
+    font-family: 'heiti';
+    src:
+      local('PingFang TC'), local('Heiti TC'), local('JhengHei'),
+      local('PingFang SC'), local('Microsoft YaHei'), local('微软雅黑'),
+      local('Heiti SC'), local('Helvetica'), local('Arial');
+  }
+  @font-face {
+    font-family: 'kaiti';
+    src:
+      local('KaiTi TC'), local('DFKai-SB'), local('BiauKai'), local('cwTeKai'),
+      local('KaiTi SC'), local('KaiTi'), local('KaiTi_GB2312'), local('楷体');
+  }
+  ```
+
+#### General styles
+
+_Paste general styles into `main.css`._
+
+- Chinese
+
+  ```css
+  @charset "utf-8";
+  body {
+    margin: 0;
+    padding: 1em;
+    font-size: 1.05em;
+    line-height: 1.8;
+    text-align: justify;
+    text-justify: inter-ideograph;
+    -webkit-font-smoothing: antialiased;
+    -webkit-text-size-adjust: none;
+    font-family: 'songti', 'Noto Serif SC', '宋体', serif;
+    /* footnote counter */
+    counter-reset: footnote 0;
+  }
+  h1,
+  h2,
+  h3,
+  h4 {
+    font-weight: bold;
+    line-height: 1.4;
+    margin-top: 2em;
+    margin-bottom: 0.5em;
+    font-family: 'heiti', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+  }
+  .kaiti,
+  blockquote {
+    font-style: normal;
+    letter-spacing: 0.03em;
+    line-height: 1.6;
+    font-family: 'kaiti', 'KaiTi', 'DFKai-SB', serif;
+  }
+  h1 {
+    font-size: 1.6em;
+    margin-top: 2.5em;
+    margin-bottom: 1.5em;
+  }
+  h2 {
+    font-size: 1.4em;
+  }
+  h3 {
+    font-size: 1.2em;
+  }
+  h4 {
+    font-size: 1.1em;
+  }
+  blockquote {
+    color: #555;
+    margin: 2em;
+    margin-right: 0;
+  }
+  p {
+    text-indent: 2em;
+    margin: 0.2em 0;
+  }
+  strong {
+    font-weight: bold;
+  }
+  cite,
+  em {
+    font-style: italic;
+  }
+  .center {
+    text-align: center;
+  }
+  .right {
+    text-align: right;
+  }
+  p.center,
+  p.right {
+    text-indent: 0;
+  }
+  a.footnote {
+    text-decoration: none;
+    font-weight: normal;
+  }
+  .footnote-content {
+    font-size: 0.8em;
+    margin-top: 4em;
+  }
+  .footnote-content a.footnote:last-child::after {
+    content: '↩';
+  }
+  a.footnote sup::after {
+    counter-increment: footnote;
+    content: counter(footnote);
+    padding-left: 0.2em;
+  }
+  img {
+    max-width: 100%;
+  }
+  a.footnote img {
+    width: 1em;
+    height: 1em;
+    vertical-align: super;
+  }
+  /* - custom styles below - */
+  ```
+
+- English
+
+  ```css
+  @charset "utf-8";
+  body {
+    margin: 0;
+    padding: 1em;
+    font-size: 1em;
+    line-height: 1.6;
+    text-align: justify;
+    text-justify: inter-word;
+    -webkit-font-smoothing: antialiased;
+    -webkit-text-size-adjust: none;
+    font-family: 'Noto Serif', serif;
+    /* footnote counter */
+    counter-reset: footnote 0;
+  }
+  h1,
+  h2,
+  h3,
+  h4 {
+    font-weight: bold;
+    line-height: 1.3;
+    margin-top: 2em;
+    margin-bottom: 0.5em;
+    font-family: 'Noto Sans', sans-serif;
+  }
+  h1 {
+    font-size: 1.8em;
+    margin-top: 2.5em;
+    margin-bottom: 1.2em;
+  }
+  h2 {
+    font-size: 1.5em;
+  }
+  h3 {
+    font-size: 1.3em;
+  }
+  h4 {
+    font-size: 1.1em;
+  }
+  blockquote {
+    margin: 1em 2em;
+    padding-left: 1em;
+    border-left: 3px solid #ccc;
+    font-style: italic;
+    color: #555;
+    line-height: 1.6;
+  }
+  p {
+    text-indent: 2em;
+    margin: 0.5em 0;
+  }
+  strong {
+    font-weight: bold;
+  }
+  cite,
+  em {
+    font-style: italic;
+  }
+  a.footnote {
+    text-decoration: none;
+    font-weight: normal;
+  }
+  .footnote-content {
+    font-size: 0.8em;
+    margin-top: 4em;
+    line-height: 1.4;
+  }
+  .footnote-content a.footnote:last-child::after {
+    content: '↩';
+  }
+  .center {
+    text-align: center;
+  }
+  .right {
+    text-align: right;
+  }
+  .noindent,
+  p.center,
+  p.right {
+    text-indent: 0;
+  }
+  img {
+    max-width: 100%;
+  }
+  a.footnote sup::after {
+    counter-increment: footnote;
+    content: counter(footnote);
+    padding-left: 0.2em;
+  }
+  /* - custom styles below - */
+  ```
+
+## Key EPUB Footnote and Noteref Attributes
+
+**Note:** Use of the `epub:type` attribute requires the inclusion of the namespace `xmlns:epub="http://www.idpf.org/2007/ops` in the `<html>` element.
+
+- **`epub:type="noteref"`** \
+  Marks a link as a footnote reference in the main text.  
+  Example:
+
+  ```html
+  <a epub:type="noteref" role="doc-noteref" href="#footnote-1" id="return-1"
+    ><sup>[1]</sup></a
+  >
+  ```
+
+- **`epub:type="footnote"`** \
+  Marks the actual footnote content, usually at the end of a chapter or page.  
+  Example:
+
+  ```html
+  <aside id="footnote-1" epub:type="footnote" role="doc-footnote">
+    Footnote content here. <a href="#return-1">↩</a>
+  </aside>
+  ```
+
+- **`role="doc-noteref"` / `role="doc-footnote"`** \
+  ARIA roles for accessibility, helping screen readers and eBook readers identify references and notes.
+
+- **`id` and `href`**  
+  Used for linking between the reference and the footnote content.
+
+**Best practice for Apple Books:** Use `<aside>` with `epub:type="footnote"`. The text is hidden in the main body and only appears in the popup. See [Pop-up Footnotes](https://help.apple.com/itc/booksassetguide/en.lproj/itccf8ecf5c8.html).
+
+---
+
+## Productivity Tips: Custom Code Snippets in Calibre
+
+Calibre’s editor allows you to create and insert custom code snippets for repetitive tasks:
+
+1. Go to `Preferences > Editor settings > Manage snippets`
+1. To use it in editor, press <kbd>Ctrl</kbd>+<kbd>j</kbd> after `trigger`.
+
+- **Insert footnote anchor** \
+  Trigger: `<fna` \
+  Template:
+
+  ```html
+  <a class="footnote" epub:type="noteref" href="#fn_A_$1" id="fn_B_$1"
+    ><sup></sup
+  ></a>
+  ```
+
+  <Callout>To use it in `html`, type `<fna`, press <kbd>Ctrl</kbd>+<kbd>j</kbd>, type `<index>` number and press <kbd>Ctrl</kbd>+<kbd>j</kbd> again.</Callout>
+
+- **Insert footnote content** \
+  Trigger: `<fnc` \
+  Template:
+
+  ```html
+  <aside class="footnote-content" epub:type="footnote">
+    <ol></ol>
+  </aside>
+  ```
+
+- **Insert footnote item** \
+  Trigger: `<fni` \
+  Template:
+  ```html
+  <li id="fn_A_$1">$2<a class="footnote" href="#fn_B_$1"></a></li>
+  ```
+
+---
+
+## Apple Books Compatibility Notes
+
+- **Use Standard HTML:** Stick to `<a>`, `<aside>`, and basic CSS for maximum compatibility.
+- **Avoid JavaScript:** Apple Books does not support JavaScript in EPUBs.
+- **SVG and Advanced CSS:** Use with caution; some features may not render as expected.
+- **Font Embedding:** Use standard fonts or properly embed custom fonts.
+- **Footnote Navigation:** Always provide a way to return from the footnote to the main text (e.g., a back arrow link).
+
+---
+
+## Additional Best Practices
+
+- **Test on Multiple Devices:** Always preview your EPUB in Calibre, Apple Books, and other readers.
+- **Keep Structure Simple:** Simple HTML and CSS ensure the widest compatibility.
+- **Validate EPUB:** Use Calibre’s “Check Book” tool to catch errors early.
+- **Remove Unused Code:** Clean up unused snippets and styles before publishing.
+
+---
+
+## References
+
+- [EPUB 3 Footnotes and Noterefs](https://www.w3.org/publishing/epub3/epub-contentdocs.html#sec-xhtml-epub-type-attribute)
+- [Calibre Book Editor Manual](https://manual.calibre-ebook.com/edit.html)
+- [Apple Books EPUB Guidelines](https://support.apple.com/guide/books-author/welcome/mac)
+- [Noto Fonts](https://fonts.google.com/noto)
+
+By leveraging Calibre’s productivity features and following these best practices, you can efficiently create professional, accessible, and compatible EPUB eBooks.
