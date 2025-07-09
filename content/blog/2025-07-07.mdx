@@ -153,6 +153,99 @@ _Paste fonts into `fonts.css`._
 
 _Paste general styles into `main.css`._
 
+- English
+
+  ```css
+  @charset "utf-8";
+  body {
+    margin: 0;
+    padding: 1em;
+    font-size: 1em;
+    line-height: 1.6;
+    text-align: justify;
+    text-justify: inter-word;
+    -webkit-font-smoothing: antialiased;
+    -webkit-text-size-adjust: none;
+    font-family: 'Noto Serif', serif;
+    /* footnote counter */
+    counter-reset: footnote 0;
+  }
+  h1,
+  h2,
+  h3,
+  h4 {
+    font-weight: bold;
+    line-height: 1.3;
+    margin-top: 2em;
+    margin-bottom: 0.5em;
+    font-family: 'Noto Sans', sans-serif;
+  }
+  h1 {
+    font-size: 1.8em;
+    margin-top: 2.5em;
+    margin-bottom: 1.2em;
+  }
+  h2 {
+    font-size: 1.5em;
+  }
+  h3 {
+    font-size: 1.3em;
+  }
+  h4 {
+    font-size: 1.1em;
+  }
+  blockquote {
+    margin: 1em 2em;
+    padding-left: 1em;
+    border-left: 3px solid #ccc;
+    font-style: italic;
+    color: #555;
+    line-height: 1.6;
+  }
+  p {
+    text-indent: 2em;
+    margin: 0.5em 0;
+  }
+  strong {
+    font-weight: bold;
+  }
+  cite,
+  em {
+    font-style: italic;
+  }
+  a.footnote {
+    text-decoration: none;
+    font-weight: normal;
+  }
+  .footnote-content {
+    font-size: 0.8em;
+    margin-top: 4em;
+    line-height: 1.4;
+  }
+  .footnote-content a.footnote:last-child::after {
+    content: '↩';
+  }
+  .center {
+    text-align: center;
+  }
+  .right {
+    text-align: right;
+  }
+  p.center,
+  p.right {
+    text-indent: 0;
+  }
+  img {
+    max-width: 100%;
+  }
+  a.footnote sup::after {
+    counter-increment: footnote;
+    content: counter(footnote);
+    padding-left: 0.2em;
+  }
+  /* - custom styles below - */
+  ```
+
 - Chinese
 
   ```css
@@ -254,100 +347,6 @@ _Paste general styles into `main.css`._
   /* - custom styles below - */
   ```
 
-- English
-
-  ```css
-  @charset "utf-8";
-  body {
-    margin: 0;
-    padding: 1em;
-    font-size: 1em;
-    line-height: 1.6;
-    text-align: justify;
-    text-justify: inter-word;
-    -webkit-font-smoothing: antialiased;
-    -webkit-text-size-adjust: none;
-    font-family: 'Noto Serif', serif;
-    /* footnote counter */
-    counter-reset: footnote 0;
-  }
-  h1,
-  h2,
-  h3,
-  h4 {
-    font-weight: bold;
-    line-height: 1.3;
-    margin-top: 2em;
-    margin-bottom: 0.5em;
-    font-family: 'Noto Sans', sans-serif;
-  }
-  h1 {
-    font-size: 1.8em;
-    margin-top: 2.5em;
-    margin-bottom: 1.2em;
-  }
-  h2 {
-    font-size: 1.5em;
-  }
-  h3 {
-    font-size: 1.3em;
-  }
-  h4 {
-    font-size: 1.1em;
-  }
-  blockquote {
-    margin: 1em 2em;
-    padding-left: 1em;
-    border-left: 3px solid #ccc;
-    font-style: italic;
-    color: #555;
-    line-height: 1.6;
-  }
-  p {
-    text-indent: 2em;
-    margin: 0.5em 0;
-  }
-  strong {
-    font-weight: bold;
-  }
-  cite,
-  em {
-    font-style: italic;
-  }
-  a.footnote {
-    text-decoration: none;
-    font-weight: normal;
-  }
-  .footnote-content {
-    font-size: 0.8em;
-    margin-top: 4em;
-    line-height: 1.4;
-  }
-  .footnote-content a.footnote:last-child::after {
-    content: '↩';
-  }
-  .center {
-    text-align: center;
-  }
-  .right {
-    text-align: right;
-  }
-  .noindent,
-  p.center,
-  p.right {
-    text-indent: 0;
-  }
-  img {
-    max-width: 100%;
-  }
-  a.footnote sup::after {
-    counter-increment: footnote;
-    content: counter(footnote);
-    padding-left: 0.2em;
-  }
-  /* - custom styles below - */
-  ```
-
 ## Key EPUB Footnote and Noteref Attributes
 
 **Note:** Use of the `epub:type` attribute requires the inclusion of the namespace `xmlns:epub="http://www.idpf.org/2007/ops` in the `<html>` element.
@@ -357,9 +356,9 @@ _Paste general styles into `main.css`._
   Example:
 
   ```html
-  <a epub:type="noteref" role="doc-noteref" href="#footnote-1" id="return-1"
-    ><sup>[1]</sup></a
-  >
+  <a epub:type="noteref" role="doc-noteref" href="#footnote-1" id="return-1">
+    <sup>[1]</sup>
+  </a>
   ```
 
 - **`epub:type="footnote"`** \
@@ -394,9 +393,15 @@ Calibre’s editor allows you to create and insert custom code snippets for repe
   Template:
 
   ```html
-  <a class="footnote" epub:type="noteref" href="#fn_A_$1" id="fn_B_$1"
-    ><sup></sup
-  ></a>
+  <a
+    epub:type="noteref"
+    role="doc-noteref"
+    class="footnote"
+    href="#fn_A_$1"
+    id="fn_B_$1"
+  >
+    <sup aria-label="Footnote $1"></sup>
+  </a>
   ```
 
   <Callout>To use it in `html`, type `<fna`, press <kbd>Ctrl</kbd>+<kbd>j</kbd>, type `<index>` number and press <kbd>Ctrl</kbd>+<kbd>j</kbd> again.</Callout>
@@ -415,7 +420,9 @@ Calibre’s editor allows you to create and insert custom code snippets for repe
   Trigger: `<fni` \
   Template:
   ```html
-  <li id="fn_A_$1">$2<a class="footnote" href="#fn_B_$1"></a></li>
+  <li epub:type="footnote" role="doc-footnote" id="fn_A_$1">
+    $2<a class="footnote" href="#fn_B_$1" aria-label="Back to reference"></a>
+  </li>
   ```
 
 ---
