@@ -46,306 +46,292 @@ Calibre is not only a free and open-source eBook manager, but also a powerful EP
   Fonts             - fonts/
   ```
 
-### Recommend General CSS Snippets
+### Fonts
 
-#### Fonts
+<Callout>Organize fonts definition in `styles/fonts.css` file.</Callout>
 
-_Paste fonts into `fonts.css`._
+#### English Fonts
 
-- English \
-   `Noto` fonts are recommended, you can download them [here](https://fonts.google.com/noto), and then import.
+<p align="center">🎯 Comparative Analysis</p>
 
-  ```css
-  @charset "utf-8";
-  @font-face {
-    font-family: 'Noto Sans';
-    src: url(fonts/NotoSans-Regular.ttf) format('truetype');
-    font-weight: normal;
-    font-style: normal;
-  }
-  @font-face {
-    font-family: 'Noto Sans';
-    src: url(fonts/NotoSans-Bold.ttf) format('truetype');
-    font-weight: bold;
-    font-style: normal;
-  }
-  @font-face {
-    font-family: 'Noto Serif';
-    src: url(fonts/NotoSerif-Regular.ttf) format('truetype');
-    font-weight: normal;
-    font-style: normal;
-  }
-  @font-face {
-    font-family: 'Noto Serif';
-    src: url(fonts/NotoSerif-Bold.ttf) format('truetype');
-    font-weight: bold;
-    font-style: normal;
-  }
-  @font-face {
-    font-family: 'Noto Serif';
-    src: url(fonts/NotoSerif-Italic.ttf) format('truetype');
-    font-weight: normal;
-    font-style: italic;
-  }
-  @font-face {
-    font-family: 'Noto Serif';
-    src: url(fonts/NotoSerif-BoldItalic.ttf) format('truetype');
-    font-weight: bold;
-    font-style: italic;
-  }
-  ```
+| Category                     | **Literata**<br/>🔗 [Google Fonts](https://fonts.google.com/specimen/Literata) | **Charis SIL**<br/>🔗 [SIL International](https://software.sil.org/charis/) | **Noto Serif / Sans**<br/>🔗 [Google Fonts](https://fonts.google.com/noto) | **Source Serif 4**<br/>🔗 [Google Fonts](https://fonts.google.com/specimen/Source+Serif+4)  |
+| ---------------------------- | ------------------------------------------------------------------------------ | --------------------------------------------------------------------------- | -------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------- |
+| **Font Type**                | Serif                                                                          | Serif                                                                       | Serif (or Sans-serif)                                                      | Serif                                                                                       |
+| **Aesthetic Style**          | Modern, literary, elegant                                                      | Traditional, academic, practical                                            | Minimalist, clean, system-neutral                                          | Neutral, bookish, classically inspired                                                      |
+| **Screen Display**           | ✅ Excellent on screen, optimized by Google                                    | ◯ Designed more for print, slightly dense onscreen                          | ✅ Excellent screen readability                                            | ✅ Well-optimized for screen and print                                                      |
+| **Long Reading Comfort**     | ✅ Very high, great for long-form reading                                      | ◯ Slightly tight line spacing; better for print                             | ◯ Clear but less “warm” for fiction                                        | ✅✅ Very high—gentle contrast, soft serifs for extended reading                            |
+| **Apple Books Performance**  | ✅ Great support, looks elegant and consistent                                 | ◯ Works, but looks more academic/formal                                     | ✅ Modern and reliable appearance                                          | ✅ Strong rendering on Apple devices (Safari, Apple Books, iOS/macOS)                       |
+| **Multilingual Support**     | ◯ Latin script focus                                                           | ✅ Especially strong for phonetics, IPA                                     | ✅ Full Unicode support, including CJK and RTL                             | ✅ Excellent Latin script + full diacritic/accents coverage for multilingual content        |
+| **Best For Fiction Reading** | ✅✅✅ Ideal for most novels                                                   | ◯ Best for philosophical or scholarly fiction                               | ◯ General-purpose, multilingual documents                                  | ✅✅✅ Excellent for novels with multilingual phrases (e.g. French, Spanish, German inline) |
 
-- Simplified Chinese
+#### Chinese Fonts
 
-  ```css
-  @charset "utf-8";
-  @font-face {
-    font-family: 'songti';
-    src:
-      local('Noto Serif SC'), local('Source Han Serif SC'), local('STSong'),
-      local('宋体'), local('华文中宋'), local('Noto Serif TC'),
-      local('Source Han Serif TC'), local('Songti TC'), local('PMingLiU'),
-      local('Georgia'), local('Times New Roman');
-  }
-  @font-face {
-    font-family: 'heiti';
-    src:
-      local('PingFang SC'), local('Microsoft YaHei'), local('微软雅黑'),
-      local('Heiti SC'), local('PingFang TC'), local('Heiti TC'),
-      local('JhengHei'), local('Helvetica'), local('Arial');
-  }
-  @font-face {
-    font-family: 'kaiti';
-    src:
-      local('KaiTi'), local('KaiTi_GB2312'), local('KaiTi SC'), local('楷体'),
-      local('DFKai-SB'), local('KaiTi TC'), local('BiauKai'), local('cwTeKai');
-  }
-  ```
+<details>
+  <summary>🇨🇳 Simplified Chinese</summary>
 
-- Traditional Chinese
+```css
+@charset "utf-8";
+@font-face {
+  font-family: 'songti';
+  src:
+    local('Noto Serif SC'), local('Source Han Serif SC'), local('STSong'),
+    local('宋体'), local('华文中宋'), local('Noto Serif TC'),
+    local('Source Han Serif TC'), local('Songti TC'), local('PMingLiU'),
+    local('Georgia'), local('Times New Roman');
+}
+@font-face {
+  font-family: 'heiti';
+  src:
+    local('PingFang SC'), local('Microsoft YaHei'), local('微软雅黑'),
+    local('Heiti SC'), local('PingFang TC'), local('Heiti TC'),
+    local('JhengHei'), local('Helvetica'), local('Arial');
+}
+@font-face {
+  font-family: 'kaiti';
+  src:
+    local('KaiTi'), local('KaiTi_GB2312'), local('KaiTi SC'), local('楷体'),
+    local('DFKai-SB'), local('KaiTi TC'), local('BiauKai'), local('cwTeKai');
+}
+```
 
-  ```css
-  @charset "utf-8";
-  @font-face {
-    font-family: 'songti';
-    src:
-      local('Noto Serif TC'), local('Source Han Serif TC'), local('Songti TC'),
-      local('PMingLiU'), local('Noto Serif SC'), local('Source Han Serif SC'),
-      local('STSong'), local('宋体'), local('华文中宋'), local('Georgia'),
-      local('Times New Roman');
-  }
-  @font-face {
-    font-family: 'heiti';
-    src:
-      local('PingFang TC'), local('Heiti TC'), local('JhengHei'),
-      local('PingFang SC'), local('Microsoft YaHei'), local('微软雅黑'),
-      local('Heiti SC'), local('Helvetica'), local('Arial');
-  }
-  @font-face {
-    font-family: 'kaiti';
-    src:
-      local('KaiTi TC'), local('DFKai-SB'), local('BiauKai'), local('cwTeKai'),
-      local('KaiTi SC'), local('KaiTi'), local('KaiTi_GB2312'), local('楷体');
-  }
-  ```
+</details>
 
-#### General styles
+<details>
+  <summary>📜 Traditional Chinese</summary>
 
-_Paste general styles into `main.css`._
+```css
+@charset "utf-8";
+@font-face {
+  font-family: 'songti';
+  src:
+    local('Noto Serif TC'), local('Source Han Serif TC'), local('Songti TC'),
+    local('PMingLiU'), local('Noto Serif SC'), local('Source Han Serif SC'),
+    local('STSong'), local('宋体'), local('华文中宋'), local('Georgia'),
+    local('Times New Roman');
+}
+@font-face {
+  font-family: 'heiti';
+  src:
+    local('PingFang TC'), local('Heiti TC'), local('JhengHei'),
+    local('PingFang SC'), local('Microsoft YaHei'), local('微软雅黑'),
+    local('Heiti SC'), local('Helvetica'), local('Arial');
+}
+@font-face {
+  font-family: 'kaiti';
+  src:
+    local('KaiTi TC'), local('DFKai-SB'), local('BiauKai'), local('cwTeKai'),
+    local('KaiTi SC'), local('KaiTi'), local('KaiTi_GB2312'), local('楷体');
+}
+```
 
-- English
+</details>
 
-  ```css
-  @charset "utf-8";
-  body {
-    margin: 0;
-    padding: 1em;
-    font-size: 1em;
-    line-height: 1.6;
-    text-align: justify;
-    text-justify: inter-word;
-    -webkit-font-smoothing: antialiased;
-    -webkit-text-size-adjust: none;
-    font-family: 'Noto Serif', serif;
-    /* footnote counter */
-    counter-reset: footnote 0;
-  }
-  h1,
-  h2,
-  h3,
-  h4 {
-    font-weight: bold;
-    line-height: 1.3;
-    margin-top: 2em;
-    margin-bottom: 0.5em;
-    font-family: 'Noto Sans', sans-serif;
-  }
-  h1 {
-    font-size: 1.8em;
-    margin-top: 2.5em;
-    margin-bottom: 1.2em;
-  }
-  h2 {
-    font-size: 1.5em;
-  }
-  h3 {
-    font-size: 1.3em;
-  }
-  h4 {
-    font-size: 1.1em;
-  }
-  blockquote {
-    margin: 1em 2em;
-    padding-left: 1em;
-    border-left: 3px solid #ccc;
-    font-style: italic;
-    color: #555;
-    line-height: 1.6;
-  }
-  p {
-    text-indent: 2em;
-    margin: 0.5em 0;
-  }
-  strong {
-    font-weight: bold;
-  }
-  cite,
-  em {
-    font-style: italic;
-  }
-  .center {
-    text-align: center;
-  }
-  .right {
-    text-align: right;
-  }
-  p.center,
-  p.right {
-    text-indent: 0;
-  }
-  a.footnote {
-    text-decoration: none;
-    font-weight: normal;
-  }
-  .footnote-content {
-    font-size: 0.8em;
-    margin-top: 4em;
-    line-height: 1.4;
-  }
-  .footnote-content a.footnote:last-child::after {
-    content: '↩';
-  }
-  a.footnote sup::after {
-    counter-increment: footnote;
-    content: counter(footnote);
-    padding: 0 0.2em;
-  }
-  img {
-    max-width: 100%;
-  }
-  /* - custom styles below - */
-  ```
+### General styles
 
-- Chinese
+<details>
+  <summary>🅰️ English</summary>
 
-  ```css
-  @charset "utf-8";
-  body {
-    margin: 0;
-    padding: 1em;
-    font-size: 1.05em;
-    line-height: 1.8;
-    text-align: justify;
-    text-justify: inter-ideograph;
-    -webkit-font-smoothing: antialiased;
-    -webkit-text-size-adjust: none;
-    font-family: 'songti', 'Noto Serif SC', '宋体', serif;
-    /* footnote counter */
-    counter-reset: footnote 0;
-  }
-  h1,
-  h2,
-  h3,
-  h4 {
-    font-weight: bold;
-    line-height: 1.4;
-    margin-top: 2em;
-    margin-bottom: 0.5em;
-    font-family: 'heiti', 'PingFang SC', 'Microsoft YaHei', sans-serif;
-  }
-  .kaiti,
-  blockquote {
-    font-style: normal;
-    letter-spacing: 0.03em;
-    line-height: 1.6;
-    font-family: 'kaiti', 'KaiTi', 'DFKai-SB', serif;
-  }
-  h1 {
-    font-size: 1.6em;
-    margin-top: 2.5em;
-    margin-bottom: 1.5em;
-  }
-  h2 {
-    font-size: 1.4em;
-  }
-  h3 {
-    font-size: 1.2em;
-  }
-  h4 {
-    font-size: 1.1em;
-  }
-  blockquote {
-    color: #555;
-    margin: 2em;
-    margin-right: 0;
-  }
-  p {
-    text-indent: 2em;
-    margin: 0.2em 0;
-  }
-  strong {
-    font-weight: bold;
-  }
-  cite,
-  em {
-    font-style: italic;
-  }
-  .center {
-    text-align: center;
-  }
-  .right {
-    text-align: right;
-  }
-  p.center,
-  p.right {
-    text-indent: 0;
-  }
-  a.footnote {
-    text-decoration: none;
-    font-weight: normal;
-  }
-  .footnote-content {
-    font-size: 0.8em;
-    margin-top: 4em;
-  }
-  .footnote-content a.footnote:last-child::after {
-    content: '↩';
-  }
-  a.footnote sup::after {
-    counter-increment: footnote;
-    content: counter(footnote);
-    padding: 0 0.2em;
-  }
-  img {
-    max-width: 100%;
-  }
-  a.footnote img {
-    width: 1em;
-    height: 1em;
-    vertical-align: super;
-  }
-  /* - custom styles below - */
-  ```
+```css
+@charset "utf-8";
+body {
+  margin: 0;
+  padding: 1em;
+  font-size: 1em;
+  line-height: 1.6;
+  text-align: justify;
+  text-justify: inter-word;
+  -webkit-font-smoothing: antialiased;
+  -webkit-text-size-adjust: none;
+  font-family:
+    <Font Here!>,
+    serif;
+  /* footnote counter */
+  counter-reset: footnote 0;
+}
+h1,
+h2,
+h3,
+h4 {
+  font-weight: bold;
+  line-height: 1.3;
+  margin-top: 2em;
+  margin-bottom: 0.5em;
+  font-family:
+    <Font Here!>,
+    sans-serif;
+}
+h1 {
+  font-size: 1.8em;
+  margin-top: 2.5em;
+  margin-bottom: 1.2em;
+}
+h2 {
+  font-size: 1.5em;
+}
+h3 {
+  font-size: 1.3em;
+}
+h4 {
+  font-size: 1.1em;
+}
+blockquote {
+  margin: 1em 2em;
+  padding-left: 1em;
+  border-left: 3px solid #ccc;
+  font-style: italic;
+  color: #555;
+  line-height: 1.6;
+}
+p {
+  text-indent: 2em;
+  margin: 0.5em 0;
+}
+strong {
+  font-weight: bold;
+}
+cite,
+em {
+  font-style: italic;
+}
+.center {
+  text-align: center;
+}
+.right {
+  text-align: right;
+}
+p.center,
+p.right,
+blockquote p {
+  text-indent: 0;
+}
+a.footnote {
+  text-decoration: none;
+  font-weight: normal;
+}
+.footnote-content {
+  font-size: 0.8em;
+  margin-top: 4em;
+  line-height: 1.4;
+}
+.footnote-content a.footnote:last-child::after {
+  content: '↩';
+}
+a.footnote sup::after {
+  counter-increment: footnote;
+  content: counter(footnote);
+  padding: 0 0.2em;
+}
+img {
+  max-width: 100%;
+}
+/* - custom styles below - */
+```
+
+</details>
+
+<details>
+  <summary>🀄 Chinese</summary>
+
+```css
+@charset "utf-8";
+body {
+  margin: 0;
+  padding: 1em;
+  font-size: 1.05em;
+  line-height: 1.8;
+  text-align: justify;
+  text-justify: inter-ideograph;
+  -webkit-font-smoothing: antialiased;
+  -webkit-text-size-adjust: none;
+  font-family: 'songti', 'STSong', '宋体', serif;
+  /* footnote counter */
+  counter-reset: footnote 0;
+}
+h1,
+h2,
+h3,
+h4 {
+  font-weight: bold;
+  line-height: 1.4;
+  margin-top: 2em;
+  margin-bottom: 0.5em;
+  font-family: 'heiti', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+}
+.kaiti,
+blockquote {
+  font-style: normal;
+  letter-spacing: 0.03em;
+  line-height: 1.6;
+  font-family: 'kaiti', 'KaiTi', 'DFKai-SB', serif;
+}
+h1 {
+  font-size: 1.6em;
+  margin-top: 2.5em;
+  margin-bottom: 1.5em;
+}
+h2 {
+  font-size: 1.4em;
+}
+h3 {
+  font-size: 1.2em;
+}
+h4 {
+  font-size: 1.1em;
+}
+blockquote {
+  color: #555;
+  margin: 2em;
+  margin-right: 0;
+}
+p {
+  text-indent: 2em;
+  margin: 0.2em 0;
+}
+strong {
+  font-weight: bold;
+}
+cite,
+em {
+  font-style: italic;
+}
+.center {
+  text-align: center;
+}
+.right {
+  text-align: right;
+}
+p.center,
+p.right {
+  text-indent: 0;
+}
+a.footnote {
+  text-decoration: none;
+  font-weight: normal;
+}
+.footnote-content {
+  font-size: 0.8em;
+  margin-top: 4em;
+}
+.footnote-content a.footnote:last-child::after {
+  content: '↩';
+}
+a.footnote sup::after {
+  counter-increment: footnote;
+  content: counter(footnote);
+  padding: 0 0.2em;
+}
+img {
+  max-width: 100%;
+}
+a.footnote img {
+  width: 1em;
+  height: 1em;
+  vertical-align: super;
+}
+/* - custom styles below - */
+```
+
+</details>
 
 ## Key EPUB Footnote and Noteref Attributes
 
