@@ -2,11 +2,11 @@ import { slug } from 'github-slugger'
 import { type Metadata } from 'next'
 import Link from 'next/link'
 
+import { posts } from '@/.velite'
 import { PostItem } from '@/app/blog/_components/post-item'
 import { Tag } from '@/components/tag'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { getAllTags, getPostsByTagSlug, sortTagsByCount } from '@/lib/utils'
-import { posts } from '#site/content'
 
 interface Props {
   params: Promise<{

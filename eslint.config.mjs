@@ -24,6 +24,16 @@ const eslintConfig = [
       'import/no-duplicates': 'error',
     },
   },
+  {
+    ignores: [
+      'node_modules/**',
+      '.next/**',
+      'out/**',
+      'build/**',
+      'next-env.d.ts',
+      '.velite/**',
+    ],
+  },
 ]
 
 export default eslintConfig

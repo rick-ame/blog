@@ -1,10 +1,10 @@
 import { type Metadata } from 'next'
 import Link from 'next/link'
 
+import { posts } from '@/.velite'
 import { Tag } from '@/components/tag'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { getAllTags, sortPosts, sortTagsByCount } from '@/lib/utils'
-import { posts } from '#site/content'
 
 import { PostItem } from './_components/post-item'
 import { QueryPagination } from './_components/query-pagination'
@@ -35,15 +35,11 @@ export default async function Page({ searchParams }: Props) {
   const sortedTags = sortTagsByCount(tags)
 
   return (
-    <div className="container max-w-4xl py-6 lg:py-10">
-      <div className="flex flex-col items-start gap-4 md:flex-row md:justify-between md:gap-8">
-        <div className="flex-1 space-y-4">
-          <h1 className="inline-block text-4xl font-black lg:text-5xl">Blog</h1>
-          <p className="text-muted-foreground text-xl">
-            My ramblings on all things.
-          </p>
-        </div>
-      </div>
+    <div className="container">
+      <h1 className="mb-4 text-4xl font-black lg:text-5xl">Blog</h1>
+      <p className="text-muted-foreground text-xl">
+        My ramblings on all things.
+      </p>
       <div className="mt-8 grid grid-cols-12 gap-2">
         <div className="col-span-12 col-start-1 sm:col-span-8">
           <hr className="mt-8" />

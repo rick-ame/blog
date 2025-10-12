@@ -3,9 +3,9 @@ import './_components/mdx.css'
 import { type Metadata } from 'next'
 import { notFound } from 'next/navigation'
 
+import { posts } from '@/.velite'
 import { Tag } from '@/components/tag'
 import { siteConfig } from '@/config/site'
-import { posts } from '#site/content'
 
 import { MDXContent } from './_components/mdx-content'
 
@@ -45,10 +45,12 @@ export default async function Page({ params }: Props) {
   }
 
   return (
-    <article className="prose dark:prose-invert container mx-auto max-w-3xl py-6">
+    <article className="prose dark:prose-invert container">
       <h1 className="mb-2">{post.title}</h1>
       <div className="mb-2 flex gap-2">
-        {post.tags?.map((tag) => <Tag tag={tag} key={tag} />)}
+        {post.tags?.map((tag) => (
+          <Tag tag={tag} key={tag} />
+        ))}
       </div>
       {post.description ? (
         <p className="text-muted-foreground mt-0 text-xl">{post.description}</p>

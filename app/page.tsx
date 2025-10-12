@@ -1,10 +1,10 @@
 import Link from 'next/link'
 
+import { posts } from '@/.velite'
 import { MyAvatar } from '@/components/avatar'
 import { buttonVariants } from '@/components/ui/button'
 import { siteConfig } from '@/config/site'
 import { cn, sortPosts } from '@/lib/utils'
-import { posts } from '#site/content'
 
 import { PostItem } from './blog/_components/post-item'
 
