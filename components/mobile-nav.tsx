@@ -9,7 +9,7 @@ import { siteConfig } from '@/config/site'
 
 import { Icons } from './icons'
 import { Button } from './ui/button'
-import { Sheet, SheetContent, SheetTrigger } from './ui/sheet'
+import { Sheet, SheetContent, SheetTitle, SheetTrigger } from './ui/sheet'
 
 export const MobileNav: FC = () => {
   const [open, setOpen] = useState(false)
@@ -22,6 +22,7 @@ export const MobileNav: FC = () => {
           <span className="sr-only">Toggle Nav</span>
         </Button>
       </SheetTrigger>
+      <SheetTitle className="hidden">Navigation</SheetTitle>
       <SheetContent
         side="right"
         onOpenAutoFocus={(e) => e.preventDefault()}
