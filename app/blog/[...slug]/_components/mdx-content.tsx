@@ -21,5 +21,6 @@ interface Props {
 }
 export const MDXContent: FC<Props> = ({ code }) => {
   const Component = useMDXComponent(code)
+  // eslint-disable-next-line react-hooks/static-components
   return <Component components={components} />
 }
