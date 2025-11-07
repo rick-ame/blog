@@ -17,7 +17,7 @@ const getPostFromParams = async (
 ) => {
   const slug = (await params).slug?.join('/')
   if (!slug) {
-    return undefined
+    return
   }
   return posts.find((post) => post.slugAsParams === decodeURI(slug))
 }

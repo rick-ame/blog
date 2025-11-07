@@ -12,7 +12,7 @@ import { buttonVariants } from './ui/button'
 
 export const Header: FC = () => {
   return (
-    <header className="border-border bg-background/95 supports-[backdrop-filter]:bg-background/60 sticky top-0 z-10 w-full border-b backdrop-blur">
+    <header className="border-border bg-background/95 supports-backdrop-filter:bg-background/60 sticky top-0 z-10 w-full border-b backdrop-blur">
       <div className="container flex h-14 max-w-screen-2xl items-center">
         <MainNav />
         <div className="flex flex-1 items-center justify-end space-x-2">

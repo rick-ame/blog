@@ -20,16 +20,16 @@ export default async function Page() {
       </div>
       <hr className="my-8" />
       <div className="flex flex-col items-center justify-center gap-8 md:flex-row">
-        <div className="flex min-w-48 max-w-48 flex-col gap-2">
+        <div className="flex max-w-48 min-w-48 flex-col gap-2">
           <MyAvatar />
-          <h2 className="break-words text-center text-2xl font-bold">
+          <h2 className="text-center text-2xl font-bold">
             {siteConfig.author}
           </h2>
-          <p className="break-words text-center text-muted-foreground">
+          <p className="text-muted-foreground text-center wrap-break-word">
             Software Developer
           </p>
         </div>
-        <ul className="py-4 text-lg text-muted-foreground">
+        <ul className="text-muted-foreground py-4 text-lg">
           <li>👋 Hi, I am {siteConfig.author}</li>
           <li>👀 I&apos;m interested in web development</li>
         </ul>
