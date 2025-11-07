@@ -39,3 +39,7 @@
 .subheading-anchor {
   @apply no-underline hover:underline;
 }
+
+.footnotes {
+  @apply mt-16 text-sm leading-6;
+}

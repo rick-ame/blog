@@ -1,2 +1,10 @@
-package-lock.json
 pnpm-lock.yaml
+
+node_modules/
+.next/
+dist/
+build/
+out/
+*.log
+*.tsbuildinfo
+.velite/

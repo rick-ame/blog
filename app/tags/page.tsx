@@ -15,8 +15,8 @@ export default async function Page() {
 
   return (
     <div className="container">
-      <h1 className="text-4xl font-black lg:text-5xl">Tags</h1>
-      <hr className="my-4" />
+      <h1 className="text-3xl font-black lg:text-4xl">Tags</h1>
+      <hr className="my-6" />
       <div className="flex flex-wrap gap-3">
         {sortedTags.map((tag) => (
           <Tag tag={tag} count={tags[tag]} key={tag} />

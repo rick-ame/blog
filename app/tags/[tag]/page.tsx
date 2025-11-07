@@ -3,7 +3,7 @@ import { type Metadata } from 'next'
 import Link from 'next/link'
 
 import { posts } from '@/.velite'
-import { PostItem } from '@/app/blog/_components/post-item'
+import { PostItem } from '@/components/post-item'
 import { Tag } from '@/components/tag'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { getAllTags, getPostsByTagSlug, sortTagsByCount } from '@/lib/utils'
@@ -38,17 +38,11 @@ export default async function Page({ params }: Props) {
   const sortedTags = sortTagsByCount(tags)
 
   return (
-    <div className="container max-w-4xl py-6 lg:py-10">
-      <div className="flex flex-col items-start gap-4 md:flex-row md:justify-between md:gap-8">
-        <div className="flex-1 space-y-4">
-          <h1 className="inline-block text-4xl font-black capitalize lg:text-5xl">
-            {title}
-          </h1>
-        </div>
-      </div>
-      <div className="mt-8 grid grid-cols-12 gap-3">
+    <div className="container">
+      <h1 className="text-3xl font-black capitalize lg:text-4xl">{title}</h1>
+      <div className="mt-4 grid grid-cols-12 gap-4">
         <div className="col-span-12 col-start-1 sm:col-span-8">
-          <hr className="mt-8" />
+          <hr className="my-6" />
           {displayPosts?.length > 0 ? (
             <ul className="flex flex-col">
               {displayPosts.map((post) => {

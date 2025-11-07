@@ -15,8 +15,8 @@ export const Callout: FC<PropsWithChildren<Props>> = ({
       className={cn(
         'my-6 w-full items-start rounded-md border border-l-4 px-4 dark:max-w-none',
         {
-          'border-red-900 bg-red-50 dark:prose': type === 'danger',
-          'border-yellow-900 bg-yellow-50 dark:prose': type === 'warning',
+          'dark:prose border-red-900 bg-red-50': type === 'danger',
+          'dark:prose border-yellow-900 bg-yellow-50': type === 'warning',
         },
       )}
       {...props}

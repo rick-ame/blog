@@ -1,9 +1,10 @@
+import './mdx.css'
+
 import Image from 'next/image'
 import { type FC } from 'react'
 import * as runtime from 'react/jsx-runtime'
 
 import { Callout } from './callout'
-import { Tag } from './tag'
 
 const useMDXComponent = (code: string) => {
   const fn = new Function(code)
@@ -13,7 +14,6 @@ const useMDXComponent = (code: string) => {
 const components = {
   Image,
   Callout,
-  Tag,
 }
 
 interface Props {

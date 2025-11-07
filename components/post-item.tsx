@@ -6,6 +6,7 @@ import { Tag } from '@/components/tag'
 import { buttonVariants } from '@/components/ui/button'
 import { cn, formatDate } from '@/lib/utils'
 
+const MAX_DESCRIPTION_LENGTH = 100
 interface Props {
   slug: string
   title: string
@@ -21,16 +22,24 @@ export const PostItem: FC<Props> = ({
   tags,
 }) => {
   return (
-    <article className="flex flex-col gap-2 border-b border-border py-3">
+    <article className="border-border flex flex-col gap-2 border-b py-4">
       <div>
         <h2 className="text-2xl font-bold">
           <Link href={'/' + slug}>{title}</Link>
         </h2>
       </div>
       <div className="flex gap-2">
-        {tags?.map((tag) => <Tag tag={tag} key={tag} />)}
+        {tags?.map((tag) => (
+          <Tag tag={tag} key={tag} />
+        ))}
       </div>
-      <div className="max-w-none text-muted-foreground">{description}</div>
+      {description && (
+        <p className="text-muted-foreground">
+          {description.length > MAX_DESCRIPTION_LENGTH
+            ? description.slice(0, MAX_DESCRIPTION_LENGTH) + '...'
+            : description}
+        </p>
+      )}
       <div className="flex items-center justify-between">
         <dl>
           <dt className="sr-only">Published On</dt>
@@ -41,7 +50,7 @@ export const PostItem: FC<Props> = ({
         </dl>
         <Link
           href={'/' + slug}
-          className={cn(buttonVariants({ variant: 'link' }), 'py-0')}
+          className={cn(buttonVariants({ variant: 'link' }))}
         >
           Read more →
         </Link>
