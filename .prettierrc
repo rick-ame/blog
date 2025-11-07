@@ -2,13 +2,5 @@
   "semi": false,
   "singleQuote": true,
   "endOfLine": "auto",
-  "plugins": ["prettier-plugin-tailwindcss"],
-  "overrides": [
-    {
-      "files": "*.mdx",
-      "options": {
-        "singleQuote": false
-      }
-    }
-  ]
+  "plugins": ["prettier-plugin-tailwindcss"]
 }
