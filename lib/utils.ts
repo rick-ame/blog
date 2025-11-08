@@ -43,7 +43,7 @@ export function sortTagsByCount(tags: Record<string, number>) {
 
 export function getPostsByTagSlug(posts: Post[], tag: string) {
   const filteredPosts = posts.filter((post) =>
-    post.tags?.map((tag) => slug(tag)).includes(tag),
+    post.tags?.map((t) => slug(t)).includes(tag),
   )
   return sortPosts(filteredPosts)
 }

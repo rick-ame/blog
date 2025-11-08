@@ -6,7 +6,8 @@ import { Tag } from '@/components/tag'
 import { buttonVariants } from '@/components/ui/button'
 import { cn, formatDate } from '@/lib/utils'
 
-const MAX_DESCRIPTION_LENGTH = 100
+const MAX_DESCRIPTION_LENGTH = 150
+
 interface Props {
   slug: string
   title: string
