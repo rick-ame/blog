@@ -5,7 +5,7 @@ import { posts } from '@/.velite'
 import { Posts } from '../_components/posts'
 
 export const metadata: Metadata = {
-  title: 'Blog',
+  title: 'My Blog',
   description: 'My ramblings on all things.',
 }
 
